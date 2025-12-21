@@ -104,7 +104,7 @@ Pixel-Drift/
 
 1. Tải file **Setup_Game.zip** trong mục Release.
 2. Giải nén file ra thư mục.
-3. Chạy file **Setup_Game.exe**. Nếu có thông báo Windows protected ... thì chọn More info và Run anyway
+3. Chạy file **Setup_Game.exe** (Icon đĩa nhạc màu đen. Nếu có thông báo Windows protected ... thì chọn More info và Run anyway).
 4. Cài đặt **Radmin:** https://www.radmin-vpn.com/
 5. Mở Radmin chọn **Network**
 6. Chọn **Join Network** 
