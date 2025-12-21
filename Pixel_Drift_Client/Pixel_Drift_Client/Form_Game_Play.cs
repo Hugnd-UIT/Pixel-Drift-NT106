@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Media;
+using System.Reflection; 
 using System.Text.Json;
 using System.Windows.Forms;
 using WMPLib;
@@ -16,17 +17,30 @@ namespace Pixel_Drift
         private string My_Username;
         private bool Is_Returning_To_Lobby = false;
 
-        private Dictionary<string, Control> Game_Objects = new Dictionary<string, Control>();
+        // Lưu tọa độ vật thể
+        private Dictionary<string, Point> Object_Positions = new Dictionary<string, Point>();
 
-        // Chống Spam phím
+        private Image Img_Player_1 = Properties.Resources.Player_Car_1;
+        private Image Img_Player_2 = Properties.Resources.Player_Car_2;
+        private Image Img_Road = Properties.Resources.Road;
+        private Image Img_Buff = Properties.Resources.Buff;
+        private Image Img_Debuff = Properties.Resources.Debuff;
+
+        private Image Img_Black_Car = Properties.Resources.Black_Car;
+        private Image Img_Blue_Car = Properties.Resources.Blue_Car;
+        private Image Img_Green_Car = Properties.Resources.Green_Car;
+        private Image Img_Red_Car = Properties.Resources.Red_Car;
+
+        private Size Size_Player = new Size(60, 120);
+        private Size Size_Road = new Size(600, 735);
+        private Size Size_Item = new Size(50, 50);
+        private Size Size_AICar = new Size(60, 120);
+
+        // Biến điều khiển
         private bool Is_Left_Pressed = false;
         private bool Is_Right_Pressed = false;
-
-        // Âm thanh
         private WindowsMediaPlayer Music;
         private SoundPlayer CountDown_5Sec, Buff, Debuff, Car_Hit;
-
-        // Điểm số
         private long Player1_Score = 0;
         private long Player2_Score = 0;
         private int Crash_Count = 0;
@@ -34,9 +48,12 @@ namespace Pixel_Drift
         public Game_Window(string Username, int Player_Num, string Room_ID)
         {
             InitializeComponent();
-            this.DoubleBuffered = true;
-            this.KeyPreview = true;
 
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            this.UpdateStyles();
+
+            this.KeyPreview = true; 
             this.My_Username = Username;
             this.My_Player_Number = Player_Num;
             if (btn_ID != null) btn_ID.Text = "ID: " + Room_ID;
@@ -53,14 +70,89 @@ namespace Pixel_Drift
         {
             try
             {
+                Remove_Old_PictureBoxes();
+                Enable_Panel_DoubleBuffer(panel1);
+                Enable_Panel_DoubleBuffer(panel2);
+                panel1.Paint += Panel1_Paint;
+                panel2.Paint += Panel2_Paint;
+                panel1.BackColor = Color.Black;
+                panel2.BackColor = Color.Black;
+
                 Init_Audio();
-                Init_Controls_Cache();
                 Reset_To_Lobby();
             }
             catch (Exception Ex)
             {
                 MessageBox.Show("Lỗi khởi tạo Game: " + Ex.Message);
                 this.Close();
+            }
+        }
+
+        private void Enable_Panel_DoubleBuffer(Panel p)
+        {
+            if (p == null) return;
+            typeof(Panel).InvokeMember("DoubleBuffered",
+                BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
+                null, p, new object[] { true });
+        }
+
+        private void Remove_Old_PictureBoxes()
+        {
+            void ScanAndRemove(Control.ControlCollection controls)
+            {
+                var itemsToRemove = new List<Control>();
+                foreach (Control c in controls)
+                {
+                    if (c is PictureBox && c.Name.StartsWith("ptb_")) itemsToRemove.Add(c);
+                    if (c.HasChildren) ScanAndRemove(c.Controls);
+                }
+                foreach (var item in itemsToRemove) controls.Remove(item);
+            }
+            ScanAndRemove(this.Controls);
+        }
+
+        private void Panel1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+
+            Draw_Object(g, "ptb_roadtrack1", Img_Road, panel1.Size);
+            Draw_Object(g, "ptb_roadtrack1dup", Img_Road, panel1.Size);
+
+            Draw_Object(g, "ptb_increasingroad1", Img_Buff, Size_Item);
+            Draw_Object(g, "ptb_decreasingroad1", Img_Debuff, Size_Item);
+
+            Draw_Object(g, "ptb_AICar1", Img_Black_Car, Size_AICar);
+            Draw_Object(g, "ptb_AICar5", Img_Blue_Car, Size_AICar);
+
+            Draw_Object(g, "ptb_player1", Img_Player_1, Size_Player);
+        }
+
+        private void Panel2_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+
+            Draw_Object(g, "ptb_roadtrack2", Img_Road, panel2.Size);
+            Draw_Object(g, "ptb_roadtrack2dup", Img_Road, panel2.Size);
+
+            Draw_Object(g, "ptb_increasingroad2", Img_Buff, Size_Item);
+            Draw_Object(g, "ptb_decreasingroad2", Img_Debuff, Size_Item);
+
+            Draw_Object(g, "ptb_AICar3", Img_Green_Car, Size_AICar);
+            Draw_Object(g, "ptb_AICar6", Img_Red_Car, Size_AICar);
+
+            Draw_Object(g, "ptb_player2", Img_Player_2, Size_Player);
+        }
+
+        private void Draw_Object(Graphics g, string key, Image img, Size size)
+        {
+            if (Object_Positions.ContainsKey(key) && img != null)
+            {
+                Point p = Object_Positions[key];
+                g.DrawImage(img, p.X, p.Y, size.Width, size.Height);
             }
         }
 
@@ -80,7 +172,7 @@ namespace Pixel_Drift
                     switch (Action)
                     {
                         case "update_game_state":
-                            Update_Game_Objects(Data);
+                            Update_Game_Positions(Data);
                             break;
 
                         case "update_score":
@@ -152,38 +244,26 @@ namespace Pixel_Drift
             }));
         }
 
-        private void Init_Controls_Cache()
+        private void Update_Game_Positions(Dictionary<string, JsonElement> Data)
         {
-            string[] Object_Names = {
-                "ptb_player1", "ptb_player2",
-                "ptb_roadtrack1", "ptb_roadtrack1dup", "ptb_roadtrack2", "ptb_roadtrack2dup",
-                "ptb_AICar1", "ptb_AICar3", "ptb_AICar5", "ptb_AICar6",
-                "ptb_increasingroad1", "ptb_decreasingroad1", "ptb_increasingroad2", "ptb_decreasingroad2"
-            };
-
-            foreach (string Name in Object_Names)
+            foreach (var key in Data.Keys)
             {
-                Control C = this.Controls.Find(Name, true).FirstOrDefault();
-                if (C != null) Game_Objects[Name] = C;
-            }
-        }
-
-        private void Update_Game_Objects(Dictionary<string, JsonElement> Data)
-        {
-            foreach (var Kvp in Game_Objects)
-            {
-                if (Data.ContainsKey(Kvp.Key))
+                if (key == "action") continue;
+                try
                 {
-                    JsonElement El = Data[Kvp.Key];
-                    int X = El.GetProperty("X").GetInt32();
-                    int Y = El.GetProperty("Y").GetInt32();
-
-                    if (Kvp.Value.Location.X != X || Kvp.Value.Location.Y != Y)
+                    JsonElement El = Data[key];
+                    if (El.ValueKind == JsonValueKind.Object &&
+                        El.TryGetProperty("X", out var xVal) &&
+                        El.TryGetProperty("Y", out var yVal))
                     {
-                        Kvp.Value.Location = new Point(X, Y);
+                        Object_Positions[key] = new Point(xVal.GetInt32(), yVal.GetInt32());
                     }
                 }
+                catch { }
             }
+            // Yêu cầu vẽ lại cả 2 Panel
+            if (panel1 != null) panel1.Invalidate();
+            if (panel2 != null) panel2.Invalidate();
         }
 
         private void Send(object Msg) => Client_Manager.Send_And_Forget(Msg);
@@ -193,12 +273,12 @@ namespace Pixel_Drift
             Send(new { action = "set_ready", ready_status = "true" });
             btn_Ready.Enabled = false;
             btn_Ready.Text = "Đang chờ...";
+            this.Focus();
         }
 
         private void Game_Window_KeyDown(object sender, KeyEventArgs e)
         {
             string Direction = null;
-
             if (e.KeyCode == Keys.Left)
             {
                 if (Is_Left_Pressed) return;
@@ -213,15 +293,12 @@ namespace Pixel_Drift
             }
 
             if (Direction != null)
-            {
                 Send(new { action = "move", player = My_Player_Number, direction = Direction, state = "down" });
-            }
         }
 
         private void Game_Window_KeyUp(object sender, KeyEventArgs e)
         {
             string Direction = null;
-
             if (e.KeyCode == Keys.Left)
             {
                 Is_Left_Pressed = false;
@@ -234,15 +311,12 @@ namespace Pixel_Drift
             }
 
             if (Direction != null)
-            {
                 Send(new { action = "move", player = My_Player_Number, direction = Direction, state = "up" });
-            }
         }
 
         private void Game_Window_FormClosing(object sender, FormClosingEventArgs e)
         {
             Client_Manager.On_Message_Received -= Handle_Server_Message;
-
             try
             {
                 Music?.controls.stop(); Music?.close();
@@ -276,8 +350,8 @@ namespace Pixel_Drift
         {
             try
             {
-                string Path_File = Path.Combine(Application.StartupPath, Music_File);
-                if (File.Exists(Path_File)) { Music.URL = Path_File; Music.controls.play(); }
+                string Path_File = System.IO.Path.Combine(Application.StartupPath, Music_File);
+                if (System.IO.File.Exists(Path_File)) { Music.URL = Path_File; Music.controls.play(); }
             }
             catch { }
         }
@@ -289,44 +363,20 @@ namespace Pixel_Drift
             else if (Sound_Type == "hit_car") { Car_Hit?.Play(); Crash_Count++; }
         }
 
-        private void Toggle_Game_Objects(bool Show)
-        {
-            foreach (var Ctrl in Game_Objects.Values) Ctrl.Visible = Show;
-        }
-
         private void Start_Game()
         {
             Crash_Count = 0; Player1_Score = 0; Player2_Score = 0;
             btn_Ready.Visible = false; lbl_P1_Status.Visible = false;
             lbl_P2_Status.Visible = false; lbl_Countdown.Visible = false;
-            btn_Scoreboard.Enabled = false;
+            btn_Scoreboard.Enabled = false; btn_Scoreboard.Visible = false;
+            btn_ID.Visible = false;
 
-            Toggle_Game_Objects(true);
             lbl_GameTimer.Visible = true; lbl_GameTimer.Text = "Time: 60";
             if (lbl_Score1 != null) { lbl_Score1.Visible = true; lbl_Score1.Text = "Score: 0"; }
             if (lbl_Score2 != null) { lbl_Score2.Visible = true; lbl_Score2.Text = "Score: 0"; }
 
-            if (Game_Objects.ContainsKey("ptb_roadtrack1")) Game_Objects["ptb_roadtrack1"].SendToBack();
-            if (Game_Objects.ContainsKey("ptb_roadtrack1dup")) Game_Objects["ptb_roadtrack1dup"].SendToBack();
-            if (Game_Objects.ContainsKey("ptb_roadtrack2")) Game_Objects["ptb_roadtrack2"].SendToBack();
-            if (Game_Objects.ContainsKey("ptb_roadtrack2dup")) Game_Objects["ptb_roadtrack2dup"].SendToBack();
-
-            if (Game_Objects.ContainsKey("ptb_player1")) Game_Objects["ptb_player1"].BringToFront();
-            if (Game_Objects.ContainsKey("ptb_player2")) Game_Objects["ptb_player2"].BringToFront();
-
-            if (Game_Objects.ContainsKey("ptb_AICar1")) Game_Objects["ptb_AICar1"].BringToFront();
-            if (Game_Objects.ContainsKey("ptb_AICar3")) Game_Objects["ptb_AICar3"].BringToFront();
-            if (Game_Objects.ContainsKey("ptb_AICar5")) Game_Objects["ptb_AICar5"].BringToFront();
-            if (Game_Objects.ContainsKey("ptb_AICar6")) Game_Objects["ptb_AICar6"].BringToFront();
-
-            if (Game_Objects.ContainsKey("ptb_increasingroad1")) Game_Objects["ptb_increasingroad1"].BringToFront();
-            if (Game_Objects.ContainsKey("ptb_decreasingroad1")) Game_Objects["ptb_decreasingroad1"].BringToFront();
-            if (Game_Objects.ContainsKey("ptb_increasingroad2")) Game_Objects["ptb_increasingroad2"].BringToFront();
-            if (Game_Objects.ContainsKey("ptb_decreasingroad2")) Game_Objects["ptb_decreasingroad2"].BringToFront();
-
             CountDown_5Sec?.Stop();
             Play_Music_Loop("compete.wav");
-
             this.Focus();
         }
 
@@ -334,13 +384,16 @@ namespace Pixel_Drift
         {
             CountDown_5Sec?.Stop();
             Play_Music_Loop("wait.wav");
-            game_timer.Stop();
+
+            Object_Positions.Clear();
+            if (panel1 != null) panel1.Invalidate();
+            if (panel2 != null) panel2.Invalidate();
 
             btn_Ready.Visible = true; btn_Ready.Enabled = true; btn_Ready.Text = "Sẵn sàng";
             lbl_P1_Status.Visible = true; lbl_P2_Status.Visible = true;
-            btn_Scoreboard.Enabled = true;
+            btn_Scoreboard.Enabled = true; btn_Scoreboard .Visible = true;
+            btn_ID.Visible = true;
 
-            Toggle_Game_Objects(false);
             lbl_Countdown.Visible = false; lbl_GameTimer.Visible = false;
             if (lbl_Score1 != null) lbl_Score1.Visible = false;
             if (lbl_Score2 != null) lbl_Score2.Visible = false;

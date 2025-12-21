@@ -61,7 +61,7 @@ namespace Pixel_Drift
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.BackgroundImage = global::Pixel_Drift.Properties.Resources.Gemini_Generated_Image_lee8x9lee8x9lee8;
+            this.panel1.BackgroundImage = global::Pixel_Drift.Properties.Resources.The_Sinh_Vien;
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.lbl_CardName);
@@ -89,7 +89,7 @@ namespace Pixel_Drift
             // ptb_Avatar
             // 
             this.ptb_Avatar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ptb_Avatar.Image = global::Pixel_Drift.Properties.Resources._421_4212275_transparent_default_avatar_png_avatar_img_png_download_1703079392;
+            this.ptb_Avatar.Image = global::Pixel_Drift.Properties.Resources.Avt_Player;
             this.ptb_Avatar.Location = new System.Drawing.Point(3, 99);
             this.ptb_Avatar.Name = "ptb_Avatar";
             this.ptb_Avatar.Size = new System.Drawing.Size(130, 147);
@@ -132,7 +132,7 @@ namespace Pixel_Drift
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Pixel_Drift.Properties.Resources.Thong_Tin;
+            this.pictureBox1.Image = global::Pixel_Drift.Properties.Resources.Background_Information;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(870, 613);

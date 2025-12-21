@@ -36,7 +36,7 @@ namespace Pixel_Drift_Server
         private int P1_Speed = 10, P2_Speed = 10;
         private long P1_Score = 0, P2_Score = 0;
         private bool P1_Left, P1_Right, P2_Left, P2_Right;
-        private const int Player_Move_Speed = 9;
+        private const int Player_Move_Speed = 10;
 
         // Config Map
         private const int Game_Height = 800;
@@ -404,7 +404,7 @@ namespace Pixel_Drift_Server
         {
             lock (Player_Lock)
             {
-                P1_Score = 0; P2_Score = 0; P1_Speed = 10; P2_Speed = 10;
+                P1_Score = 0; P2_Score = 0; P1_Speed = 12; P2_Speed = 12;
                 P1_Left = P1_Right = P2_Left = P2_Right = false;
                 Game_Objects.Clear(); Object_Sizes.Clear();
                 Setup_Objects_Config();
@@ -454,7 +454,7 @@ namespace Pixel_Drift_Server
         private Point Reposition_Object(string Name, int Min_X, int Max_X)
         {
             Size Current_Size = Object_Sizes.ContainsKey(Name) ? Object_Sizes[Name] : new Size(30, 30);
-            int Safe_Max_X = Max_X - Current_Size.Width - 60;
+            int Safe_Max_X = Max_X - Current_Size.Width - 70;
 
             if (Safe_Max_X <= Min_X)
                 Safe_Max_X = Min_X + 1;

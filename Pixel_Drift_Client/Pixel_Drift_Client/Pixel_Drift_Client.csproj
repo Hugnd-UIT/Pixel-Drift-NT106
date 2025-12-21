@@ -340,11 +340,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Form_Dang_Ki.resx">
       <DependentUpon>Form_Dang_Ki.cs</DependentUpon>
     </EmbeddedResource>
@@ -385,6 +380,11 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -407,31 +407,29 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BuickerB1.png" />
+    <None Include="Resources\.editorconfig" />
+    <None Include="Resources\Black_Car.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\CarPackPrev1.png" />
+    <None Include="Resources\Explosion.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\explosion.png" />
+    <None Include="Resources\Red_Car.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\GalardB.png" />
+    <None Include="Resources\Green_Car.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\JeepB.png" />
+    <None Include="Resources\Blue_Car.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RamB.png" />
+    <None Include="Resources\Orange_Car.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SuperB.png" />
+    <None Include="Resources\Player_Car_1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\usercar1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\usercar2.png" />
+    <None Include="Resources\Player_Car_2.png" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="MediaPlayer">
@@ -461,19 +459,10 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-    <None Include="Resources\421-4212275_transparent-default-avatar-png-avatar-img-png-download-1703079392.png" />
+    <None Include="Resources\Avt_Player.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Gemini_Generated_Image_2gg76z2gg76z2gg7.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Gemini_Generated_Image_5sxbbs5sxbbs5sxb.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Screenshot 2025-11-17 155655.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Gemini_Generated_Image_lee8x9lee8x9lee8.png" />
+    <None Include="Resources\The_Sinh_Vien.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="buff.wav">
@@ -494,21 +483,13 @@
     <Content Include="compete.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\modaub.jpg" />
-    <None Include="Resources\rackrack.jpg" />
-    <None Include="Resources\racbou.jpg" />
-    <None Include="Resources\backrou.jpg" />
-    <None Include="Resources\31564d5d33242f05596b764177067545.jpg" />
-    <None Include="Resources\gameback.jpg" />
-    <None Include="Resources\formm_odau.jpg" />
-    <None Include="Resources\formmodau.jpg" />
-    <None Include="Resources\Quen_MK.png" />
-    <None Include="Resources\Thong_Tin.png" />
-    <None Include="Resources\Doi_MK.png" />
+    <None Include="Resources\Background_Quen_Mat_Khau.png" />
+    <None Include="Resources\Background_Information.png" />
+    <None Include="Resources\Background_Doi_Mat_Khau.png" />
     <None Include="Resources\ScoreBoard.png" />
-    <None Include="Resources\Gemini_Generated_Image_hs0qr3hs0qr3hs0q.png" />
-    <None Include="Resources\Gemini_Generated_Image_55ox6j55ox6j55ox.png" />
-    <None Include="Resources\Gemini_Generated_Image_afaixrafaixrafai.png" />
+    <None Include="Resources\Background_Open.png" />
+    <None Include="Resources\Background_ID.png" />
+    <None Include="Resources\Background_Lobby.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

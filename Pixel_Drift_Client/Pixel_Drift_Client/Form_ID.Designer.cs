@@ -59,7 +59,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Pixel_Drift.Properties.Resources.Gemini_Generated_Image_55ox6j55ox6j55ox;
+            this.BackgroundImage = global::Pixel_Drift.Properties.Resources.Background_ID;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(514, 149);
             this.Controls.Add(this.btn_TimPhong);

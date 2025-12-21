@@ -41,9 +41,8 @@ namespace Pixel_Drift
             // btn_dang_ki
             // 
             this.btn_dang_ki.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btn_dang_ki.BorderColor = System.Drawing.Color.White;
-            this.btn_dang_ki.BorderRadius = 20;
             this.btn_dang_ki.BorderThickness = 2;
+            this.btn_dang_ki.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btn_dang_ki.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.btn_dang_ki.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.btn_dang_ki.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
@@ -56,10 +55,10 @@ namespace Pixel_Drift
             this.btn_dang_ki.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.btn_dang_ki.HoverState.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.btn_dang_ki.ImageSize = new System.Drawing.Size(30, 30);
-            this.btn_dang_ki.Location = new System.Drawing.Point(286, 310);
+            this.btn_dang_ki.Location = new System.Drawing.Point(295, 255);
             this.btn_dang_ki.Margin = new System.Windows.Forms.Padding(4);
             this.btn_dang_ki.Name = "btn_dang_ki";
-            this.btn_dang_ki.Size = new System.Drawing.Size(344, 73);
+            this.btn_dang_ki.Size = new System.Drawing.Size(341, 85);
             this.btn_dang_ki.TabIndex = 0;
             this.btn_dang_ki.Text = "ĐĂNG KÍ";
             this.btn_dang_ki.Click += new System.EventHandler(this.btn_dang_ki_Click);
@@ -67,8 +66,6 @@ namespace Pixel_Drift
             // btn_dang_nhap
             // 
             this.btn_dang_nhap.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btn_dang_nhap.BorderColor = System.Drawing.Color.White;
-            this.btn_dang_nhap.BorderRadius = 20;
             this.btn_dang_nhap.BorderThickness = 2;
             this.btn_dang_nhap.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.btn_dang_nhap.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
@@ -82,10 +79,10 @@ namespace Pixel_Drift
             this.btn_dang_nhap.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btn_dang_nhap.HoverState.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btn_dang_nhap.ImageSize = new System.Drawing.Size(30, 30);
-            this.btn_dang_nhap.Location = new System.Drawing.Point(286, 391);
+            this.btn_dang_nhap.Location = new System.Drawing.Point(295, 348);
             this.btn_dang_nhap.Margin = new System.Windows.Forms.Padding(4);
             this.btn_dang_nhap.Name = "btn_dang_nhap";
-            this.btn_dang_nhap.Size = new System.Drawing.Size(344, 73);
+            this.btn_dang_nhap.Size = new System.Drawing.Size(341, 85);
             this.btn_dang_nhap.TabIndex = 3;
             this.btn_dang_nhap.Text = "ĐĂNG NHẬP";
             this.btn_dang_nhap.Click += new System.EventHandler(this.btn_dang_nhap_Click);
@@ -93,14 +90,12 @@ namespace Pixel_Drift
             // btn_thoat
             // 
             this.btn_thoat.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btn_thoat.BorderColor = System.Drawing.Color.White;
-            this.btn_thoat.BorderRadius = 20;
             this.btn_thoat.BorderThickness = 2;
             this.btn_thoat.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.btn_thoat.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.btn_thoat.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.btn_thoat.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btn_thoat.FillColor = System.Drawing.Color.Red;
+            this.btn_thoat.FillColor = System.Drawing.Color.LightCoral;
             this.btn_thoat.FillColor2 = System.Drawing.Color.OrangeRed;
             this.btn_thoat.Font = new System.Drawing.Font("Segoe UI Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_thoat.ForeColor = System.Drawing.Color.White;
@@ -108,10 +103,10 @@ namespace Pixel_Drift
             this.btn_thoat.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btn_thoat.HoverState.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.btn_thoat.ImageSize = new System.Drawing.Size(30, 30);
-            this.btn_thoat.Location = new System.Drawing.Point(286, 472);
+            this.btn_thoat.Location = new System.Drawing.Point(295, 441);
             this.btn_thoat.Margin = new System.Windows.Forms.Padding(4);
             this.btn_thoat.Name = "btn_thoat";
-            this.btn_thoat.Size = new System.Drawing.Size(344, 73);
+            this.btn_thoat.Size = new System.Drawing.Size(341, 85);
             this.btn_thoat.TabIndex = 2;
             this.btn_thoat.Text = "THOÁT GAME";
             this.btn_thoat.Click += new System.EventHandler(this.btn_thoat_Click);
@@ -127,7 +122,7 @@ namespace Pixel_Drift
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.BackgroundImage = global::Pixel_Drift.Properties.Resources.modaub1;
+            this.BackgroundImage = global::Pixel_Drift.Properties.Resources.Background_Open;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(917, 571);
             this.Controls.Add(this.btn_dang_nhap);

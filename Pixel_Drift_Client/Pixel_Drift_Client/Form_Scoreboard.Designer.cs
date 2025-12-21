@@ -210,7 +210,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = global::Pixel_Drift.Properties.Resources.ScoreBoard;
+            this.pictureBox1.Image = global::Pixel_Drift.Properties.Resources.Background_ScoreBoard;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox1.Name = "pictureBox1";

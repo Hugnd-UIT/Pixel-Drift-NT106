@@ -118,106 +118,67 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="usercar1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\usercar1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Gemini_Generated_Image_55ox6j55ox6j55ox" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gemini_Generated_Image_55ox6j55ox6j55ox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="31564d5d33242f05596b764177067545" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\31564d5d33242f05596b764177067545.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RamB" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RamB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="gameback" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\gameback.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="racbou" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\racbou.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Gemini_Generated_Image_afaixrafaixrafai" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gemini_Generated_Image_afaixrafaixrafai.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Gemini_Generated_Image_5sxbbs5sxbbs5sxb" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gemini_Generated_Image_5sxbbs5sxbbs5sxb.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Doi_MK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Doi_MK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="slowdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Debuff" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slowdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Thong_Tin" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Thong_Tin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="road" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Road" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\road.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="backrou" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\backrou.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Gemini_Generated_Image_hs0qr3hs0qr3hs0q" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gemini_Generated_Image_hs0qr3hs0qr3hs0q.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="explosion" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\explosion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="formmodau" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\formmodau.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Quen_MK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Quen_MK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CarPackPrev" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CarPackPrev1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ScoreBoard" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ScoreBoard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GalardB" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GalardB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BuickerB" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BuickerB1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Gemini_Generated_Image_2gg76z2gg76z2gg7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gemini_Generated_Image_2gg76z2gg76z2gg7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="421-4212275_transparent-default-avatar-png-avatar-img-png-download-1703079392" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\421-4212275_transparent-default-avatar-png-avatar-img-png-download-1703079392.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="rackrack" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\rackrack.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SuperB" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SuperB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Screenshot 2025-11-17 155655" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Screenshot 2025-11-17 155655.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Gemini_Generated_Image_lee8x9lee8x9lee8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gemini_Generated_Image_lee8x9lee8x9lee8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="formm_odau" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\formm_odau.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="31564d5d33242f05596b7641770675451" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\31564d5d33242f05596b764177067545.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="modaub" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\modaub.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="JeepB" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\JeepB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="usercar2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\usercar2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="speedup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Buff" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\speedup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="modaub1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\modaub.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Avt_Player" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Avt_Player.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background_Doi_Mat_Khau" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background_Doi_Mat_Khau.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background_ID" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background_ID.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background_Information" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background_Information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background_Lobby" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background_Lobby.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background_Quen_Mat_Khau" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background_Quen_Mat_Khau.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Black_Car" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Black_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Blue_Car" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Blue_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Explosion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Explosion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Green_Car" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Green_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Orange_Car" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Orange_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Player_Car_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Player_Car_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Player_Car_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Player_Car_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Red_Car" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Red_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background_ScoreBoard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ScoreBoard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="The_Sinh_Vien" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\The_Sinh_Vien.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background_Open" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background_Open.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background_Game_Play" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background_Game_Play.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

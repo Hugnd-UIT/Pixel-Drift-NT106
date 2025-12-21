@@ -37,7 +37,7 @@
             // 
             // ptb_Lobby
             // 
-            this.ptb_Lobby.Image = global::Pixel_Drift.Properties.Resources.Gemini_Generated_Image_afaixrafaixrafai;
+            this.ptb_Lobby.Image = global::Pixel_Drift.Properties.Resources.Background_Lobby;
             this.ptb_Lobby.Location = new System.Drawing.Point(0, 0);
             this.ptb_Lobby.Margin = new System.Windows.Forms.Padding(4);
             this.ptb_Lobby.Name = "ptb_Lobby";

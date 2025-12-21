@@ -85,7 +85,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Pixel_Drift.Properties.Resources.Quen_MK;
+            this.BackgroundImage = global::Pixel_Drift.Properties.Resources.Background_Quen_Mat_Khau;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1045, 559);
             this.Controls.Add(this.guna2HtmlLabel1);

@@ -175,7 +175,7 @@
             // 
             // ptb_Doi_MK
             // 
-            this.ptb_Doi_MK.BackgroundImage = global::Pixel_Drift.Properties.Resources.Doi_MK;
+            this.ptb_Doi_MK.BackgroundImage = global::Pixel_Drift.Properties.Resources.Background_Doi_Mat_Khau;
             this.ptb_Doi_MK.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ptb_Doi_MK.Location = new System.Drawing.Point(0, 0);
             this.ptb_Doi_MK.Margin = new System.Windows.Forms.Padding(4);
