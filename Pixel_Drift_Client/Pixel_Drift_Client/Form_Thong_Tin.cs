@@ -44,9 +44,9 @@ namespace Pixel_Drift
                     string Status = Dict["status"].GetString();
                     if (Status == "success")
                     {
-                        lbl_TenDangNhap.Text = Dict.ContainsKey("username") ? Dict["username"].GetString() : "N/A";
-                        lbl_Email.Text = Dict.ContainsKey("email") ? Dict["email"].GetString() : "N/A";
-                        lbl_Birthday.Text = Dict.ContainsKey("birthday") ? Dict["birthday"].GetString() : "N/A";
+                        lbl_username.Text = Dict.ContainsKey("username") ? Dict["username"].GetString() : "N/A";
+                        lbl_email.Text = Dict.ContainsKey("email") ? Dict["email"].GetString() : "N/A";
+                        lbl_birthday.Text = Dict.ContainsKey("birthday") ? Dict["birthday"].GetString() : "N/A";
                     }
                     else
                     {
@@ -72,16 +72,16 @@ namespace Pixel_Drift
             }
         }
 
-        private void btnVaoGame_Click(object sender, EventArgs e)
+        private void Form_Thong_Tin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btn_vao_game_Click(object sender, EventArgs e)
         {
             Lobby Lobby_Form = new Lobby(Current_Username);
             Lobby_Form.Show();
             this.Hide();
-        }
-
-        private void Form_Thong_Tin_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.Exit();
         }
     }
 }

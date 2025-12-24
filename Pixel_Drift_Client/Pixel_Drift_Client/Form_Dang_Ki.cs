@@ -35,6 +35,14 @@ namespace Pixel_Drift
             }
         }
 
+        // Hàm chuẩn hóa định dạng ngày
+        private string Dinh_Dang_Ngay(string Day)
+        {
+            if (DateTime.TryParse(Day, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime Parsed_Day))
+                return Parsed_Day.ToString("yyyy-MM-dd");
+            return null;
+        }
+
         // Kiểm tra độ mạnh của mật khẩu
         private bool Kiem_Tra_Do_Manh_Mat_Khau(string Password)
         {
@@ -48,11 +56,11 @@ namespace Pixel_Drift
 
         private void btn_xacnhan_Click(object sender, EventArgs e)
         {
-            string Username = tb_tendangnhap.Text.Trim();
+            string Username = tb_username.Text.Trim();
             string Password = tb_matkhau.Text.Trim();
             string Confirm_Pass = tb_xacnhanmk.Text.Trim();
-            string Email = tb_emailsdt.Text.Trim();
-            string Birthday = tb_BirthDay.Text.Trim();
+            string Email = tb_email.Text.Trim();
+            string Birthday = tb_birthday.Text.Trim();
 
             // Kiểm tra dữ liệu đầu vào
             if (Username == "" || Password == "" || Email == "")
@@ -93,7 +101,35 @@ namespace Pixel_Drift
 
             try
             {
-                string Response = Send_Register_Request(Username, Email, Hashed_Password, Birthday);
+                if (!Client_Manager.Is_Connected)
+                {
+                    string IP = Client_Manager.Get_Server_IP();
+
+                    if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
+
+                    if (!Client_Manager.Connect(IP, 1111))
+                    {
+                        MessageBox.Show("Không tìm thấy server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                var Request = new
+                {
+                    action = "register",
+                    email = Email,
+                    username = Username,
+                    password = Hashed_Password,
+                    birthday = Birthday
+                };
+
+                string Response = Client_Manager.Send_And_Wait(Request);
+
+                if (string.IsNullOrEmpty(Response))
+                {
+                    MessageBox.Show("Server không phản hồi!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
                 var Dict = JsonSerializer.Deserialize<Dictionary<string, string>>(Response);
 
@@ -126,40 +162,6 @@ namespace Pixel_Drift
             {
                 MessageBox.Show("Lỗi: " + Ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private string Dinh_Dang_Ngay(string Day)
-        {
-            if (DateTime.TryParse(Day, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime Parsed_Day))
-                return Parsed_Day.ToString("yyyy-MM-dd");
-            return null;
-        }
-
-        private string Send_Register_Request(string Username, string Email, string Hashed_Password, string Birthday)
-        {
-            if (!Client_Manager.Is_Connected)
-            {
-                string IP = Client_Manager.Get_Server_IP();
-
-                if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
-
-                if (!Client_Manager.Connect(IP, 1111))
-                {
-                    var Error = new { status = "error", message = "Không thể kết nối đến server." };
-                    return JsonSerializer.Serialize(Error);
-                }
-            }
-
-            var Data = new
-            {
-                action = "register",
-                email = Email,
-                username = Username,
-                password = Hashed_Password,
-                birthday = Birthday
-            };
-
-            return Client_Manager.Send_And_Wait(Data);
         }
 
         private void btn_backdn_Click(object sender, EventArgs e)

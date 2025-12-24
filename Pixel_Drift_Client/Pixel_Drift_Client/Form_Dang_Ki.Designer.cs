@@ -36,12 +36,12 @@ namespace Pixel_Drift
             this.label3 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.label4 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.label5 = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.tb_emailsdt = new Guna.UI2.WinForms.Guna2TextBox();
+            this.tb_email = new Guna.UI2.WinForms.Guna2TextBox();
             this.tb_xacnhanmk = new Guna.UI2.WinForms.Guna2TextBox();
             this.tb_matkhau = new Guna.UI2.WinForms.Guna2TextBox();
-            this.tb_tendangnhap = new Guna.UI2.WinForms.Guna2TextBox();
+            this.tb_username = new Guna.UI2.WinForms.Guna2TextBox();
             this.btn_xacnhan = new Guna.UI2.WinForms.Guna2Button();
-            this.tb_BirthDay = new Guna.UI2.WinForms.Guna2TextBox();
+            this.tb_birthday = new Guna.UI2.WinForms.Guna2TextBox();
             this.label6 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.btn_backdn = new Guna.UI2.WinForms.Guna2Button();
             this.Panel_Chua_Form = new Guna.UI2.WinForms.Guna2Panel();
@@ -103,24 +103,24 @@ namespace Pixel_Drift
             this.label5.TabIndex = 12;
             this.label5.Text = "Xác nhận mật khẩu *";
             // 
-            // tb_emailsdt
+            // tb_email
             // 
-            this.tb_emailsdt.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.tb_emailsdt.BorderRadius = 8;
-            this.tb_emailsdt.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.tb_emailsdt.DefaultText = "";
-            this.tb_emailsdt.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
-            this.tb_emailsdt.FocusedState.BorderColor = System.Drawing.Color.Aqua;
-            this.tb_emailsdt.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.tb_emailsdt.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.tb_emailsdt.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.tb_emailsdt.Location = new System.Drawing.Point(60, 140);
-            this.tb_emailsdt.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.tb_emailsdt.Name = "tb_emailsdt";
-            this.tb_emailsdt.PlaceholderText = "Email/SĐT";
-            this.tb_emailsdt.SelectedText = "";
-            this.tb_emailsdt.Size = new System.Drawing.Size(744, 36);
-            this.tb_emailsdt.TabIndex = 5;
+            this.tb_email.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.tb_email.BorderRadius = 8;
+            this.tb_email.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.tb_email.DefaultText = "";
+            this.tb_email.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
+            this.tb_email.FocusedState.BorderColor = System.Drawing.Color.Aqua;
+            this.tb_email.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.tb_email.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.tb_email.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.tb_email.Location = new System.Drawing.Point(60, 140);
+            this.tb_email.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.tb_email.Name = "tb_email";
+            this.tb_email.PlaceholderText = "Email";
+            this.tb_email.SelectedText = "";
+            this.tb_email.Size = new System.Drawing.Size(744, 36);
+            this.tb_email.TabIndex = 5;
             // 
             // tb_xacnhanmk
             // 
@@ -162,24 +162,24 @@ namespace Pixel_Drift
             this.tb_matkhau.Size = new System.Drawing.Size(744, 36);
             this.tb_matkhau.TabIndex = 7;
             // 
-            // tb_tendangnhap
+            // tb_username
             // 
-            this.tb_tendangnhap.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.tb_tendangnhap.BorderRadius = 8;
-            this.tb_tendangnhap.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.tb_tendangnhap.DefaultText = "";
-            this.tb_tendangnhap.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
-            this.tb_tendangnhap.FocusedState.BorderColor = System.Drawing.Color.Aqua;
-            this.tb_tendangnhap.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.tb_tendangnhap.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.tb_tendangnhap.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.tb_tendangnhap.Location = new System.Drawing.Point(60, 300);
-            this.tb_tendangnhap.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.tb_tendangnhap.Name = "tb_tendangnhap";
-            this.tb_tendangnhap.PlaceholderText = "Tên đăng nhập";
-            this.tb_tendangnhap.SelectedText = "";
-            this.tb_tendangnhap.Size = new System.Drawing.Size(744, 36);
-            this.tb_tendangnhap.TabIndex = 6;
+            this.tb_username.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.tb_username.BorderRadius = 8;
+            this.tb_username.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.tb_username.DefaultText = "";
+            this.tb_username.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
+            this.tb_username.FocusedState.BorderColor = System.Drawing.Color.Aqua;
+            this.tb_username.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.tb_username.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.tb_username.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.tb_username.Location = new System.Drawing.Point(60, 300);
+            this.tb_username.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.tb_username.Name = "tb_username";
+            this.tb_username.PlaceholderText = "Tên đăng nhập";
+            this.tb_username.SelectedText = "";
+            this.tb_username.Size = new System.Drawing.Size(744, 36);
+            this.tb_username.TabIndex = 6;
             // 
             // btn_xacnhan
             // 
@@ -201,24 +201,24 @@ namespace Pixel_Drift
             this.btn_xacnhan.Text = "Xác nhận";
             this.btn_xacnhan.Click += new System.EventHandler(this.btn_xacnhan_Click);
             // 
-            // tb_BirthDay
+            // tb_birthday
             // 
-            this.tb_BirthDay.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.tb_BirthDay.BorderRadius = 8;
-            this.tb_BirthDay.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.tb_BirthDay.DefaultText = "";
-            this.tb_BirthDay.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
-            this.tb_BirthDay.FocusedState.BorderColor = System.Drawing.Color.Aqua;
-            this.tb_BirthDay.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.tb_BirthDay.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.tb_BirthDay.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.tb_BirthDay.Location = new System.Drawing.Point(60, 220);
-            this.tb_BirthDay.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.tb_BirthDay.Name = "tb_BirthDay";
-            this.tb_BirthDay.PlaceholderText = "DD/MM/YYYY";
-            this.tb_BirthDay.SelectedText = "";
-            this.tb_BirthDay.Size = new System.Drawing.Size(744, 36);
-            this.tb_BirthDay.TabIndex = 8;
+            this.tb_birthday.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.tb_birthday.BorderRadius = 8;
+            this.tb_birthday.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.tb_birthday.DefaultText = "";
+            this.tb_birthday.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
+            this.tb_birthday.FocusedState.BorderColor = System.Drawing.Color.Aqua;
+            this.tb_birthday.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.tb_birthday.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.tb_birthday.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.tb_birthday.Location = new System.Drawing.Point(60, 220);
+            this.tb_birthday.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.tb_birthday.Name = "tb_birthday";
+            this.tb_birthday.PlaceholderText = "DD/MM/YYYY";
+            this.tb_birthday.SelectedText = "";
+            this.tb_birthday.Size = new System.Drawing.Size(744, 36);
+            this.tb_birthday.TabIndex = 8;
             // 
             // label6
             // 
@@ -260,11 +260,11 @@ namespace Pixel_Drift
             this.Panel_Chua_Form.Controls.Add(this.btn_backdn);
             this.Panel_Chua_Form.Controls.Add(this.label1);
             this.Panel_Chua_Form.Controls.Add(this.btn_xacnhan);
-            this.Panel_Chua_Form.Controls.Add(this.tb_BirthDay);
+            this.Panel_Chua_Form.Controls.Add(this.tb_birthday);
             this.Panel_Chua_Form.Controls.Add(this.tb_xacnhanmk);
             this.Panel_Chua_Form.Controls.Add(this.tb_matkhau);
-            this.Panel_Chua_Form.Controls.Add(this.tb_tendangnhap);
-            this.Panel_Chua_Form.Controls.Add(this.tb_emailsdt);
+            this.Panel_Chua_Form.Controls.Add(this.tb_username);
+            this.Panel_Chua_Form.Controls.Add(this.tb_email);
             this.Panel_Chua_Form.Controls.Add(this.label6);
             this.Panel_Chua_Form.Controls.Add(this.label5);
             this.Panel_Chua_Form.Controls.Add(this.label4);
@@ -300,12 +300,12 @@ namespace Pixel_Drift
         private Guna.UI2.WinForms.Guna2HtmlLabel label3;
         private Guna.UI2.WinForms.Guna2HtmlLabel label4;
         private Guna.UI2.WinForms.Guna2HtmlLabel label5;
-        private Guna.UI2.WinForms.Guna2TextBox tb_emailsdt;
+        private Guna.UI2.WinForms.Guna2TextBox tb_email;
         private Guna.UI2.WinForms.Guna2TextBox tb_xacnhanmk;
         private Guna.UI2.WinForms.Guna2TextBox tb_matkhau;
-        private Guna.UI2.WinForms.Guna2TextBox tb_tendangnhap;
+        private Guna.UI2.WinForms.Guna2TextBox tb_username;
         private Guna.UI2.WinForms.Guna2Button btn_xacnhan;
-        private Guna.UI2.WinForms.Guna2TextBox tb_BirthDay;
+        private Guna.UI2.WinForms.Guna2TextBox tb_birthday;
         private Guna.UI2.WinForms.Guna2HtmlLabel label6;
         private Guna.UI2.WinForms.Guna2Button btn_backdn;
         private Guna.UI2.WinForms.Guna2Panel Panel_Chua_Form;

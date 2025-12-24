@@ -46,7 +46,7 @@
             // 
             // btn_guimahoa
             // 
-            this.btn_guimahoa.BackColor = System.Drawing.Color.White;
+            this.btn_guimahoa.BackColor = System.Drawing.Color.WhiteSmoke;
             this.btn_guimahoa.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_guimahoa.Location = new System.Drawing.Point(370, 231);
             this.btn_guimahoa.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -59,6 +59,7 @@
             // 
             // btn_quaylai
             // 
+            this.btn_quaylai.BackColor = System.Drawing.Color.WhiteSmoke;
             this.btn_quaylai.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_quaylai.Location = new System.Drawing.Point(533, 231);
             this.btn_quaylai.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -66,7 +67,7 @@
             this.btn_quaylai.Size = new System.Drawing.Size(138, 44);
             this.btn_quaylai.TabIndex = 4;
             this.btn_quaylai.Text = "Quay lại";
-            this.btn_quaylai.UseVisualStyleBackColor = true;
+            this.btn_quaylai.UseVisualStyleBackColor = false;
             this.btn_quaylai.Click += new System.EventHandler(this.btn_quaylai_Click);
             // 
             // guna2HtmlLabel1
@@ -75,9 +76,9 @@
             this.guna2HtmlLabel1.BackColor = System.Drawing.Color.Transparent;
             this.guna2HtmlLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2HtmlLabel1.ForeColor = System.Drawing.Color.Orange;
-            this.guna2HtmlLabel1.Location = new System.Drawing.Point(315, 86);
+            this.guna2HtmlLabel1.Location = new System.Drawing.Point(324, 99);
             this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            this.guna2HtmlLabel1.Size = new System.Drawing.Size(515, 33);
+            this.guna2HtmlLabel1.Size = new System.Drawing.Size(411, 33);
             this.guna2HtmlLabel1.TabIndex = 6;
             this.guna2HtmlLabel1.Text = "Vui lòng nhập email của bạn:";
             // 

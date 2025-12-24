@@ -33,42 +33,10 @@ namespace Pixel_Drift
             }
         }
 
-        private void btn_quenmatkhau_Click(object sender, EventArgs e)
+        private void btn_dangnhap_Click(object sender, EventArgs e)
         {
-            Form_Quen_Mat_Khau Form = Application.OpenForms.OfType<Form_Quen_Mat_Khau>().FirstOrDefault();
-
-            if (Form != null)
-            {
-                Form.Show();
-            }
-            else
-            {
-                Form = new Form_Quen_Mat_Khau();
-                Form.Show();
-            }
-            this.Hide();
-        }
-
-        private void btn_backdk_Click(object sender, EventArgs e)
-        {
-            Form_Dang_Ki Form = Application.OpenForms.OfType<Form_Dang_Ki>().FirstOrDefault();
-
-            if (Form != null)
-            {
-                Form.Show();
-            }
-            else
-            {
-                Form = new Form_Dang_Ki();
-                Form.Show();
-            }
-            this.Hide();
-        }
-
-        private void btn_vaogame_Click(object sender, EventArgs e)
-        {
-            string Username = textBox1.Text.Trim();
-            string Password = textBox2.Text.Trim();
+            string Username = tb_username.Text.Trim();
+            string Password = tb_matkhau.Text.Trim();
 
             if (Username == "" || Password == "")
             {
@@ -112,11 +80,16 @@ namespace Pixel_Drift
 
                 if (Dict.ContainsKey("status") && Dict["status"] == "success")
                 {
-                    MessageBox.Show("Đăng nhập thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Form_Dang_Nhap.Current_Username = Username;
-                    this.Hide();
-                    Form_Thong_Tin Form_Thong_Tin = new Form_Thong_Tin(Username);
-                    Form_Thong_Tin.ShowDialog();
+                    DialogResult Result = MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    Current_Username = Username;
+
+                    if (Result == DialogResult.OK)
+                    {
+                        Form_Thong_Tin Form_Thong_Tin = new Form_Thong_Tin(Username);
+                        Form_Thong_Tin.Show();
+                        this.Close();
+                    }
                 }
                 else
                 {
@@ -136,6 +109,38 @@ namespace Pixel_Drift
             {
                 MessageBox.Show("Lỗi: " + Ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btn_quaylaidk_Click(object sender, EventArgs e)
+        {
+            Form_Dang_Ki Form = Application.OpenForms.OfType<Form_Dang_Ki>().FirstOrDefault();
+
+            if (Form != null)
+            {
+                Form.Show();
+            }
+            else
+            {
+                Form = new Form_Dang_Ki();
+                Form.Show();
+            }
+            this.Hide();
+        }
+
+        private void btn_quenmatkhau_Click(object sender, EventArgs e)
+        {
+            Form_Quen_Mat_Khau Form = Application.OpenForms.OfType<Form_Quen_Mat_Khau>().FirstOrDefault();
+
+            if (Form != null)
+            {
+                Form.Show();
+            }
+            else
+            {
+                Form = new Form_Quen_Mat_Khau();
+                Form.Show();
+            }
+            this.Hide();
         }
     }
 }

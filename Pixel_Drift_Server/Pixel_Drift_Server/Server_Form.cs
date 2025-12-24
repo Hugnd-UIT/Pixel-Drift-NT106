@@ -313,6 +313,7 @@ namespace Pixel_Drift_Server
                 string Password = Data["password"];
 
                 string User_Email = Get_Email_From_Username(Username);
+
                 if (string.IsNullOrEmpty(User_Email))
                 {
                     return JsonSerializer.Serialize(new { status = "error", message = "Tài khoản không tồn tại" });
@@ -494,6 +495,7 @@ namespace Pixel_Drift_Server
 
                     // Kiểm tra email có tồn tại không
                     string Query = "SELECT Username, Password FROM Info_User WHERE Email=@email";
+
                     using (var Cmd = new SQLiteCommand(Query, SQL_Helper.Connection))
                     {
                         Cmd.Parameters.AddWithValue("@email", Email);
@@ -513,8 +515,7 @@ namespace Pixel_Drift_Server
                                 }
 
                                 // Gửi email với token
-                                bool Sent = Send_Email(Email, "Password Reset",
-                                    $"Hello {Username}, your password reset token is: {Token}");
+                                bool Sent = Send_Email(Email, "Password Reset", $"Hello {Username}, your password reset token is: {Token}");
 
                                 if (Sent)
                                 {

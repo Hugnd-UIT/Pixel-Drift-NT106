@@ -21,8 +21,15 @@ namespace Pixel_Drift
         {
             if (Client_Manager.Is_Connected && !string.IsNullOrEmpty(Form_Dang_Nhap.Current_Username))
             {
-                MessageBox.Show("Bạn đã đăng nhập rồi!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btn_dang_ki.Enabled = false;
                 return;
+            }
+
+            Form_Dang_Nhap Form_Login = Application.OpenForms.OfType<Form_Dang_Nhap>().FirstOrDefault();
+
+            if (Form_Login != null)
+            {
+                Form_Login.Close();
             }
 
             Form_Dang_Ki Form = Application.OpenForms.OfType<Form_Dang_Ki>().FirstOrDefault();
@@ -47,8 +54,15 @@ namespace Pixel_Drift
         {
             if (Client_Manager.Is_Connected && !string.IsNullOrEmpty(Form_Dang_Nhap.Current_Username))
             {
-                MessageBox.Show("Bạn đã đăng nhập rồi!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btn_dang_nhap.Enabled = false;
                 return;
+            }
+
+            Form_Dang_Ki Form_Regis = Application.OpenForms.OfType<Form_Dang_Ki>().FirstOrDefault();
+
+            if (Form_Regis != null)
+            {
+                Form_Regis.Close();
             }
 
             Form_Dang_Nhap Form = Application.OpenForms.OfType<Form_Dang_Nhap>().FirstOrDefault();

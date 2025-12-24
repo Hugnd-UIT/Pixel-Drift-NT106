@@ -63,11 +63,11 @@ namespace Pixel_Drift
 
                 DataTable Dt = new DataTable();
                 Dt.Columns.Add("STT", typeof(int));
-                Dt.Columns.Add("Tên người chơi", typeof(string));
-                Dt.Columns.Add("Số trận thắng", typeof(int));
-                Dt.Columns.Add("Số lần va chạm", typeof(int));
-                Dt.Columns.Add("Tổng điểm", typeof(double));
-                Dt.Columns.Add("Ngày chơi", typeof(string));
+                Dt.Columns.Add("Username", typeof(string));
+                Dt.Columns.Add("Win", typeof(int));
+                Dt.Columns.Add("Crash", typeof(int));
+                Dt.Columns.Add("Total", typeof(double));
+                Dt.Columns.Add("Date", typeof(string));
 
                 string[] Lines = Json_Data.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -92,7 +92,10 @@ namespace Pixel_Drift
                 if (dgv_ScoreBoard.Columns.Count > 0)
                 {
                     dgv_ScoreBoard.Columns[0].Width = 60;
-                    dgv_ScoreBoard.Columns[1].Width = 200;
+                    dgv_ScoreBoard.Columns[1].Width = 90;
+                    dgv_ScoreBoard.Columns[3].Width = 80;
+                    dgv_ScoreBoard.Columns[4].Width = 60;
+                    dgv_ScoreBoard.Columns[5].Width = 60;
                 }
 
                 Highlight_Top_Players();
@@ -105,7 +108,7 @@ namespace Pixel_Drift
 
         private void btn_Search_Click(object sender, EventArgs e)
         {
-            string Search_Text = txt_Search.Text.Trim();
+            string Search_Text = tb_username.Text.Trim();
             if (string.IsNullOrEmpty(Search_Text))
             {
                 Load_Score_Board();

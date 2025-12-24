@@ -25,17 +25,21 @@ namespace Pixel_Drift
                 return;
             }
 
+            if (!Client_Manager.Is_Connected)
+            {
+                string IP = Client_Manager.Get_Server_IP();
+
+                if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
+
+                if (!Client_Manager.Connect(IP, 1111))
+                {
+                    MessageBox.Show("Không tìm thấy server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             try
             {
-                if (!Client_Manager.Is_Connected)
-                {
-
-                    if (!Client_Manager.Connect(Client_Manager.Get_Server_IP(), 1111))
-                    {
-                        throw new SocketException();
-                    }
-                }
-
                 var Request = new
                 {
                     action = "forgot_password",
@@ -55,16 +59,16 @@ namespace Pixel_Drift
                 {
                     MessageBox.Show(Dict["message"], "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    Form_Doi_Mat_Khau Form_Doi = Application.OpenForms.OfType<Form_Doi_Mat_Khau>().FirstOrDefault();
+                    Form_Doi_Mat_Khau Form = Application.OpenForms.OfType<Form_Doi_Mat_Khau>().FirstOrDefault();
 
-                    if (Form_Doi != null)
+                    if (Form != null)
                     {
-                        Form_Doi.Show();
+                        Form.Show();
                     }
                     else
                     {
-                        Form_Doi = new Form_Doi_Mat_Khau(Email);
-                        Form_Doi.Show();
+                        Form = new Form_Doi_Mat_Khau(Email);
+                        Form.Show();
                     }
                     this.Close();
                 }

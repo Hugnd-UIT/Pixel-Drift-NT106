@@ -19,6 +19,19 @@ namespace Pixel_Drift
             User_Email = Email;
         }
 
+        // Hàm mã hóa SHA-256
+        private string Ma_Hoa(string Password)
+        {
+            using (SHA256 Sha = SHA256.Create())
+            {
+                byte[] Bytes = Sha.ComputeHash(Encoding.UTF8.GetBytes(Password));
+                StringBuilder Builder = new StringBuilder();
+                foreach (byte B in Bytes)
+                    Builder.Append(B.ToString("x2"));
+                return Builder.ToString();
+            }
+        }
+
         private void btn_doimk_Click(object sender, EventArgs e)
         {
             string Token = txt_mkcu.Text.Trim();
@@ -27,35 +40,37 @@ namespace Pixel_Drift
 
             if (string.IsNullOrEmpty(Token) || string.IsNullOrEmpty(New_Pass) || string.IsNullOrEmpty(Confirm))
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Cảnh báo",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (New_Pass != Confirm)
             {
-                MessageBox.Show("Mật khẩu xác nhận không trùng khớp!", "Lỗi",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Mật khẩu xác nhận không trùng khớp!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (!Client_Manager.Is_Connected)
             {
-                MessageBox.Show("Mất kết nối đến server! Vui lòng thử lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                string IP = Client_Manager.Get_Server_IP();
+
+                if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
+
+                if (!Client_Manager.Connect(IP, 1111))
+                {
+                    MessageBox.Show("Không tìm thấy server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
 
             try
             {
-                // Mã hóa mật khẩu mới trước khi gửi 
-                string Encrypted_New_Password = Ma_Hoa(New_Pass);
-
                 var Request = new
                 {
                     action = "change_password",
                     email = User_Email,
                     token = Token,
-                    new_password = Encrypted_New_Password
+                    new_password = Ma_Hoa(New_Pass)
                 };
 
                 string Response = Client_Manager.Send_And_Wait(Request);
@@ -102,19 +117,6 @@ namespace Pixel_Drift
             catch (Exception Ex)
             {
                 MessageBox.Show("Lỗi: " + Ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Hàm mã hóa SHA-256
-        private string Ma_Hoa(string Password)
-        {
-            using (SHA256 Sha = SHA256.Create())
-            {
-                byte[] Bytes = Sha.ComputeHash(Encoding.UTF8.GetBytes(Password));
-                StringBuilder Builder = new StringBuilder();
-                foreach (byte B in Bytes)
-                    Builder.Append(B.ToString("x2"));
-                return Builder.ToString();
             }
         }
 

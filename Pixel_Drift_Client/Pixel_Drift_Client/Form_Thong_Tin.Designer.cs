@@ -31,32 +31,32 @@ namespace Pixel_Drift
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnVaoGame = new System.Windows.Forms.Button();
+            this.btn_vao_game = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_CardName = new System.Windows.Forms.Label();
             this.ptb_Avatar = new System.Windows.Forms.PictureBox();
-            this.lbl_TenDangNhap = new System.Windows.Forms.Label();
-            this.lbl_Email = new System.Windows.Forms.Label();
-            this.lbl_Birthday = new System.Windows.Forms.Label();
+            this.lbl_username = new System.Windows.Forms.Label();
+            this.lbl_email = new System.Windows.Forms.Label();
+            this.lbl_birthday = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptb_Avatar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnVaoGame
+            // btn_vao_game
             // 
-            this.btnVaoGame.BackColor = System.Drawing.Color.RoyalBlue;
-            this.btnVaoGame.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnVaoGame.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btnVaoGame.Location = new System.Drawing.Point(318, 501);
-            this.btnVaoGame.Margin = new System.Windows.Forms.Padding(4);
-            this.btnVaoGame.Name = "btnVaoGame";
-            this.btnVaoGame.Size = new System.Drawing.Size(233, 63);
-            this.btnVaoGame.TabIndex = 0;
-            this.btnVaoGame.Text = "Vào game";
-            this.btnVaoGame.UseVisualStyleBackColor = false;
-            this.btnVaoGame.Click += new System.EventHandler(this.btnVaoGame_Click);
+            this.btn_vao_game.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btn_vao_game.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_vao_game.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btn_vao_game.Location = new System.Drawing.Point(318, 501);
+            this.btn_vao_game.Margin = new System.Windows.Forms.Padding(4);
+            this.btn_vao_game.Name = "btn_vao_game";
+            this.btn_vao_game.Size = new System.Drawing.Size(233, 63);
+            this.btn_vao_game.TabIndex = 0;
+            this.btn_vao_game.Text = "Lets go!";
+            this.btn_vao_game.UseVisualStyleBackColor = false;
+            this.btn_vao_game.Click += new System.EventHandler(this.btn_vao_game_Click);
             // 
             // panel1
             // 
@@ -66,9 +66,9 @@ namespace Pixel_Drift
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.lbl_CardName);
             this.panel1.Controls.Add(this.ptb_Avatar);
-            this.panel1.Controls.Add(this.lbl_TenDangNhap);
-            this.panel1.Controls.Add(this.lbl_Email);
-            this.panel1.Controls.Add(this.lbl_Birthday);
+            this.panel1.Controls.Add(this.lbl_username);
+            this.panel1.Controls.Add(this.lbl_email);
+            this.panel1.Controls.Add(this.lbl_birthday);
             this.panel1.Location = new System.Drawing.Point(184, 149);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(498, 275);
@@ -97,38 +97,38 @@ namespace Pixel_Drift
             this.ptb_Avatar.TabIndex = 5;
             this.ptb_Avatar.TabStop = false;
             // 
-            // lbl_TenDangNhap
+            // lbl_username
             // 
-            this.lbl_TenDangNhap.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_TenDangNhap.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_TenDangNhap.ForeColor = System.Drawing.Color.Black;
-            this.lbl_TenDangNhap.Location = new System.Drawing.Point(229, 120);
-            this.lbl_TenDangNhap.Name = "lbl_TenDangNhap";
-            this.lbl_TenDangNhap.Size = new System.Drawing.Size(227, 36);
-            this.lbl_TenDangNhap.TabIndex = 3;
-            this.lbl_TenDangNhap.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_username.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_username.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_username.ForeColor = System.Drawing.Color.Black;
+            this.lbl_username.Location = new System.Drawing.Point(229, 120);
+            this.lbl_username.Name = "lbl_username";
+            this.lbl_username.Size = new System.Drawing.Size(227, 36);
+            this.lbl_username.TabIndex = 3;
+            this.lbl_username.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbl_Email
+            // lbl_email
             // 
-            this.lbl_Email.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_Email.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_Email.ForeColor = System.Drawing.Color.Black;
-            this.lbl_Email.Location = new System.Drawing.Point(200, 187);
-            this.lbl_Email.Name = "lbl_Email";
-            this.lbl_Email.Size = new System.Drawing.Size(292, 29);
-            this.lbl_Email.TabIndex = 4;
-            this.lbl_Email.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_email.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_email.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_email.ForeColor = System.Drawing.Color.Black;
+            this.lbl_email.Location = new System.Drawing.Point(200, 187);
+            this.lbl_email.Name = "lbl_email";
+            this.lbl_email.Size = new System.Drawing.Size(292, 29);
+            this.lbl_email.TabIndex = 4;
+            this.lbl_email.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lbl_Birthday
+            // lbl_birthday
             // 
-            this.lbl_Birthday.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_Birthday.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_Birthday.ForeColor = System.Drawing.Color.Black;
-            this.lbl_Birthday.Location = new System.Drawing.Point(230, 154);
-            this.lbl_Birthday.Name = "lbl_Birthday";
-            this.lbl_Birthday.Size = new System.Drawing.Size(226, 33);
-            this.lbl_Birthday.TabIndex = 2;
-            this.lbl_Birthday.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_birthday.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_birthday.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_birthday.ForeColor = System.Drawing.Color.Black;
+            this.lbl_birthday.Location = new System.Drawing.Point(230, 154);
+            this.lbl_birthday.Name = "lbl_birthday";
+            this.lbl_birthday.Size = new System.Drawing.Size(226, 33);
+            this.lbl_birthday.TabIndex = 2;
+            this.lbl_birthday.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pictureBox1
             // 
@@ -148,7 +148,7 @@ namespace Pixel_Drift
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(870, 613);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.btnVaoGame);
+            this.Controls.Add(this.btn_vao_game);
             this.Controls.Add(this.pictureBox1);
             this.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.DarkGoldenrod;
@@ -168,10 +168,10 @@ namespace Pixel_Drift
 
         #endregion
 
-        private System.Windows.Forms.Label lbl_Birthday;
-        private System.Windows.Forms.Label lbl_Email;
-        private System.Windows.Forms.Label lbl_TenDangNhap;
-        private System.Windows.Forms.Button btnVaoGame;
+        private System.Windows.Forms.Label lbl_birthday;
+        private System.Windows.Forms.Label lbl_email;
+        private System.Windows.Forms.Label lbl_username;
+        private System.Windows.Forms.Button btn_vao_game;
         private Panel panel1;
         private PictureBox ptb_Avatar;
         private Label lbl_CardName;
