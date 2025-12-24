@@ -160,15 +160,13 @@ namespace Pixel_Drift_Server
                         switch (Action)
                         {
                             case "login":
+                                var Login_Data = new Dictionary<string, string>
                                 {
-                                    var Login_Data = new Dictionary<string, string>
-                                    {
-                                        { "username", Data["username"].GetString() },
-                                        { "password", Data["password"].GetString() }
-                                    };
-                                    Response = Handle_Login(Login_Data, Client);
-                                    break;
-                                }
+                                    { "username", Data["username"].GetString() },
+                                    { "password", Data["password"].GetString() }
+                                };
+                                Response = Handle_Login(Login_Data, Client);
+                                break;
 
                             case "register":
                                 var Reg_Data = new Dictionary<string, string> {
