@@ -22,7 +22,7 @@
 ---
 ## 📸 Demo
 **Mở Đầu Game**
-> ![Image](https://github.com/user-attachments/assets/a63248c7-7662-4077-848a-42a28d72e457)
+> ![Image](https://github.com/user-attachments/assets/aac397f4-3611-4d07-ab29-f8452b4ad550)
 
 **Đăng Kí**
 > ![Image](https://github.com/user-attachments/assets/3e91a7a1-ae12-4acf-b359-7f463f4c0153)
@@ -37,7 +37,7 @@
 > ![Image](https://github.com/user-attachments/assets/a6c05d8e-443e-4954-b1b3-958a3a2be38e)
 
 **Game Play**
-> ![Image](https://github.com/user-attachments/assets/ebf0b6a6-9023-4354-8e72-b6651157ebd4)
+> ![Image](https://github.com/user-attachments/assets/070fa6a9-f5e7-4058-9080-407ed96ce20d)
 
 --- 
 
@@ -104,7 +104,7 @@ Pixel-Drift/
 
 1. Tải file **Setup_Game.zip** trong mục Release.
 2. Giải nén file ra thư mục.
-3. Chạy file **Setup_Game.exe**. Nếu có thông báo Windows protected ... thì chọn More info và Run anyway
+3. Chạy file **Setup_Game.exe** (Icon đĩa nhạc màu đen. Nếu có thông báo Windows protected ... thì chọn More info và Run anyway).
 4. Cài đặt **Radmin:** https://www.radmin-vpn.com/
 5. Mở Radmin chọn **Network**
 6. Chọn **Join Network** 
