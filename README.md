@@ -102,15 +102,15 @@ Pixel-Drift/
 
 ## 🛠 Hướng dẫn cài đặt
 
-1. Tải file **Setup_Game.zip** trong mục Release.
-2. Giải nén file ra thư mục.
-3. Chạy file **setup.exe** (Icon đĩa nhạc màu đen. Nếu có thông báo Windows protected ... thì chọn More info và Run anyway).
+1. Tải file **Setup_Game.zip** trong mục Release
+2. Giải nén file ra thư mục
+3. Chạy file **setup.exe**
 4. Cài đặt **Radmin:** https://www.radmin-vpn.com/
 5. Mở Radmin chọn **Network**
 6. Chọn **Join Network** 
 7. Nhập Network name: **Pixel Drift** và Password: **0123456789**
 8. Mở Game và bắt đầu chơi thôi!!!
-
+Lưu ý: Nếu xuất hiện Windows protected thì chọn More info -> Run anyway
 ---
 <div align="center">
   <sub>© 2025 Pixel Drift - UIT</sub>
