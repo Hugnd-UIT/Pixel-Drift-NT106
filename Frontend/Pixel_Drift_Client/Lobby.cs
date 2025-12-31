@@ -50,15 +50,15 @@ namespace Pixel_Drift
                     }
                     else if (Status == "force_logout")
                     {
-                        string Msg = Data.ContainsKey("message") ? Data["message"].GetString() : "Tài khoản đã đăng nhập nơi khác!";
+                        string Msg = Data.ContainsKey("message") ? Data["message"].GetString() : "Account Logged In From Another Location!";
 
-                        MessageBox.Show(Msg, "Cảnh báo Đăng Nhập", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(Msg, "Login Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                         Application.Exit();
                     }
                     else if (Status == "error")
                     {
-                        MessageBox.Show(Data["message"].GetString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Data["message"].GetString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch { }
@@ -90,11 +90,10 @@ namespace Pixel_Drift
         private void btn_Scoreboard_Click(object sender, EventArgs e)
         {
             var Sb = Application.OpenForms.OfType<Form_ScoreBoard>().FirstOrDefault();
-            if (Sb != null) Sb.
-                    Show();
-            else 
-            { 
-                new Form_ScoreBoard(Network_Handle.Get_Client()).Show(); 
+            if (Sb != null) Sb.Show();
+            else
+            {
+                new Form_ScoreBoard(Network_Handle.Get_Client()).Show();
             }
         }
     }

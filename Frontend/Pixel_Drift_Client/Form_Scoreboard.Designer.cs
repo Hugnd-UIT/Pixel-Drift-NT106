@@ -17,9 +17,9 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lbl_TitleBanner = new Guna.UI2.WinForms.Guna2Button();
             this.dgv_ScoreBoard = new Guna.UI2.WinForms.Guna2DataGridView();
             this.btn_Close = new Guna.UI2.WinForms.Guna2GradientButton();
@@ -50,7 +50,7 @@
             this.lbl_TitleBanner.Location = new System.Drawing.Point(350, 11);
             this.lbl_TitleBanner.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lbl_TitleBanner.Name = "lbl_TitleBanner";
-            this.lbl_TitleBanner.Size = new System.Drawing.Size(529, 69);
+            this.lbl_TitleBanner.Size = new System.Drawing.Size(529, 61);
             this.lbl_TitleBanner.TabIndex = 0;
             this.lbl_TitleBanner.Text = "🏆 SCORE BOARD 🏆";
             // 
@@ -58,27 +58,27 @@
             // 
             this.dgv_ScoreBoard.AllowUserToAddRows = false;
             this.dgv_ScoreBoard.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
-            this.dgv_ScoreBoard.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.dgv_ScoreBoard.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgv_ScoreBoard.BackgroundColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.Navy;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.Navy;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_ScoreBoard.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Navy;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Navy;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_ScoreBoard.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgv_ScoreBoard.ColumnHeadersHeight = 40;
             this.dgv_ScoreBoard.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 10F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv_ScoreBoard.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_ScoreBoard.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgv_ScoreBoard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_ScoreBoard.GridColor = System.Drawing.Color.LightGray;
             this.dgv_ScoreBoard.Location = new System.Drawing.Point(3, 2);
@@ -132,7 +132,7 @@
             this.btn_Close.Name = "btn_Close";
             this.btn_Close.Size = new System.Drawing.Size(644, 76);
             this.btn_Close.TabIndex = 2;
-            this.btn_Close.Text = "ĐÓNG";
+            this.btn_Close.Text = "EXIT";
             this.btn_Close.Click += new System.EventHandler(this.btn_Close_Click);
             // 
             // tb_username
@@ -154,7 +154,7 @@
             this.tb_username.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.tb_username.Name = "tb_username";
             this.tb_username.PlaceholderForeColor = System.Drawing.Color.Gray;
-            this.tb_username.PlaceholderText = "Nhập tên để tìm...";
+            this.tb_username.PlaceholderText = "Enter username...";
             this.tb_username.SelectedText = "";
             this.tb_username.Size = new System.Drawing.Size(330, 53);
             this.tb_username.TabIndex = 3;
@@ -178,7 +178,7 @@
             this.btn_search.Name = "btn_search";
             this.btn_search.Size = new System.Drawing.Size(144, 53);
             this.btn_search.TabIndex = 4;
-            this.btn_search.Text = "🔍Tìm kiếm";
+            this.btn_search.Text = "🔍Search";
             this.btn_search.Click += new System.EventHandler(this.btn_Search_Click);
             // 
             // btn_refesh
@@ -199,7 +199,7 @@
             this.btn_refesh.Name = "btn_refesh";
             this.btn_refesh.Size = new System.Drawing.Size(147, 53);
             this.btn_refesh.TabIndex = 5;
-            this.btn_refesh.Text = "🔄Làm mới";
+            this.btn_refesh.Text = "🔄 Refesh";
             this.btn_refesh.Click += new System.EventHandler(this.btn_Refresh_Click);
             // 
             // pictureBox1

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Media;
-using System.Reflection; 
+using System.Reflection;
 using System.Text.Json;
 using System.Windows.Forms;
 using WMPLib;
@@ -53,12 +53,12 @@ namespace Pixel_Drift
             this.SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
             this.UpdateStyles();
 
-            this.KeyPreview = true; 
+            this.KeyPreview = true;
             this.My_Username = Username;
             this.My_Player_Number = Player_Num;
             if (btn_ID != null) btn_ID.Text = "ID: " + Room_ID;
 
-            string Player_Color = (My_Player_Number == 1) ? "Xe Đỏ" : "Xe Xanh";
+            string Player_Color = (My_Player_Number == 1) ? "Red Car" : "Blue Car";
             this.Text = $"Pixel Drift - PLAYER {My_Player_Number} ({Player_Color}) - {My_Username}";
 
             Network_Handle.On_Message_Received += Handle_Server_Message;
@@ -83,7 +83,7 @@ namespace Pixel_Drift
             }
             catch (Exception Ex)
             {
-                MessageBox.Show("Lỗi khởi tạo Game: " + Ex.Message);
+                MessageBox.Show("Game Initialization Error: " + Ex.Message);
                 this.Close();
             }
         }
@@ -206,22 +206,22 @@ namespace Pixel_Drift
                             string P2_Name = Data["player2_name"].GetString();
                             bool P1_Ready = Data["player1_ready"].GetBoolean();
                             bool P2_Ready = Data["player2_ready"].GetBoolean();
-                            if (lbl_P1_Status != null) lbl_P1_Status.Text = $"P1 ({P1_Name}): {(P1_Ready ? "Sẵn sàng" : "...")}";
-                            if (lbl_P2_Status != null) lbl_P2_Status.Text = $"P2 ({P2_Name}): {(P2_Ready ? "Sẵn sàng" : "...")}";
+                            if (lbl_P1_Status != null) lbl_P1_Status.Text = $"P1 ({P1_Name}): {(P1_Ready ? "Ready" : "...")}";
+                            if (lbl_P2_Status != null) lbl_P2_Status.Text = $"P2 ({P2_Name}): {(P2_Ready ? "Ready" : "...")}";
                             break;
 
                         case "game_over":
                             Music?.controls.stop();
-                            MessageBox.Show("Hết giờ! Trò chơi kết thúc.", "Thông báo");
+                            MessageBox.Show("Time Is Up! Game Over.", "Notification");
                             End_Game();
                             Reset_To_Lobby();
                             break;
 
                         case "player_disconnected":
-                            string Name = Data.ContainsKey("name") ? Data["name"].GetString() : "Đối thủ";
+                            string Name = Data.ContainsKey("name") ? Data["name"].GetString() : "Opponent";
                             Music?.controls.stop();
                             CountDown_5Sec?.Stop();
-                            MessageBox.Show($"{Name} đã thoát. Bạn sẽ về Lobby.", "Thông báo");
+                            MessageBox.Show($"{Name} Has Disconnected. You Will Return To Lobby.", "Notification");
 
                             Is_Returning_To_Lobby = true;
                             Send(new { action = "leave_room" });
@@ -235,7 +235,7 @@ namespace Pixel_Drift
 
                         case "force_logout":
                             Music?.controls.stop();
-                            MessageBox.Show("Tài khoản đăng nhập nơi khác!", "Cảnh báo");
+                            MessageBox.Show("Account Logged In From Another Location!", "Warning");
                             Application.Exit();
                             break;
                     }
@@ -272,7 +272,7 @@ namespace Pixel_Drift
         {
             Send(new { action = "set_ready", ready_status = "true" });
             btn_Ready.Enabled = false;
-            btn_Ready.Text = "Đang chờ...";
+            btn_Ready.Text = "Waiting...";
             this.Focus();
         }
 
@@ -389,9 +389,9 @@ namespace Pixel_Drift
             if (panel1 != null) panel1.Invalidate();
             if (panel2 != null) panel2.Invalidate();
 
-            btn_Ready.Visible = true; btn_Ready.Enabled = true; btn_Ready.Text = "Sẵn sàng";
+            btn_Ready.Visible = true; btn_Ready.Enabled = true; btn_Ready.Text = "Ready";
             lbl_P1_Status.Visible = true; lbl_P2_Status.Visible = true;
-            btn_Scoreboard.Enabled = true; btn_Scoreboard .Visible = true;
+            btn_Scoreboard.Enabled = true; btn_Scoreboard.Visible = true;
             btn_ID.Visible = true;
 
             lbl_Countdown.Visible = false; lbl_GameTimer.Visible = false;
@@ -430,9 +430,9 @@ namespace Pixel_Drift
         {
             var Sb = Application.OpenForms.OfType<Form_ScoreBoard>().FirstOrDefault();
             if (Sb != null) Sb.Show();
-            else 
-            { 
-                new Form_ScoreBoard(Network_Handle.Get_Client()).Show(); 
+            else
+            {
+                new Form_ScoreBoard(Network_Handle.Get_Client()).Show();
             }
         }
     }

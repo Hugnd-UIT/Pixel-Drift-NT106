@@ -21,7 +21,7 @@ namespace Pixel_Drift
 
             if (string.IsNullOrEmpty(Email))
             {
-                MessageBox.Show("Vui lòng nhập email của bạn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please Enter Your Email!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -33,13 +33,13 @@ namespace Pixel_Drift
 
                 if (!Network_Handle.Connect(IP, 1111))
                 {
-                    MessageBox.Show("Không tìm thấy server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Server Not Found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 if (!Network_Handle.Secure())
                 {
-                    MessageBox.Show("Lỗi thiết lập bảo mật! Không thể tiếp tục.");
+                    MessageBox.Show("Security Setup Error! Cannot Continue.");
                     Network_Handle.Close_Connection();
                     return;
                 }
@@ -66,7 +66,7 @@ namespace Pixel_Drift
 
                 if (Dict.ContainsKey("status") && Dict["status"] == "success")
                 {
-                    MessageBox.Show(Dict["message"], "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Dict["message"], "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     Form_Doi_Mat_Khau Form = Application.OpenForms.OfType<Form_Doi_Mat_Khau>().FirstOrDefault();
 
@@ -83,22 +83,22 @@ namespace Pixel_Drift
                 }
                 else
                 {
-                    string Msg = Dict.ContainsKey("message") ? Dict["message"] : "Không thể gửi mật khẩu!";
-                    MessageBox.Show(Msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string Msg = Dict.ContainsKey("message") ? Dict["message"] : "Cannot Send Password!";
+                    MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (SocketException)
             {
-                MessageBox.Show("Không thể kết nối đến server. Kiểm tra IP và cổng!", "Lỗi",
+                MessageBox.Show("Cannot Connect To Server. Check IP And Port!", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (JsonException)
             {
-                MessageBox.Show("Phản hồi từ server không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Response From Server Is Invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception Ex)
             {
-                MessageBox.Show("Lỗi: " + Ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

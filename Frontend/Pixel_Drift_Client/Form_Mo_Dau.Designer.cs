@@ -60,7 +60,7 @@ namespace Pixel_Drift
             this.btn_dang_ki.Name = "btn_dang_ki";
             this.btn_dang_ki.Size = new System.Drawing.Size(341, 85);
             this.btn_dang_ki.TabIndex = 0;
-            this.btn_dang_ki.Text = "ĐĂNG KÍ";
+            this.btn_dang_ki.Text = "REGISTER";
             this.btn_dang_ki.Click += new System.EventHandler(this.btn_dang_ki_Click);
             // 
             // btn_dang_nhap
@@ -84,7 +84,7 @@ namespace Pixel_Drift
             this.btn_dang_nhap.Name = "btn_dang_nhap";
             this.btn_dang_nhap.Size = new System.Drawing.Size(341, 85);
             this.btn_dang_nhap.TabIndex = 3;
-            this.btn_dang_nhap.Text = "ĐĂNG NHẬP";
+            this.btn_dang_nhap.Text = "LOGIN";
             this.btn_dang_nhap.Click += new System.EventHandler(this.btn_dang_nhap_Click);
             // 
             // btn_thoat
@@ -108,7 +108,7 @@ namespace Pixel_Drift
             this.btn_thoat.Name = "btn_thoat";
             this.btn_thoat.Size = new System.Drawing.Size(341, 85);
             this.btn_thoat.TabIndex = 2;
-            this.btn_thoat.Text = "THOÁT GAME";
+            this.btn_thoat.Text = "EXIT";
             this.btn_thoat.Click += new System.EventHandler(this.btn_thoat_Click);
             // 
             // guna2BorderlessForm1

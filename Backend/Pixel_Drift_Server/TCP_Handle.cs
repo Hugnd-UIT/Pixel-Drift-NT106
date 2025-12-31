@@ -4,10 +4,12 @@ using System.Net;
 using System.Net.Mail;
 using System.Net.Sockets;
 using System.Text;
-using System.Text.Json; 
+using System.Text.Json;
 using System.IO;
+using System.Threading.Tasks;
 using BCrypt.Net;
 using Pixel_Drift;
+using System.Linq;
 
 namespace Pixel_Drift_Server
 {
@@ -17,6 +19,8 @@ namespace Pixel_Drift_Server
         private NetworkStream Stream;
 
         private string Session_AES_Key = null;
+        private static Dictionary<string, int> Login_Attempts = new Dictionary<string, int>();
+        private static Dictionary<string, DateTime> IP_Block_List = new Dictionary<string, DateTime>();
 
         private int Request_Count = 0;
         private const int MAX_REQUESTS_PER_SECOND = 20;
@@ -31,6 +35,19 @@ namespace Pixel_Drift_Server
             this.Client = TCP_Client;
             this.Client.ReceiveTimeout = 10000;
             this.Stream = TCP_Client.GetStream();
+        }
+
+        private string Get_Client_IP()
+        {
+            try
+            {
+                if (Client != null && Client.Client != null && Client.Client.RemoteEndPoint != null)
+                {
+                    return ((IPEndPoint)Client.Client.RemoteEndPoint).Address.ToString();
+                }
+            }
+            catch { }
+            return "Unknown";
         }
 
         public static void Start(int port)
@@ -50,7 +67,7 @@ namespace Pixel_Drift_Server
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[Error] {ex.Message}");
+                Console.WriteLine($"[Error] Server Start Failed: {ex.Message}");
             }
         }
 
@@ -59,12 +76,12 @@ namespace Pixel_Drift_Server
             try
             {
                 StreamReader Reader = new StreamReader(Stream, Encoding.UTF8);
-                
                 string Message;
 
                 while ((Message = Reader.ReadLine()) != null)
                 {
                     if (string.IsNullOrEmpty(Message)) continue;
+                    string IP = Get_Client_IP();
 
                     TimeSpan Diff = DateTime.Now - Last_Request_Time;
                     if (Diff.TotalSeconds >= 1)
@@ -77,7 +94,7 @@ namespace Pixel_Drift_Server
                         Request_Count++;
                         if (Request_Count > MAX_REQUESTS_PER_SECOND)
                         {
-                            Console.WriteLine($"[Warning] {Client.Client.RemoteEndPoint} Is Spamming! Dropping Packet!");
+                            Security_Logger.Log(Security_Logger.Level.ALERT, IP, "FAILED", "Client Is Spamming Dropping Packet");
                             break;
                         }
                     }
@@ -93,8 +110,8 @@ namespace Pixel_Drift_Server
                         }
                         else
                         {
-                            Console.WriteLine("[Warning] Decryption Failed From " + Client.Client.RemoteEndPoint);
-                            continue; 
+                            Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", "Decryption Failed");
+                            continue;
                         }
                     }
 
@@ -106,7 +123,8 @@ namespace Pixel_Drift_Server
                         string Action = Data["action"].GetString();
                         string Response = null;
 
-                        if (Action != "move" && Action != "ping") Console.WriteLine($"[TCP] {Client.Client.RemoteEndPoint}: {Action}");
+                        if (Action != "move" && Action != "ping")
+                            Console.WriteLine($"[TCP] {Client.Client.RemoteEndPoint}: {Action}");
 
                         switch (Action)
                         {
@@ -115,11 +133,7 @@ namespace Pixel_Drift_Server
                                 break;
 
                             case "get_public_key":
-                                string Key = JsonSerializer.Serialize(new
-                                {
-                                    status = "success",
-                                    public_key = Program.SERVER_PUBLIC_KEY
-                                });
+                                string Key = JsonSerializer.Serialize(new { status = "success", public_key = Program.SERVER_PUBLIC_KEY });
                                 Send_Message(Key);
                                 break;
 
@@ -160,13 +174,7 @@ namespace Pixel_Drift_Server
                                 break;
 
                             case "set_ready":
-                                Handle_Game_Action(Data, Action);
-                                break;
-
                             case "move":
-                                Handle_Game_Action(Data, Action);
-                                break;
-
                             case "leave_room":
                                 Handle_Game_Action(Data, Action);
                                 break;
@@ -182,13 +190,12 @@ namespace Pixel_Drift_Server
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"[Error] {ex.Message}");
+                        Console.WriteLine($"[Error] Processing Data: {ex.Message}");
                     }
                 }
             }
-            catch 
+            catch
             {
-                
             }
             finally
             {
@@ -213,7 +220,7 @@ namespace Pixel_Drift_Server
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[Error] {ex.Message}");
+                Console.WriteLine($"[Error] Send Message Failed: {ex.Message}");
             }
         }
 
@@ -222,17 +229,18 @@ namespace Pixel_Drift_Server
             try
             {
                 string Encrypted_Key = Data["aes_key"].GetString();
-
                 string Decrypted_Key = RSA_Handle.Decrypt(Encrypted_Key, Program.SERVER_PRIVATE_KEY);
 
                 if (Decrypted_Key != null && Decrypted_Key.Length == 32)
                 {
                     this.Session_AES_Key = Decrypted_Key;
-                    return JsonSerializer.Serialize(new { status = "success", message = "Kết nối bảo mật đã thiết lập" });
+                    Security_Logger.Log(Security_Logger.Level.INFO, Get_Client_IP(), "SUCCESS", "Secure Connection Established");
+                    return JsonSerializer.Serialize(new { status = "success", message = "Secure Connection Established" });
                 }
             }
             catch { }
-            return JsonSerializer.Serialize(new { status = "error", message = "Lỗi trao đổi khóa" });
+            Security_Logger.Log(Security_Logger.Level.WARNING, Get_Client_IP(), "FAILED", "Key Exchange Error");
+            return JsonSerializer.Serialize(new { status = "error", message = "Key Exchange Error" });
         }
 
         private void Handle_Game_Action(Dictionary<string, JsonElement> Data, string Action)
@@ -252,13 +260,36 @@ namespace Pixel_Drift_Server
 
         private string Handle_Login(Dictionary<string, JsonElement> Data)
         {
+            string IP = Get_Client_IP();
+
+            if (IP_Block_List.ContainsKey(IP))
+            {
+                if (DateTime.Now < IP_Block_List[IP])
+                {
+                    TimeSpan Remaining_Time = IP_Block_List[IP] - DateTime.Now;
+                    Security_Logger.Log(Security_Logger.Level.ALERT, IP, "FAILED", $"Ip Address Is Blocked To Prevent Brute Force Remaining {Remaining_Time.TotalSeconds:F0}s");
+                    return JsonSerializer.Serialize(new { status = "error", message = $"You Are Temporarily Blocked. Please Try Again In {Math.Ceiling(Remaining_Time.TotalMinutes)} Minutes." });
+                }
+                else
+                {
+                    IP_Block_List.Remove(IP);
+                    if (Login_Attempts.ContainsKey(IP)) Login_Attempts.Remove(IP);
+                }
+            }
+
+            if (!Data.ContainsKey("username") || !Data.ContainsKey("password"))
+            {
+                return JsonSerializer.Serialize(new { status = "error", message = "Incomplete Data" });
+            }
+
             string User = Data["username"].GetString();
             string Encrypted_Pass = Data["password"].GetString();
-            string Decrypted_Pass = RSA_Handle.Decrypt(Encrypted_Pass, Program.SERVER_PRIVATE_KEY);
 
+            string Decrypted_Pass = RSA_Handle.Decrypt(Encrypted_Pass, Program.SERVER_PRIVATE_KEY);
             if (Decrypted_Pass == null)
             {
-                return JsonSerializer.Serialize(new { status = "error", message = "Lỗi bảo mật: Gói tin không hợp lệ." });
+                Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", "Login Packet Decryption Failed");
+                return JsonSerializer.Serialize(new { status = "error", message = "Security Error: Invalid Packet" });
             }
 
             if (SQL_Handle.Handle_Login(User, Decrypted_Pass))
@@ -267,32 +298,59 @@ namespace Pixel_Drift_Server
 
                 lock (Active_Connections)
                 {
-                    if (Email != null && Active_Connections.ContainsKey(Email))
+                    if (Email != null)
                     {
-                        try
+                        if (Active_Connections.ContainsKey(Email))
                         {
-                            var Old_Client = Active_Connections[Email];
-                            string Kick_Msg = JsonSerializer.Serialize(new { status = "force_logout", message = "Tài khoản đăng nhập nơi khác" });
-                            byte[] Bytes = Encoding.UTF8.GetBytes(Kick_Msg + "\n");
-                            Old_Client.GetStream().Write(Bytes, 0, Bytes.Length);
-                            Old_Client.Close();
+                            try
+                            {
+                                var Old_Client = Active_Connections[Email];
+                                if (Old_Client.Connected)
+                                {
+                                    string Kick_Msg = JsonSerializer.Serialize(new { status = "force_logout", message = "Account Logged In From Another Location" });
+                                    byte[] Bytes = Encoding.UTF8.GetBytes(Kick_Msg + "\n");
+                                    Old_Client.GetStream().Write(Bytes, 0, Bytes.Length);
+                                    Old_Client.Close();
+                                }
+                            }
+                            catch { }
+                            Active_Connections.Remove(Email);
                         }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"[Error] {ex.Message}");
-                        }
-                        Active_Connections.Remove(Email);
+                        Active_Connections[Email] = Client;
                     }
-                    if (Email != null) Active_Connections[Email] = Client;
                 }
 
-                return JsonSerializer.Serialize(new { status = "success", message = "Login success", username = User });
+                if (Login_Attempts.ContainsKey(IP)) Login_Attempts.Remove(IP);
+                if (IP_Block_List.ContainsKey(IP)) IP_Block_List.Remove(IP);
+
+                Security_Logger.Log(Security_Logger.Level.INFO, IP, "SUCCESS", $"User {User} Logged In");
+                return JsonSerializer.Serialize(new { status = "success", message = "Login Success", username = User });
             }
-            return JsonSerializer.Serialize(new { status = "error", message = "Sai tài khoản hoặc mật khẩu" });
+            else
+            {
+                if (!Login_Attempts.ContainsKey(IP)) Login_Attempts[IP] = 0;
+                Login_Attempts[IP]++;
+
+                int Max_Attempts = 5;
+
+                if (Login_Attempts[IP] >= Max_Attempts)
+                {
+                    IP_Block_List[IP] = DateTime.Now.AddMinutes(5);
+                    Security_Logger.Log(Security_Logger.Level.ALERT, IP, "FAILED", "Ip Address Is Blocked To Prevent Brute Force");
+                    return JsonSerializer.Serialize(new { status = "error", message = "Too Many Failed Attempts. You Are Blocked For 5 Minutes." });
+                }
+                else
+                {
+                    int Remaining = Max_Attempts - Login_Attempts[IP];
+                    Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", $"Wrong Password For User {User}");
+                    return JsonSerializer.Serialize(new { status = "error", message = $"Invalid Username Or Password. {Remaining} Attempts Remaining." });
+                }
+            }
         }
 
         private string Handle_Register(Dictionary<string, JsonElement> Data)
         {
+            string IP = Get_Client_IP();
             string Username = Data["username"].GetString();
             string Email = Data["email"].GetString();
             string Birthday = Data.ContainsKey("birthday") ? Data["birthday"].GetString() : "";
@@ -301,35 +359,48 @@ namespace Pixel_Drift_Server
 
             if (Decrypted_Pass == null)
             {
-                return JsonSerializer.Serialize(new { status = "error", message = "Lỗi bảo mật: Gói tin không hợp lệ." });
+                Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", "Register Packet Decryption Failed");
+                return JsonSerializer.Serialize(new { status = "error", message = "Security Error: Invalid Packet" });
             }
 
             int Result = SQL_Handle.Handle_Register(Username, Email, Decrypted_Pass, Birthday);
 
-            if (Result == 1) return JsonSerializer.Serialize(new { status = "success", message = "Đăng ký thành công" });
-            if (Result == -1) return JsonSerializer.Serialize(new { status = "error", message = "Username hoặc Email đã tồn tại" });
-            return JsonSerializer.Serialize(new { status = "error", message = "Lỗi hệ thống đăng ký" });
+            if (Result == 1)
+            {
+                Security_Logger.Log(Security_Logger.Level.INFO, IP, "SUCCESS", $"New User Registered {Username} With Email {Email}");
+                return JsonSerializer.Serialize(new { status = "success", message = "Registration Successful" });
+            }
+            if (Result == -1)
+            {
+                Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", $"Duplicate Username Or Email Attempt For {Username}");
+                return JsonSerializer.Serialize(new { status = "error", message = "Username Or Email Already Exists" });
+            }
+            return JsonSerializer.Serialize(new { status = "error", message = "Registration System Error" });
         }
 
         private string Handle_Get_Info(Dictionary<string, JsonElement> Data)
         {
-            string Info = SQL_Handle.Handle_Get_Info(Data["username"].GetString());
+            string User = Data["username"].GetString();
+            string Info = SQL_Handle.Handle_Get_Info(User);
+
             if (!string.IsNullOrEmpty(Info))
             {
                 var Parts = Info.Split('|');
+                Console.WriteLine($"[Info] Retrieved Info For User: {User}");
                 return JsonSerializer.Serialize(new
                 {
                     status = "success",
-                    username = Data["username"].GetString(),
+                    username = User,
                     email = Parts[0],
                     birthday = Parts[1]
                 });
             }
-            return JsonSerializer.Serialize(new { status = "error", message = "Không tìm thấy user" });
+            return JsonSerializer.Serialize(new { status = "error", message = "User Not Found" });
         }
 
         private string Handle_Forgot_Password(Dictionary<string, JsonElement> Data)
         {
+            string IP = Get_Client_IP();
             string Email = Data["email"].GetString();
             string Username = SQL_Handle.Handle_Get_Username(Email);
 
@@ -341,16 +412,25 @@ namespace Pixel_Drift_Server
                     Reset_Tokens[Email] = Token;
                 }
 
-                bool Sent = Send_Email(Email, "Reset Password - Pixel Drift", $"Chào {Username}, mã xác nhận của bạn là: {Token}");
+                bool Sent = Send_Email(Email, "Reset Password - Pixel Drift", $"Hello {Username}, your verification code is: {Token}");
 
-                if (Sent) return JsonSerializer.Serialize(new { status = "success", message = "Đã gửi mã xác nhận qua Email" });
-                return JsonSerializer.Serialize(new { status = "error", message = "Lỗi gửi mail" });
+                if (Sent)
+                {
+                    Security_Logger.Log(Security_Logger.Level.INFO, IP, "SUCCESS", $"Reset Code Sent To {Email}");
+                    return JsonSerializer.Serialize(new { status = "success", message = "Verification Code Sent Via Email" });
+                }
+
+                Console.WriteLine($"[Error] Failed To Send Email To {Email}");
+                return JsonSerializer.Serialize(new { status = "error", message = "Error Sending Email" });
             }
-            return JsonSerializer.Serialize(new { status = "error", message = "Email không tồn tại trong hệ thống" });
+
+            Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", $"Invalid Email Requested {Email}");
+            return JsonSerializer.Serialize(new { status = "error", message = "Email Does Not Exist In The System" });
         }
 
         private string Handle_Change_Password(Dictionary<string, JsonElement> Data)
         {
+            string IP = Get_Client_IP();
             string Email = Data["email"].GetString();
             string Token = Data["token"].GetString();
             string Encrypted_Pass = Data["new_password"].GetString();
@@ -358,7 +438,7 @@ namespace Pixel_Drift_Server
 
             if (Decrypted_Pass == null)
             {
-                return JsonSerializer.Serialize(new { status = "error", message = "Lỗi bảo mật: Gói tin không hợp lệ." });
+                return JsonSerializer.Serialize(new { status = "error", message = "Security Error: Invalid Packet" });
             }
 
             lock (Reset_Tokens)
@@ -368,11 +448,14 @@ namespace Pixel_Drift_Server
                     if (SQL_Handle.Handle_Change_Password(Email, Decrypted_Pass))
                     {
                         Reset_Tokens.Remove(Email);
-                        return JsonSerializer.Serialize(new { status = "success", message = "Đổi mật khẩu thành công" });
+                        Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "SUCCESS", $"Password For Email {Email} Has Been Changed");
+                        return JsonSerializer.Serialize(new { status = "success", message = "Password Changed Successfully" });
                     }
                 }
             }
-            return JsonSerializer.Serialize(new { status = "error", message = "Mã xác nhận sai hoặc hết hạn" });
+
+            Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", $"Invalid Token Attempt For {Email}");
+            return JsonSerializer.Serialize(new { status = "error", message = "Invalid Or Expired Verification Code" });
         }
 
         private string Handle_Create_Room(Dictionary<string, JsonElement> Data)
@@ -392,8 +475,7 @@ namespace Pixel_Drift_Server
 
                 Program.Rooms.Add(Room_ID, New_Room);
                 Client_Room_Map[Client] = Room_ID;
-
-                Console.WriteLine($"[Success] {User} Create Room {Room_ID}");
+                Console.WriteLine($"[Success] User {User} Created Room {Room_ID}");
                 return JsonSerializer.Serialize(new { status = "create_room_success", room_id = Room_ID, player_number = P_Num });
             }
         }
@@ -413,13 +495,13 @@ namespace Pixel_Drift_Server
                     if (P_Num != -1)
                     {
                         Client_Room_Map[Client] = Room_ID;
-                        Console.WriteLine($"[Success] {User} Join Room {Room_ID}");
+                        Console.WriteLine($"[Success] User {User} Joined Room {Room_ID}");
                         return JsonSerializer.Serialize(new { status = "join_room_success", room_id = Room_ID, player_number = P_Num });
                     }
-                    return JsonSerializer.Serialize(new { status = "error", message = "Phòng đã đầy" });
+                    return JsonSerializer.Serialize(new { status = "error", message = "Room Is Full" });
                 }
             }
-            return JsonSerializer.Serialize(new { status = "error", message = "Không tìm thấy phòng" });
+            return JsonSerializer.Serialize(new { status = "error", message = "Room Not Found" });
         }
 
         private string Handle_Get_Scoreboard(Dictionary<string, JsonElement> Data)
@@ -440,7 +522,7 @@ namespace Pixel_Drift_Server
         {
             try
             {
-                Console.WriteLine($"[TCP] Client {Client.Client.RemoteEndPoint} Disconnected.");
+                Console.WriteLine($"[TCP] Client {Client.Client.RemoteEndPoint} Disconnected");
 
                 if (Client_Room_Map.ContainsKey(Client))
                 {
@@ -453,7 +535,7 @@ namespace Pixel_Drift_Server
                             if (Program.Rooms[Room_ID].Is_Empty())
                             {
                                 Program.Rooms.Remove(Room_ID);
-                                Console.WriteLine($"[Success] Room {Room_ID} Has Been Cancelled.");
+                                Console.WriteLine($"[Success] Room {Room_ID} Has Been Cancelled");
                             }
                         }
                     }
@@ -480,7 +562,7 @@ namespace Pixel_Drift_Server
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[Error] {ex.Message}");
+                    Console.WriteLine($"[Error] Close Client Error: {ex.Message}");
                 }
             }
             catch { }
@@ -495,7 +577,7 @@ namespace Pixel_Drift_Server
 
                 if (string.IsNullOrEmpty(From_Email) || string.IsNullOrEmpty(From_Pass))
                 {
-                    Console.WriteLine("[Error] MAIL_ACCOUNT Or MAIL_PASSWORD Hasn't Been Set Up!");
+                    Console.WriteLine("[Error] Mail Account Or Mail Password Hasn't Been Set Up!");
                     return false;
                 }
 
@@ -513,7 +595,7 @@ namespace Pixel_Drift_Server
             }
             catch (Exception Ex)
             {
-                Console.WriteLine($"[Error] {Ex.Message}");
+                Console.WriteLine($"[Error] Email Send Error: {Ex.Message}");
                 return false;
             }
         }

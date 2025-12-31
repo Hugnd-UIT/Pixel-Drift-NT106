@@ -55,9 +55,9 @@ namespace Pixel_Drift
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.label1.Location = new System.Drawing.Point(290, 40);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(256, 76);
+            this.label1.Size = new System.Drawing.Size(302, 76);
             this.label1.TabIndex = 11;
-            this.label1.Text = "ĐĂNG KÍ";
+            this.label1.Text = "REGISTER";
             // 
             // label2
             // 
@@ -77,9 +77,9 @@ namespace Pixel_Drift
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.label3.Location = new System.Drawing.Point(60, 270);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(136, 25);
+            this.label3.Size = new System.Drawing.Size(95, 25);
             this.label3.TabIndex = 14;
-            this.label3.Text = "Tên đăng nhập *";
+            this.label3.Text = "Username *";
             // 
             // label4
             // 
@@ -88,9 +88,9 @@ namespace Pixel_Drift
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.label4.Location = new System.Drawing.Point(60, 350);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(92, 25);
+            this.label4.Size = new System.Drawing.Size(91, 25);
             this.label4.TabIndex = 13;
-            this.label4.Text = "Mật khẩu *";
+            this.label4.Text = "Password *";
             // 
             // label5
             // 
@@ -99,9 +99,9 @@ namespace Pixel_Drift
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.label5.Location = new System.Drawing.Point(60, 430);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(169, 25);
+            this.label5.Size = new System.Drawing.Size(157, 25);
             this.label5.TabIndex = 12;
-            this.label5.Text = "Xác nhận mật khẩu *";
+            this.label5.Text = "Confirm Password*";
             // 
             // tb_email
             // 
@@ -137,7 +137,7 @@ namespace Pixel_Drift
             this.tb_xacnhanmk.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.tb_xacnhanmk.Name = "tb_xacnhanmk";
             this.tb_xacnhanmk.PasswordChar = '*';
-            this.tb_xacnhanmk.PlaceholderText = "Xác nhận mật khẩu";
+            this.tb_xacnhanmk.PlaceholderText = "Confirm Password";
             this.tb_xacnhanmk.SelectedText = "";
             this.tb_xacnhanmk.Size = new System.Drawing.Size(744, 36);
             this.tb_xacnhanmk.TabIndex = 8;
@@ -157,7 +157,7 @@ namespace Pixel_Drift
             this.tb_matkhau.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.tb_matkhau.Name = "tb_matkhau";
             this.tb_matkhau.PasswordChar = '*';
-            this.tb_matkhau.PlaceholderText = "Mật khẩu";
+            this.tb_matkhau.PlaceholderText = "Password";
             this.tb_matkhau.SelectedText = "";
             this.tb_matkhau.Size = new System.Drawing.Size(744, 36);
             this.tb_matkhau.TabIndex = 7;
@@ -176,7 +176,7 @@ namespace Pixel_Drift
             this.tb_username.Location = new System.Drawing.Point(60, 300);
             this.tb_username.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.tb_username.Name = "tb_username";
-            this.tb_username.PlaceholderText = "Tên đăng nhập";
+            this.tb_username.PlaceholderText = "Username";
             this.tb_username.SelectedText = "";
             this.tb_username.Size = new System.Drawing.Size(744, 36);
             this.tb_username.TabIndex = 6;
@@ -198,7 +198,7 @@ namespace Pixel_Drift
             this.btn_xacnhan.Name = "btn_xacnhan";
             this.btn_xacnhan.Size = new System.Drawing.Size(464, 45);
             this.btn_xacnhan.TabIndex = 9;
-            this.btn_xacnhan.Text = "Xác nhận";
+            this.btn_xacnhan.Text = "Register";
             this.btn_xacnhan.Click += new System.EventHandler(this.btn_xacnhan_Click);
             // 
             // tb_birthday
@@ -227,9 +227,9 @@ namespace Pixel_Drift
             this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.label6.Location = new System.Drawing.Point(60, 190);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(82, 25);
+            this.label6.Size = new System.Drawing.Size(85, 25);
             this.label6.TabIndex = 11;
-            this.label6.Text = "Ngày sinh";
+            this.label6.Text = "Birthday *";
             // 
             // btn_backdn
             // 
@@ -248,7 +248,7 @@ namespace Pixel_Drift
             this.btn_backdn.Name = "btn_backdn";
             this.btn_backdn.Size = new System.Drawing.Size(464, 30);
             this.btn_backdn.TabIndex = 10;
-            this.btn_backdn.Text = "Quay lại đăng nhập";
+            this.btn_backdn.Text = "Return to login";
             this.btn_backdn.Click += new System.EventHandler(this.btn_backdn_Click);
             // 
             // Panel_Chua_Form

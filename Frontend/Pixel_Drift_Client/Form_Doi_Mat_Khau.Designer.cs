@@ -40,7 +40,7 @@
             // txt_mkcu
             // 
             this.txt_mkcu.BorderColor = System.Drawing.Color.Black;
-            this.txt_mkcu.BorderThickness = 8;
+            this.txt_mkcu.BorderThickness = 5;
             this.txt_mkcu.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txt_mkcu.DefaultText = "";
             this.txt_mkcu.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
@@ -64,7 +64,7 @@
             // txt_mkmoi
             // 
             this.txt_mkmoi.BorderColor = System.Drawing.Color.Black;
-            this.txt_mkmoi.BorderThickness = 8;
+            this.txt_mkmoi.BorderThickness = 5;
             this.txt_mkmoi.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txt_mkmoi.DefaultText = "";
             this.txt_mkmoi.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
@@ -81,7 +81,7 @@
             this.txt_mkmoi.Name = "txt_mkmoi";
             this.txt_mkmoi.PasswordChar = '●';
             this.txt_mkmoi.PlaceholderForeColor = System.Drawing.Color.Black;
-            this.txt_mkmoi.PlaceholderText = "Mật khẩu mới...";
+            this.txt_mkmoi.PlaceholderText = "New password...";
             this.txt_mkmoi.SelectedText = "";
             this.txt_mkmoi.Size = new System.Drawing.Size(363, 63);
             this.txt_mkmoi.TabIndex = 5;
@@ -90,7 +90,7 @@
             // txt_xacnhanmk
             // 
             this.txt_xacnhanmk.BorderColor = System.Drawing.Color.Black;
-            this.txt_xacnhanmk.BorderThickness = 8;
+            this.txt_xacnhanmk.BorderThickness = 5;
             this.txt_xacnhanmk.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txt_xacnhanmk.DefaultText = "";
             this.txt_xacnhanmk.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
@@ -107,7 +107,7 @@
             this.txt_xacnhanmk.Name = "txt_xacnhanmk";
             this.txt_xacnhanmk.PasswordChar = '●';
             this.txt_xacnhanmk.PlaceholderForeColor = System.Drawing.Color.Black;
-            this.txt_xacnhanmk.PlaceholderText = "Xác nhận mật khẩu...";
+            this.txt_xacnhanmk.PlaceholderText = "Confirm new password...";
             this.txt_xacnhanmk.SelectedText = "";
             this.txt_xacnhanmk.Size = new System.Drawing.Size(363, 56);
             this.txt_xacnhanmk.TabIndex = 6;
@@ -123,12 +123,12 @@
             this.btn_doimk.FillColor = System.Drawing.Color.Green;
             this.btn_doimk.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Bold);
             this.btn_doimk.ForeColor = System.Drawing.Color.White;
-            this.btn_doimk.Location = new System.Drawing.Point(663, 41);
+            this.btn_doimk.Location = new System.Drawing.Point(654, 40);
             this.btn_doimk.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_doimk.Name = "btn_doimk";
-            this.btn_doimk.Size = new System.Drawing.Size(92, 109);
+            this.btn_doimk.Size = new System.Drawing.Size(106, 109);
             this.btn_doimk.TabIndex = 7;
-            this.btn_doimk.Text = "Đổi mật khẩu";
+            this.btn_doimk.Text = "Change password";
             this.btn_doimk.Click += new System.EventHandler(this.btn_doimk_Click);
             // 
             // btn_thoat
@@ -141,12 +141,12 @@
             this.btn_thoat.FillColor = System.Drawing.Color.Red;
             this.btn_thoat.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Bold);
             this.btn_thoat.ForeColor = System.Drawing.Color.White;
-            this.btn_thoat.Location = new System.Drawing.Point(663, 154);
+            this.btn_thoat.Location = new System.Drawing.Point(654, 153);
             this.btn_thoat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_thoat.Name = "btn_thoat";
-            this.btn_thoat.Size = new System.Drawing.Size(92, 113);
+            this.btn_thoat.Size = new System.Drawing.Size(106, 113);
             this.btn_thoat.TabIndex = 8;
-            this.btn_thoat.Text = "Thoát";
+            this.btn_thoat.Text = "Exit";
             this.btn_thoat.Click += new System.EventHandler(this.btn_thoat_Click);
             // 
             // ptb_Doi_MK

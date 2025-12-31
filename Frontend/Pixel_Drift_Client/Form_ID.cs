@@ -25,7 +25,7 @@ namespace Pixel_Drift
 
             if (string.IsNullOrEmpty(Input))
             {
-                MessageBox.Show("Vui lòng nhập mã phòng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please Enter Room ID!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
