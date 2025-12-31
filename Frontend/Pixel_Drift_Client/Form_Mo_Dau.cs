@@ -19,7 +19,7 @@ namespace Pixel_Drift
 
         private void btn_dang_ki_Click(object sender, EventArgs e)
         {
-            if (Client_Manager.Is_Connected && !string.IsNullOrEmpty(Form_Dang_Nhap.Current_Username))
+            if (Network_Handle.Is_Connected && !string.IsNullOrEmpty(Form_Dang_Nhap.Current_Username))
             {
                 btn_dang_ki.Enabled = false;
                 return;
@@ -52,7 +52,7 @@ namespace Pixel_Drift
 
         private void btn_dang_nhap_Click(object sender, EventArgs e)
         {
-            if (Client_Manager.Is_Connected && !string.IsNullOrEmpty(Form_Dang_Nhap.Current_Username))
+            if (Network_Handle.Is_Connected && !string.IsNullOrEmpty(Form_Dang_Nhap.Current_Username))
             {
                 btn_dang_nhap.Enabled = false;
                 return;

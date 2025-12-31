@@ -29,7 +29,7 @@ namespace Pixel_Drift
                     username = Current_Username
                 };
 
-                string Response = Client_Manager.Send_And_Wait(Request);
+                string Response = Network_Handle.Send_And_Wait(Request);
 
                 if (string.IsNullOrEmpty(Response))
                 {

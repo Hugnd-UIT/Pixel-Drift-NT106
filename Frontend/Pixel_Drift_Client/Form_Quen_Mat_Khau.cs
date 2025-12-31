@@ -25,17 +25,26 @@ namespace Pixel_Drift
                 return;
             }
 
-            if (!Client_Manager.Is_Connected)
+            if (!Network_Handle.Is_Connected)
             {
-                string IP = Client_Manager.Get_Server_IP();
+                string IP = Network_Handle.Get_Server_IP();
 
                 if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
 
-                if (!Client_Manager.Connect(IP, 1111))
+                if (!Network_Handle.Connect(IP, 1111))
                 {
                     MessageBox.Show("Không tìm thấy server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+
+                if (!Network_Handle.Secure())
+                {
+                    MessageBox.Show("Lỗi thiết lập bảo mật! Không thể tiếp tục.");
+                    Network_Handle.Close_Connection();
+                    return;
+                }
+
+                Network_Handle.Start_Global_Listening();
             }
 
             try
@@ -46,7 +55,7 @@ namespace Pixel_Drift
                     email = Email
                 };
 
-                string Response = Client_Manager.Send_And_Wait(Request);
+                string Response = Network_Handle.Send_And_Wait(Request);
 
                 if (Response == null)
                 {

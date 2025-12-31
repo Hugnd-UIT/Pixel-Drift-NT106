@@ -14,7 +14,7 @@ namespace Pixel_Drift
         {
             InitializeComponent();
 
-            Client_Manager.On_Message_Received += Handle_Server_Message;
+            Network_Handle.On_Message_Received += Handle_Server_Message;
 
             Load_Score_Board();
         }
@@ -48,7 +48,7 @@ namespace Pixel_Drift
         private void Load_Score_Board()
         {
             var Request = new { action = "get_scoreboard", top_count = 50 };
-            Client_Manager.Send_And_Forget(Request);
+            Network_Handle.Send_And_Forget(Request);
         }
 
         public void Display_Score_Board(string Json_Data)
@@ -115,7 +115,7 @@ namespace Pixel_Drift
                 return;
             }
             var Request = new { action = "search_player", search_text = Search_Text };
-            Client_Manager.Send_And_Forget(Request);
+            Network_Handle.Send_And_Forget(Request);
         }
 
         private void btn_Refresh_Click(object sender, EventArgs e)
@@ -163,7 +163,7 @@ namespace Pixel_Drift
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            Client_Manager.On_Message_Received -= Handle_Server_Message;
+            Network_Handle.On_Message_Received -= Handle_Server_Message;
             base.OnFormClosing(e);
         }
     }

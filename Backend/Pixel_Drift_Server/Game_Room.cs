@@ -11,7 +11,6 @@ namespace Pixel_Drift_Server
     public class Game_Room
     {
         public string Room_ID { get; private set; }
-        public Action<string> Log_Action;
 
         private Game_Player Player_1;
         private Game_Player Player_2;
@@ -19,11 +18,11 @@ namespace Pixel_Drift_Server
 
         // Cấu hình logic mạng
         private const int Logic_FPS = 60;
-        private const int Network_FPS = 60;
+        private const int Network_FPS = 40;
         private DateTime Last_Network_Send = DateTime.Now;
 
         // Timer đếm ngược
-        private System.Threading.Timer Countdown_Timer;
+        private Timer Countdown_Timer;
         private int Countdown_Value = 5;
         private bool Is_Game_Running = false;
 
@@ -34,7 +33,7 @@ namespace Pixel_Drift_Server
         // Game Variables
         private int Game_Time_Remaining = 60;
         private int P1_Speed = 10, P2_Speed = 10;
-        private long P1_Score = 0, P2_Score = 0;
+        private int P1_Score = 0, P2_Score = 0;
         private bool P1_Left, P1_Right, P2_Left, P2_Right;
         private const int Player_Move_Speed = 10;
 
@@ -183,9 +182,13 @@ namespace Pixel_Drift_Server
                 byte[] Buffer = Encoding.UTF8.GetBytes(Message + "\n");
                 await Stream.WriteAsync(Buffer, 0, Buffer.Length);
             }
-            catch
+            catch (Exception ex)
             {
-
+                if (ex is System.IO.IOException || ex is ObjectDisposedException || ex.Message.Contains("aborted") || ex.Message.Contains("forcibly closed"))
+                {
+                    return;
+                }
+                Console.WriteLine($"[Error] {ex.Message}");
             }
         }
 
@@ -229,7 +232,6 @@ namespace Pixel_Drift_Server
             {
                 if (Player_1 != null && Player_1.Is_Ready && Player_2 != null && Player_2.Is_Ready && Countdown_Timer == null)
                 {
-                    Log_Action?.Invoke($"Phòng {Room_ID}: Bắt đầu đếm ngược...");
                     Countdown_Value = 5;
                     Countdown_Timer = new System.Threading.Timer(Countdown_Tick, null, 0, 1000);
                 }
@@ -253,6 +255,8 @@ namespace Pixel_Drift_Server
 
         private void Start_Game_Logic()
         {
+            Initialize_Game(); 
+            Is_Game_Running = true;
             Broadcast(JsonSerializer.Serialize(new { action = "start_game" }));
             Initialize_Game();
             Is_Game_Running = true;
@@ -311,7 +315,6 @@ namespace Pixel_Drift_Server
             Is_Game_Running = false;
             Save_Game_Scores();
             Broadcast(JsonSerializer.Serialize(new { action = "game_over" }));
-            Log_Action?.Invoke($"Phòng {Room_ID}: Game kết thúc.");
 
             lock (Player_Lock)
             {
@@ -510,27 +513,27 @@ namespace Pixel_Drift_Server
             {
                 lock (Player_Lock)
                 {
-                    int P1_Win_Count = P1_Score > P2_Score ? 1 : 0;
-                    int P2_Win_Count = P2_Score > P1_Score ? 1 : 0;
+                    bool P1_Win_Count = P1_Score > P2_Score ? true : false;
+                    bool P2_Win_Count = P2_Score > P1_Score ? true : false;
                     int P1_Crash_Count = Math.Max(0, (100 - P1_Speed) / 10);
                     int P2_Crash_Count = Math.Max(0, (100 - P2_Speed) / 10);
 
                     if (Player_1 != null && !string.IsNullOrEmpty(Player_1.Username))
                     {
                         string Clean_Name = Clean_Username(Player_1.Username);
-                        SQL_Helper.Add_Score(Clean_Name, P1_Win_Count, P1_Crash_Count, P1_Score);
+                        SQL_Handle.Handle_Match_Result(1, P1_Win_Count, P1_Score, P1_Crash_Count);
                     }
 
                     if (Player_2 != null && !string.IsNullOrEmpty(Player_2.Username))
                     {
                         string Clean_Name = Clean_Username(Player_2.Username);
-                        SQL_Helper.Add_Score(Clean_Name, P2_Win_Count, P2_Crash_Count, P2_Score);
+                        SQL_Handle.Handle_Match_Result(2, P2_Win_Count, P2_Score, P2_Crash_Count);
                     }
                 }
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Log_Action?.Invoke($"Lỗi lưu điểm: {Ex.Message}");
+                Console.WriteLine($"[Error] {ex.Message}");
             }
         }
     }
