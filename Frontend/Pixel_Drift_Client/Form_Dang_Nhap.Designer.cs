@@ -56,9 +56,9 @@ namespace Pixel_Drift
             this.lb_pass.Location = new System.Drawing.Point(35, 181);
             this.lb_pass.Margin = new System.Windows.Forms.Padding(4);
             this.lb_pass.Name = "lb_pass";
-            this.lb_pass.Size = new System.Drawing.Size(153, 32);
+            this.lb_pass.Size = new System.Drawing.Size(153, 53);
             this.lb_pass.TabIndex = 7;
-            this.lb_pass.Text = "Mật khẩu";
+            this.lb_pass.Text = "Password";
             // 
             // lb_user
             // 
@@ -72,9 +72,9 @@ namespace Pixel_Drift
             this.lb_user.Location = new System.Drawing.Point(35, 94);
             this.lb_user.Margin = new System.Windows.Forms.Padding(4);
             this.lb_user.Name = "lb_user";
-            this.lb_user.Size = new System.Drawing.Size(222, 33);
+            this.lb_user.Size = new System.Drawing.Size(222, 54);
             this.lb_user.TabIndex = 8;
-            this.lb_user.Text = "Tên đăng nhập";
+            this.lb_user.Text = "Username";
             // 
             // lb_dangnhap
             // 
@@ -88,7 +88,7 @@ namespace Pixel_Drift
             this.lb_dangnhap.Location = new System.Drawing.Point(198, 23);
             this.lb_dangnhap.Margin = new System.Windows.Forms.Padding(4);
             this.lb_dangnhap.Name = "lb_dangnhap";
-            this.lb_dangnhap.Size = new System.Drawing.Size(211, 48);
+            this.lb_dangnhap.Size = new System.Drawing.Size(211, 69);
             this.lb_dangnhap.TabIndex = 9;
             this.lb_dangnhap.Text = "LOGIN";
             // 
@@ -106,7 +106,7 @@ namespace Pixel_Drift
             this.tb_username.Location = new System.Drawing.Point(35, 125);
             this.tb_username.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.tb_username.Name = "tb_username";
-            this.tb_username.PlaceholderText = "Nhập tên đăng nhập";
+            this.tb_username.PlaceholderText = "Username";
             this.tb_username.SelectedText = "";
             this.tb_username.Size = new System.Drawing.Size(427, 44);
             this.tb_username.TabIndex = 3;
@@ -123,10 +123,10 @@ namespace Pixel_Drift
             this.tb_matkhau.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.tb_matkhau.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tb_matkhau.Location = new System.Drawing.Point(35, 211);
-            this.tb_matkhau.Margin = new System.Windows.Forms.Padding(4);
+            this.tb_matkhau.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tb_matkhau.Name = "tb_matkhau";
             this.tb_matkhau.PasswordChar = '*';
-            this.tb_matkhau.PlaceholderText = "Nhập mật khẩu";
+            this.tb_matkhau.PlaceholderText = "Password";
             this.tb_matkhau.SelectedText = "";
             this.tb_matkhau.Size = new System.Drawing.Size(427, 44);
             this.tb_matkhau.TabIndex = 4;
@@ -149,7 +149,7 @@ namespace Pixel_Drift
             this.btn_dangnhap.Name = "btn_dangnhap";
             this.btn_dangnhap.Size = new System.Drawing.Size(320, 55);
             this.btn_dangnhap.TabIndex = 5;
-            this.btn_dangnhap.Text = "ĐĂNG NHẬP";
+            this.btn_dangnhap.Text = "Login";
             this.btn_dangnhap.Click += new System.EventHandler(this.btn_dangnhap_Click);
             // 
             // btn_quenmatkhau
@@ -164,12 +164,12 @@ namespace Pixel_Drift
             this.btn_quenmatkhau.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_quenmatkhau.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))));
             this.btn_quenmatkhau.HoverState.ForeColor = System.Drawing.Color.Lime;
-            this.btn_quenmatkhau.Location = new System.Drawing.Point(9, 347);
+            this.btn_quenmatkhau.Location = new System.Drawing.Point(3, 358);
             this.btn_quenmatkhau.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.btn_quenmatkhau.Name = "btn_quenmatkhau";
-            this.btn_quenmatkhau.Size = new System.Drawing.Size(213, 31);
+            this.btn_quenmatkhau.Size = new System.Drawing.Size(254, 31);
             this.btn_quenmatkhau.TabIndex = 0;
-            this.btn_quenmatkhau.Text = "Quên / Đổi mật khẩu";
+            this.btn_quenmatkhau.Text = "Forgot / Change password";
             this.btn_quenmatkhau.Click += new System.EventHandler(this.btn_quenmatkhau_Click);
             // 
             // btn_quaylaidk
@@ -184,12 +184,12 @@ namespace Pixel_Drift
             this.btn_quaylaidk.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_quaylaidk.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.btn_quaylaidk.HoverState.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.btn_quaylaidk.Location = new System.Drawing.Point(222, 347);
+            this.btn_quaylaidk.Location = new System.Drawing.Point(242, 358);
             this.btn_quaylaidk.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.btn_quaylaidk.Name = "btn_quaylaidk";
-            this.btn_quaylaidk.Size = new System.Drawing.Size(267, 31);
+            this.btn_quaylaidk.Size = new System.Drawing.Size(248, 31);
             this.btn_quaylaidk.TabIndex = 6;
-            this.btn_quaylaidk.Text = "Chưa có tài khoản? Đăng kí";
+            this.btn_quaylaidk.Text = "Don\'t have an account yet?";
             this.btn_quaylaidk.Click += new System.EventHandler(this.btn_quaylaidk_Click);
             // 
             // Panel_Chua_Form
@@ -210,7 +210,7 @@ namespace Pixel_Drift
             this.Panel_Chua_Form.Location = new System.Drawing.Point(84, 77);
             this.Panel_Chua_Form.Margin = new System.Windows.Forms.Padding(4);
             this.Panel_Chua_Form.Name = "Panel_Chua_Form";
-            this.Panel_Chua_Form.Size = new System.Drawing.Size(504, 393);
+            this.Panel_Chua_Form.Size = new System.Drawing.Size(504, 414);
             this.Panel_Chua_Form.TabIndex = 0;
             // 
             // Form_Dang_Nhap

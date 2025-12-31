@@ -51,7 +51,7 @@
             this.btn_TimPhong.Name = "btn_TimPhong";
             this.btn_TimPhong.Size = new System.Drawing.Size(100, 28);
             this.btn_TimPhong.TabIndex = 2;
-            this.btn_TimPhong.Text = "Tìm Phòng";
+            this.btn_TimPhong.Text = "Find room";
             this.btn_TimPhong.UseVisualStyleBackColor = true;
             this.btn_TimPhong.Click += new System.EventHandler(this.btn_TimPhong_Click);
             // 

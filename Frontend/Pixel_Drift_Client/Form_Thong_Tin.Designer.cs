@@ -46,9 +46,9 @@ namespace Pixel_Drift
             // 
             // btn_vao_game
             // 
-            this.btn_vao_game.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btn_vao_game.BackColor = System.Drawing.Color.Azure;
             this.btn_vao_game.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_vao_game.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btn_vao_game.ForeColor = System.Drawing.Color.Red;
             this.btn_vao_game.Location = new System.Drawing.Point(318, 501);
             this.btn_vao_game.Margin = new System.Windows.Forms.Padding(4);
             this.btn_vao_game.Name = "btn_vao_game";
@@ -79,9 +79,9 @@ namespace Pixel_Drift
             this.lbl_CardName.BackColor = System.Drawing.Color.Transparent;
             this.lbl_CardName.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_CardName.ForeColor = System.Drawing.Color.Green;
-            this.lbl_CardName.Location = new System.Drawing.Point(198, 85);
+            this.lbl_CardName.Location = new System.Drawing.Point(258, 69);
             this.lbl_CardName.Name = "lbl_CardName";
-            this.lbl_CardName.Size = new System.Drawing.Size(258, 35);
+            this.lbl_CardName.Size = new System.Drawing.Size(162, 35);
             this.lbl_CardName.TabIndex = 6;
             this.lbl_CardName.Text = "USER IN4";
             this.lbl_CardName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

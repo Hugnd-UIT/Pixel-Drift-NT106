@@ -53,34 +53,34 @@ namespace Pixel_Drift
             // Kiểm tra dữ liệu đầu vào
             if (Username == "" || Password == "" || Email == "")
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please Enter Full Information!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             Birthday = Dinh_Dang_Ngay(Birthday);
             if (Birthday == null)
             {
-                MessageBox.Show("Nhập sai định dạng ngày sinh nhật");
+                MessageBox.Show("Invalid Birthday Format Entered", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             bool Is_Email = Regex.IsMatch(Email, @"^[a-zA-Z0-9._%+-]+@gmail\.com$");
             if (!Is_Email)
             {
-                MessageBox.Show("Email không hợp lệ!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Invalid Email!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (!Kiem_Tra_Do_Manh_Mat_Khau(Password))
             {
-                MessageBox.Show("Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt!",
-                    "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Password Must Have At Least 8 Characters, Including Uppercase, Lowercase, Numbers And Special Characters!",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (Password != Confirm_Pass)
             {
-                MessageBox.Show("Mật khẩu không khớp!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Passwords Do Not Match!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -94,13 +94,13 @@ namespace Pixel_Drift
 
                     if (!Network_Handle.Connect(IP, 1111))
                     {
-                        MessageBox.Show("Không tìm thấy server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Server Not Found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
                     if (!Network_Handle.Secure())
                     {
-                        MessageBox.Show("Lỗi thiết lập bảo mật! Không thể tiếp tục.");
+                        MessageBox.Show("Security Setup Error! Cannot Continue.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Network_Handle.Close_Connection();
                         return;
                     }
@@ -116,7 +116,7 @@ namespace Pixel_Drift
 
                 if (Secure_Pass == null)
                 {
-                    MessageBox.Show("Lỗi mã hóa mật khẩu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Password Encryption Error!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -133,7 +133,7 @@ namespace Pixel_Drift
 
                 if (string.IsNullOrEmpty(Response))
                 {
-                    MessageBox.Show("Server không phản hồi!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Server Is Not Responding!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -141,7 +141,7 @@ namespace Pixel_Drift
 
                 if (Dict.ContainsKey("status") && Dict["status"] == "success")
                 {
-                    DialogResult Result = MessageBox.Show("Đăng ký thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult Result = MessageBox.Show("Registration Successful!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     if (Result == DialogResult.OK)
                     {
@@ -152,21 +152,21 @@ namespace Pixel_Drift
                 }
                 else
                 {
-                    string Msg = Dict.ContainsKey("message") ? Dict["message"] : "Đăng ký thất bại!";
-                    MessageBox.Show(Msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string Msg = Dict.ContainsKey("message") ? Dict["message"] : "Registration Failed!";
+                    MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (JsonException)
             {
-                MessageBox.Show("Dữ liệu phản hồi từ server không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Response Data From Server Is Invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (SocketException)
             {
-                MessageBox.Show("Không thể kết nối đến server. Kiểm tra IP và cổng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Cannot Connect To Server. Check IP And Port!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception Ex)
             {
-                MessageBox.Show("Lỗi: " + Ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

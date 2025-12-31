@@ -33,7 +33,7 @@ namespace Pixel_Drift
 
                 if (string.IsNullOrEmpty(Response))
                 {
-                    MessageBox.Show("Server không phản hồi!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Server Is Not Responding!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -50,25 +50,25 @@ namespace Pixel_Drift
                     }
                     else
                     {
-                        MessageBox.Show("Không thể tải thông tin.");
+                        MessageBox.Show("Unable To Load Information.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Phản hồi từ server không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid Response From Server!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (SocketException)
             {
-                MessageBox.Show("Server chưa sẵn sàng", "Lỗi Kết Nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Server Is Not Ready", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (JsonException Ex)
             {
-                MessageBox.Show($"Dữ liệu từ server không hợp lệ: {Ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Data From Server Is Invalid: {Ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception Ex)
             {
-                MessageBox.Show("Lỗi khi tải thông tin: " + Ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error Loading Information: " + Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

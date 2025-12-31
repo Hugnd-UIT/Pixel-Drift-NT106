@@ -62,7 +62,7 @@ namespace Pixel_Drift
                 }
 
                 DataTable Dt = new DataTable();
-                Dt.Columns.Add("STT", typeof(int));
+                Dt.Columns.Add("Rank", typeof(int));
                 Dt.Columns.Add("Username", typeof(string));
                 Dt.Columns.Add("Win", typeof(int));
                 Dt.Columns.Add("Crash", typeof(int));
@@ -102,7 +102,7 @@ namespace Pixel_Drift
             }
             catch (Exception Ex)
             {
-                MessageBox.Show("Lỗi hiển thị bảng điểm: " + Ex.Message);
+                MessageBox.Show("Scoreboard Display Error: " + Ex.Message);
             }
         }
 
