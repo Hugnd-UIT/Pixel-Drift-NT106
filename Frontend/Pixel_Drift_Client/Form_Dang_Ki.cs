@@ -7,6 +7,7 @@ using System.Linq;
 using System.Media;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -20,19 +21,6 @@ namespace Pixel_Drift
         public Form_Dang_Ki()
         {
             InitializeComponent();
-        }
-
-        // Hàm mã hoá mật khẩu bằng SHA256
-        private string Ma_Hoa(string Password)
-        {
-            using (SHA256 Sha256 = SHA256.Create())
-            {
-                byte[] Bytes = Sha256.ComputeHash(Encoding.UTF8.GetBytes(Password));
-                StringBuilder Builder = new StringBuilder();
-                foreach (byte B in Bytes)
-                    Builder.Append(B.ToString("x2"));
-                return Builder.ToString();
-            }
         }
 
         // Hàm chuẩn hóa định dạng ngày
@@ -96,22 +84,40 @@ namespace Pixel_Drift
                 return;
             }
 
-            // Mã hóa mật khẩu
-            string Hashed_Password = Ma_Hoa(Password);
-
             try
             {
-                if (!Client_Manager.Is_Connected)
+                if (!Network_Handle.Is_Connected)
                 {
-                    string IP = Client_Manager.Get_Server_IP();
+                    string IP = Network_Handle.Get_Server_IP();
 
                     if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
 
-                    if (!Client_Manager.Connect(IP, 1111))
+                    if (!Network_Handle.Connect(IP, 1111))
                     {
                         MessageBox.Show("Không tìm thấy server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+
+                    if (!Network_Handle.Secure())
+                    {
+                        MessageBox.Show("Lỗi thiết lập bảo mật! Không thể tiếp tục.");
+                        Network_Handle.Close_Connection();
+                        return;
+                    }
+
+                    Network_Handle.Start_Global_Listening();
+                }
+
+                string Response_Key = Network_Handle.Send_And_Wait(new { action = "get_public_key" });
+
+                var Json_Key = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Response_Key);
+                string Public_Key = Json_Key["public_key"].GetString();
+                string Secure_Pass = RSA_Handle.Encrypt(Password, Public_Key);
+
+                if (Secure_Pass == null)
+                {
+                    MessageBox.Show("Lỗi mã hóa mật khẩu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
                 var Request = new
@@ -119,11 +125,11 @@ namespace Pixel_Drift
                     action = "register",
                     email = Email,
                     username = Username,
-                    password = Hashed_Password,
+                    password = Secure_Pass,
                     birthday = Birthday
                 };
 
-                string Response = Client_Manager.Send_And_Wait(Request);
+                string Response = Network_Handle.Send_And_Wait(Request);
 
                 if (string.IsNullOrEmpty(Response))
                 {

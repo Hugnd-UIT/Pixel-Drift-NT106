@@ -61,7 +61,7 @@ namespace Pixel_Drift
             string Player_Color = (My_Player_Number == 1) ? "Xe Đỏ" : "Xe Xanh";
             this.Text = $"Pixel Drift - PLAYER {My_Player_Number} ({Player_Color}) - {My_Username}";
 
-            Client_Manager.On_Message_Received += Handle_Server_Message;
+            Network_Handle.On_Message_Received += Handle_Server_Message;
         }
 
         public Game_Window() { InitializeComponent(); }
@@ -266,7 +266,7 @@ namespace Pixel_Drift
             if (panel2 != null) panel2.Invalidate();
         }
 
-        private void Send(object Msg) => Client_Manager.Send_And_Forget(Msg);
+        private void Send(object Msg) => Network_Handle.Send_And_Forget(Msg);
 
         private void btn_Ready_Click(object sender, EventArgs e)
         {
@@ -316,7 +316,7 @@ namespace Pixel_Drift
 
         private void Game_Window_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Client_Manager.On_Message_Received -= Handle_Server_Message;
+            Network_Handle.On_Message_Received -= Handle_Server_Message;
             try
             {
                 Music?.controls.stop(); Music?.close();
@@ -430,7 +430,10 @@ namespace Pixel_Drift
         {
             var Sb = Application.OpenForms.OfType<Form_ScoreBoard>().FirstOrDefault();
             if (Sb != null) Sb.Show();
-            else { new Form_ScoreBoard(Client_Manager.Get_Client()).Show(); }
+            else 
+            { 
+                new Form_ScoreBoard(Network_Handle.Get_Client()).Show(); 
+            }
         }
     }
 }

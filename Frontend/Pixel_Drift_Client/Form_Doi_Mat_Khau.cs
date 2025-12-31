@@ -19,19 +19,6 @@ namespace Pixel_Drift
             User_Email = Email;
         }
 
-        // Hàm mã hóa SHA-256
-        private string Ma_Hoa(string Password)
-        {
-            using (SHA256 Sha = SHA256.Create())
-            {
-                byte[] Bytes = Sha.ComputeHash(Encoding.UTF8.GetBytes(Password));
-                StringBuilder Builder = new StringBuilder();
-                foreach (byte B in Bytes)
-                    Builder.Append(B.ToString("x2"));
-                return Builder.ToString();
-            }
-        }
-
         private void btn_doimk_Click(object sender, EventArgs e)
         {
             string Token = txt_mkcu.Text.Trim();
@@ -50,30 +37,51 @@ namespace Pixel_Drift
                 return;
             }
 
-            if (!Client_Manager.Is_Connected)
+            if (!Network_Handle.Is_Connected)
             {
-                string IP = Client_Manager.Get_Server_IP();
+                string IP = Network_Handle.Get_Server_IP();
 
                 if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
 
-                if (!Client_Manager.Connect(IP, 1111))
+                if (!Network_Handle.Connect(IP, 1111))
                 {
                     MessageBox.Show("Không tìm thấy server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+
+                if (!Network_Handle.Secure())
+                {
+                    MessageBox.Show("Lỗi thiết lập bảo mật! Không thể tiếp tục.");
+                    Network_Handle.Close_Connection();
+                    return;
+                }
+
+                Network_Handle.Start_Global_Listening();
             }
 
             try
             {
+                string Response_Key = Network_Handle.Send_And_Wait(new { action = "get_public_key" });
+
+                var Json_Key = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Response_Key);
+                string Public_Key = Json_Key["public_key"].GetString();
+                string Secure_Pass = RSA_Handle.Encrypt(New_Pass, Public_Key);
+
+                if (Secure_Pass == null)
+                {
+                    MessageBox.Show("Lỗi mã hóa mật khẩu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 var Request = new
                 {
                     action = "change_password",
                     email = User_Email,
                     token = Token,
-                    new_password = Ma_Hoa(New_Pass)
+                    new_password = Secure_Pass
                 };
 
-                string Response = Client_Manager.Send_And_Wait(Request);
+                string Response = Network_Handle.Send_And_Wait(Request);
 
                 if (Response == null)
                 {

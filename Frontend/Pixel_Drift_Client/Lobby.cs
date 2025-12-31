@@ -15,9 +15,9 @@ namespace Pixel_Drift
             InitializeComponent();
             My_Username = Username;
 
-            Client_Manager.Start_Global_Listening();
+            Network_Handle.Start_Global_Listening();
 
-            Client_Manager.On_Message_Received += Handle_Server_Message;
+            Network_Handle.On_Message_Received += Handle_Server_Message;
         }
 
         private void Handle_Server_Message(string Message)
@@ -67,7 +67,7 @@ namespace Pixel_Drift
 
         private void btn_CreateRoom_Click(object sender, EventArgs e)
         {
-            Client_Manager.Send_And_Forget(new { action = "create_room", username = My_Username });
+            Network_Handle.Send_And_Forget(new { action = "create_room", username = My_Username });
         }
 
         private void btn_JoinRoom_Click(object sender, EventArgs e)
@@ -76,22 +76,26 @@ namespace Pixel_Drift
             {
                 if (Input_Form.ShowDialog() == DialogResult.OK)
                 {
-                    Client_Manager.Send_And_Forget(new { action = "join_room", room_id = Input_Form.Room_ID, username = My_Username });
+                    Network_Handle.Send_And_Forget(new { action = "join_room", room_id = Input_Form.Room_ID, username = My_Username });
                 }
             }
         }
 
         private void Lobby_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Client_Manager.On_Message_Received -= Handle_Server_Message;
+            Network_Handle.On_Message_Received -= Handle_Server_Message;
             Application.Exit();
         }
 
         private void btn_Scoreboard_Click(object sender, EventArgs e)
         {
             var Sb = Application.OpenForms.OfType<Form_ScoreBoard>().FirstOrDefault();
-            if (Sb != null) Sb.Show();
-            else { new Form_ScoreBoard(Client_Manager.Get_Client()).Show(); }
+            if (Sb != null) Sb.
+                    Show();
+            else 
+            { 
+                new Form_ScoreBoard(Network_Handle.Get_Client()).Show(); 
+            }
         }
     }
 }
