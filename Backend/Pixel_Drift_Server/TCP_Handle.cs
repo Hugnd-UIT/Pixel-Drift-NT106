@@ -86,7 +86,23 @@ namespace Pixel_Drift_Server
                     {
                         continue;
                     }
+
                     string IP = Get_Client_IP();
+
+                    if (Message.Length > 4096)
+                    {
+                        Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Buffer Overflow Detected! Packet Size {Message.Length} > 4096 Bytes");
+
+                        try 
+                        { 
+                            Client.Close(); 
+                        } 
+                        catch 
+                        {
+                            // Continue
+                        }
+                        break;
+                    }
 
                     TimeSpan Diff = DateTime.Now - Last_Request_Time;
                     if (Diff.TotalSeconds >= 1)

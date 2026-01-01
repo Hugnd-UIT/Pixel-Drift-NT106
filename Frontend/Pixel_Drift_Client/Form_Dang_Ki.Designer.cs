@@ -116,6 +116,7 @@ namespace Pixel_Drift
             this.tb_email.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tb_email.Location = new System.Drawing.Point(60, 140);
             this.tb_email.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.tb_email.MaxLength = 100;
             this.tb_email.Name = "tb_email";
             this.tb_email.PlaceholderText = "Email";
             this.tb_email.SelectedText = "";
@@ -135,6 +136,7 @@ namespace Pixel_Drift
             this.tb_xacnhanmk.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tb_xacnhanmk.Location = new System.Drawing.Point(60, 460);
             this.tb_xacnhanmk.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.tb_xacnhanmk.MaxLength = 50;
             this.tb_xacnhanmk.Name = "tb_xacnhanmk";
             this.tb_xacnhanmk.PasswordChar = '*';
             this.tb_xacnhanmk.PlaceholderText = "Confirm Password";
@@ -155,6 +157,7 @@ namespace Pixel_Drift
             this.tb_matkhau.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tb_matkhau.Location = new System.Drawing.Point(60, 380);
             this.tb_matkhau.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.tb_matkhau.MaxLength = 50;
             this.tb_matkhau.Name = "tb_matkhau";
             this.tb_matkhau.PasswordChar = '*';
             this.tb_matkhau.PlaceholderText = "Password";
@@ -175,6 +178,7 @@ namespace Pixel_Drift
             this.tb_username.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tb_username.Location = new System.Drawing.Point(60, 300);
             this.tb_username.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.tb_username.MaxLength = 50;
             this.tb_username.Name = "tb_username";
             this.tb_username.PlaceholderText = "Username";
             this.tb_username.SelectedText = "";
@@ -214,6 +218,7 @@ namespace Pixel_Drift
             this.tb_birthday.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tb_birthday.Location = new System.Drawing.Point(60, 220);
             this.tb_birthday.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.tb_birthday.MaxLength = 100;
             this.tb_birthday.Name = "tb_birthday";
             this.tb_birthday.PlaceholderText = "DD/MM/YYYY";
             this.tb_birthday.SelectedText = "";
