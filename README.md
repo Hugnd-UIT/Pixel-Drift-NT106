@@ -58,8 +58,6 @@ Dự án mô phỏng quy trình phòng thủ chiều sâu (Defense in Depth) v�
 ### 2. Hệ thống Giám sát (SIEM)
 * Server C# tự động đẩy log chuẩn hóa sang **Logstash** qua HTTP. Sử dụng **Kibana** để vẽ biểu đồ tấn công, theo dõi IP nghi vấn và các hành vi bất thường.
 
-> **Dashboard Kibana: Giám sát log và phát hiện tấn công**
-
 > *Minh họa báo cáo*
 > ![Kibana Dashboard](https://github.com/user-attachments/assets/a6559db5-315b-4f31-b981-dc9d6aa7638c)
 
