@@ -31,206 +31,224 @@ namespace Pixel_Drift
         /// </summary>
         private void InitializeComponent()
         {
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Dang_Nhap));
-            this.lb_pass = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.lb_user = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.lb_dangnhap = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.tb_username = new Guna.UI2.WinForms.Guna2TextBox();
-            this.tb_matkhau = new Guna.UI2.WinForms.Guna2TextBox();
-            this.btn_dangnhap = new Guna.UI2.WinForms.Guna2Button();
-            this.btn_quenmatkhau = new Guna.UI2.WinForms.Guna2Button();
-            this.btn_quaylaidk = new Guna.UI2.WinForms.Guna2Button();
-            this.Panel_Chua_Form = new Guna.UI2.WinForms.Guna2Panel();
-            this.Panel_Chua_Form.SuspendLayout();
-            this.SuspendLayout();
+            lb_pass = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            lb_user = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            lb_dangnhap = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            tb_username = new Guna.UI2.WinForms.Guna2TextBox();
+            tb_matkhau = new Guna.UI2.WinForms.Guna2TextBox();
+            btn_dangnhap = new Guna.UI2.WinForms.Guna2Button();
+            btn_quenmatkhau = new Guna.UI2.WinForms.Guna2Button();
+            btn_quaylaidk = new Guna.UI2.WinForms.Guna2Button();
+            Panel_Chua_Form = new Guna.UI2.WinForms.Guna2Panel();
+            Panel_Chua_Form.SuspendLayout();
+            SuspendLayout();
             // 
             // lb_pass
             // 
-            this.lb_pass.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lb_pass.AutoSize = false;
-            this.lb_pass.BackColor = System.Drawing.Color.Transparent;
-            this.lb_pass.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_pass.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.lb_pass.Location = new System.Drawing.Point(35, 181);
-            this.lb_pass.Margin = new System.Windows.Forms.Padding(4);
-            this.lb_pass.Name = "lb_pass";
-            this.lb_pass.Size = new System.Drawing.Size(153, 53);
-            this.lb_pass.TabIndex = 7;
-            this.lb_pass.Text = "Password";
+            lb_pass.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lb_pass.AutoSize = false;
+            lb_pass.BackColor = Color.Transparent;
+            lb_pass.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lb_pass.ForeColor = Color.FromArgb(128, 255, 255);
+            lb_pass.Location = new Point(35, 226);
+            lb_pass.Margin = new Padding(4, 5, 4, 5);
+            lb_pass.Name = "lb_pass";
+            lb_pass.Size = new Size(153, 66);
+            lb_pass.TabIndex = 7;
+            lb_pass.Text = "Password";
             // 
             // lb_user
             // 
-            this.lb_user.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lb_user.AutoSize = false;
-            this.lb_user.BackColor = System.Drawing.Color.Transparent;
-            this.lb_user.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_user.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.lb_user.Location = new System.Drawing.Point(35, 94);
-            this.lb_user.Margin = new System.Windows.Forms.Padding(4);
-            this.lb_user.Name = "lb_user";
-            this.lb_user.Size = new System.Drawing.Size(222, 54);
-            this.lb_user.TabIndex = 8;
-            this.lb_user.Text = "Username";
+            lb_user.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lb_user.AutoSize = false;
+            lb_user.BackColor = Color.Transparent;
+            lb_user.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lb_user.ForeColor = Color.FromArgb(128, 255, 255);
+            lb_user.Location = new Point(35, 118);
+            lb_user.Margin = new Padding(4, 5, 4, 5);
+            lb_user.Name = "lb_user";
+            lb_user.Size = new Size(222, 68);
+            lb_user.TabIndex = 8;
+            lb_user.Text = "Username";
             // 
             // lb_dangnhap
             // 
-            this.lb_dangnhap.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lb_dangnhap.AutoSize = false;
-            this.lb_dangnhap.BackColor = System.Drawing.Color.Transparent;
-            this.lb_dangnhap.Font = new System.Drawing.Font("Arial Black", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_dangnhap.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.lb_dangnhap.Location = new System.Drawing.Point(198, 23);
-            this.lb_dangnhap.Margin = new System.Windows.Forms.Padding(4);
-            this.lb_dangnhap.Name = "lb_dangnhap";
-            this.lb_dangnhap.Size = new System.Drawing.Size(211, 69);
-            this.lb_dangnhap.TabIndex = 9;
-            this.lb_dangnhap.Text = "LOGIN";
+            lb_dangnhap.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lb_dangnhap.AutoSize = false;
+            lb_dangnhap.BackColor = Color.Transparent;
+            lb_dangnhap.Font = new Font("Arial Black", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lb_dangnhap.ForeColor = Color.FromArgb(0, 255, 255);
+            lb_dangnhap.Location = new Point(198, 29);
+            lb_dangnhap.Margin = new Padding(4, 5, 4, 5);
+            lb_dangnhap.Name = "lb_dangnhap";
+            lb_dangnhap.Size = new Size(211, 86);
+            lb_dangnhap.TabIndex = 9;
+            lb_dangnhap.Text = "LOGIN";
             // 
             // tb_username
             // 
-            this.tb_username.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.tb_username.BorderRadius = 8;
-            this.tb_username.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.tb_username.DefaultText = "";
-            this.tb_username.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
-            this.tb_username.FocusedState.BorderColor = System.Drawing.Color.Aqua;
-            this.tb_username.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.tb_username.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.tb_username.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.tb_username.Location = new System.Drawing.Point(35, 125);
-            this.tb_username.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.tb_username.MaxLength = 50;
-            this.tb_username.Name = "tb_username";
-            this.tb_username.PlaceholderText = "Username";
-            this.tb_username.SelectedText = "";
-            this.tb_username.Size = new System.Drawing.Size(427, 44);
-            this.tb_username.TabIndex = 3;
+            tb_username.BorderColor = Color.FromArgb(0, 192, 192);
+            tb_username.BorderRadius = 8;
+            tb_username.Cursor = Cursors.IBeam;
+            tb_username.CustomizableEdges = customizableEdges1;
+            tb_username.DefaultText = "";
+            tb_username.FillColor = Color.FromArgb(20, 20, 40);
+            tb_username.FocusedState.BorderColor = Color.Aqua;
+            tb_username.Font = new Font("Segoe UI", 10F);
+            tb_username.ForeColor = Color.WhiteSmoke;
+            tb_username.HoverState.BorderColor = Color.FromArgb(0, 255, 255);
+            tb_username.Location = new Point(35, 156);
+            tb_username.Margin = new Padding(4, 8, 4, 8);
+            tb_username.MaxLength = 50;
+            tb_username.Name = "tb_username";
+            tb_username.PlaceholderText = "Username";
+            tb_username.SelectedText = "";
+            tb_username.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            tb_username.Size = new Size(427, 55);
+            tb_username.TabIndex = 3;
             // 
             // tb_matkhau
             // 
-            this.tb_matkhau.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.tb_matkhau.BorderRadius = 8;
-            this.tb_matkhau.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.tb_matkhau.DefaultText = "";
-            this.tb_matkhau.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(40)))));
-            this.tb_matkhau.FocusedState.BorderColor = System.Drawing.Color.Aqua;
-            this.tb_matkhau.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_matkhau.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.tb_matkhau.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.tb_matkhau.Location = new System.Drawing.Point(35, 211);
-            this.tb_matkhau.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tb_matkhau.MaxLength = 50;
-            this.tb_matkhau.Name = "tb_matkhau";
-            this.tb_matkhau.PasswordChar = '*';
-            this.tb_matkhau.PlaceholderText = "Password";
-            this.tb_matkhau.SelectedText = "";
-            this.tb_matkhau.Size = new System.Drawing.Size(427, 44);
-            this.tb_matkhau.TabIndex = 4;
+            tb_matkhau.BorderColor = Color.FromArgb(0, 192, 192);
+            tb_matkhau.BorderRadius = 8;
+            tb_matkhau.Cursor = Cursors.IBeam;
+            tb_matkhau.CustomizableEdges = customizableEdges3;
+            tb_matkhau.DefaultText = "";
+            tb_matkhau.FillColor = Color.FromArgb(20, 20, 40);
+            tb_matkhau.FocusedState.BorderColor = Color.Aqua;
+            tb_matkhau.Font = new Font("Microsoft Sans Serif", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tb_matkhau.ForeColor = Color.WhiteSmoke;
+            tb_matkhau.HoverState.BorderColor = Color.FromArgb(0, 255, 255);
+            tb_matkhau.Location = new Point(35, 264);
+            tb_matkhau.Margin = new Padding(4, 5, 4, 5);
+            tb_matkhau.MaxLength = 50;
+            tb_matkhau.Name = "tb_matkhau";
+            tb_matkhau.PasswordChar = '*';
+            tb_matkhau.PlaceholderText = "Password";
+            tb_matkhau.SelectedText = "";
+            tb_matkhau.ShadowDecoration.CustomizableEdges = customizableEdges4;
+            tb_matkhau.Size = new Size(427, 55);
+            tb_matkhau.TabIndex = 4;
             // 
             // btn_dangnhap
             // 
-            this.btn_dangnhap.BorderColor = System.Drawing.Color.Orange;
-            this.btn_dangnhap.BorderRadius = 15;
-            this.btn_dangnhap.BorderThickness = 3;
-            this.btn_dangnhap.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btn_dangnhap.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btn_dangnhap.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btn_dangnhap.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btn_dangnhap.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_dangnhap.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_dangnhap.ForeColor = System.Drawing.Color.White;
-            this.btn_dangnhap.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.btn_dangnhap.Location = new System.Drawing.Point(89, 279);
-            this.btn_dangnhap.Margin = new System.Windows.Forms.Padding(4);
-            this.btn_dangnhap.Name = "btn_dangnhap";
-            this.btn_dangnhap.Size = new System.Drawing.Size(320, 55);
-            this.btn_dangnhap.TabIndex = 5;
-            this.btn_dangnhap.Text = "Login";
-            this.btn_dangnhap.Click += new System.EventHandler(this.btn_dangnhap_Click);
+            btn_dangnhap.BorderColor = Color.Orange;
+            btn_dangnhap.BorderRadius = 15;
+            btn_dangnhap.BorderThickness = 3;
+            btn_dangnhap.CustomizableEdges = customizableEdges5;
+            btn_dangnhap.DisabledState.BorderColor = Color.DarkGray;
+            btn_dangnhap.DisabledState.CustomBorderColor = Color.DarkGray;
+            btn_dangnhap.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btn_dangnhap.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btn_dangnhap.FillColor = Color.FromArgb(255, 128, 0);
+            btn_dangnhap.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_dangnhap.ForeColor = Color.White;
+            btn_dangnhap.HoverState.FillColor = Color.FromArgb(255, 192, 128);
+            btn_dangnhap.Location = new Point(89, 349);
+            btn_dangnhap.Margin = new Padding(4, 5, 4, 5);
+            btn_dangnhap.Name = "btn_dangnhap";
+            btn_dangnhap.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            btn_dangnhap.Size = new Size(320, 69);
+            btn_dangnhap.TabIndex = 5;
+            btn_dangnhap.Text = "Login";
+            btn_dangnhap.Click += btn_dangnhap_Click;
             // 
             // btn_quenmatkhau
             // 
-            this.btn_quenmatkhau.BackColor = System.Drawing.Color.Transparent;
-            this.btn_quenmatkhau.BorderColor = System.Drawing.Color.Transparent;
-            this.btn_quenmatkhau.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btn_quenmatkhau.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btn_quenmatkhau.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btn_quenmatkhau.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btn_quenmatkhau.FillColor = System.Drawing.Color.Transparent;
-            this.btn_quenmatkhau.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_quenmatkhau.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))));
-            this.btn_quenmatkhau.HoverState.ForeColor = System.Drawing.Color.Lime;
-            this.btn_quenmatkhau.Location = new System.Drawing.Point(3, 358);
-            this.btn_quenmatkhau.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.btn_quenmatkhau.Name = "btn_quenmatkhau";
-            this.btn_quenmatkhau.Size = new System.Drawing.Size(254, 31);
-            this.btn_quenmatkhau.TabIndex = 0;
-            this.btn_quenmatkhau.Text = "Forgot / Change password";
-            this.btn_quenmatkhau.Click += new System.EventHandler(this.btn_quenmatkhau_Click);
+            btn_quenmatkhau.BackColor = Color.Transparent;
+            btn_quenmatkhau.BorderColor = Color.Transparent;
+            btn_quenmatkhau.CustomizableEdges = customizableEdges7;
+            btn_quenmatkhau.DisabledState.BorderColor = Color.DarkGray;
+            btn_quenmatkhau.DisabledState.CustomBorderColor = Color.DarkGray;
+            btn_quenmatkhau.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btn_quenmatkhau.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btn_quenmatkhau.FillColor = Color.Transparent;
+            btn_quenmatkhau.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            btn_quenmatkhau.ForeColor = Color.FromArgb(128, 255, 0);
+            btn_quenmatkhau.HoverState.ForeColor = Color.Lime;
+            btn_quenmatkhau.Location = new Point(3, 448);
+            btn_quenmatkhau.Margin = new Padding(3, 1, 3, 1);
+            btn_quenmatkhau.Name = "btn_quenmatkhau";
+            btn_quenmatkhau.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btn_quenmatkhau.Size = new Size(254, 39);
+            btn_quenmatkhau.TabIndex = 0;
+            btn_quenmatkhau.Text = "Forgot / Change password";
+            btn_quenmatkhau.Click += btn_quenmatkhau_Click;
             // 
             // btn_quaylaidk
             // 
-            this.btn_quaylaidk.BackColor = System.Drawing.Color.Transparent;
-            this.btn_quaylaidk.BorderColor = System.Drawing.Color.Transparent;
-            this.btn_quaylaidk.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btn_quaylaidk.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btn_quaylaidk.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btn_quaylaidk.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btn_quaylaidk.FillColor = System.Drawing.Color.Transparent;
-            this.btn_quaylaidk.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_quaylaidk.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.btn_quaylaidk.HoverState.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.btn_quaylaidk.Location = new System.Drawing.Point(242, 358);
-            this.btn_quaylaidk.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.btn_quaylaidk.Name = "btn_quaylaidk";
-            this.btn_quaylaidk.Size = new System.Drawing.Size(248, 31);
-            this.btn_quaylaidk.TabIndex = 6;
-            this.btn_quaylaidk.Text = "Don\'t have an account yet?";
-            this.btn_quaylaidk.Click += new System.EventHandler(this.btn_quaylaidk_Click);
+            btn_quaylaidk.BackColor = Color.Transparent;
+            btn_quaylaidk.BorderColor = Color.Transparent;
+            btn_quaylaidk.CustomizableEdges = customizableEdges9;
+            btn_quaylaidk.DisabledState.BorderColor = Color.DarkGray;
+            btn_quaylaidk.DisabledState.CustomBorderColor = Color.DarkGray;
+            btn_quaylaidk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btn_quaylaidk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btn_quaylaidk.FillColor = Color.Transparent;
+            btn_quaylaidk.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            btn_quaylaidk.ForeColor = Color.FromArgb(0, 192, 255);
+            btn_quaylaidk.HoverState.ForeColor = Color.DeepSkyBlue;
+            btn_quaylaidk.Location = new Point(242, 448);
+            btn_quaylaidk.Margin = new Padding(3, 1, 3, 1);
+            btn_quaylaidk.Name = "btn_quaylaidk";
+            btn_quaylaidk.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            btn_quaylaidk.Size = new Size(248, 39);
+            btn_quaylaidk.TabIndex = 6;
+            btn_quaylaidk.Text = "Don't have an account yet?";
+            btn_quaylaidk.Click += btn_quaylaidk_Click;
             // 
             // Panel_Chua_Form
             // 
-            this.Panel_Chua_Form.BackColor = System.Drawing.Color.Transparent;
-            this.Panel_Chua_Form.BorderColor = System.Drawing.Color.Aquamarine;
-            this.Panel_Chua_Form.BorderRadius = 15;
-            this.Panel_Chua_Form.BorderThickness = 2;
-            this.Panel_Chua_Form.Controls.Add(this.btn_quaylaidk);
-            this.Panel_Chua_Form.Controls.Add(this.btn_quenmatkhau);
-            this.Panel_Chua_Form.Controls.Add(this.btn_dangnhap);
-            this.Panel_Chua_Form.Controls.Add(this.tb_matkhau);
-            this.Panel_Chua_Form.Controls.Add(this.tb_username);
-            this.Panel_Chua_Form.Controls.Add(this.lb_pass);
-            this.Panel_Chua_Form.Controls.Add(this.lb_user);
-            this.Panel_Chua_Form.Controls.Add(this.lb_dangnhap);
-            this.Panel_Chua_Form.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.Panel_Chua_Form.Location = new System.Drawing.Point(84, 77);
-            this.Panel_Chua_Form.Margin = new System.Windows.Forms.Padding(4);
-            this.Panel_Chua_Form.Name = "Panel_Chua_Form";
-            this.Panel_Chua_Form.Size = new System.Drawing.Size(504, 414);
-            this.Panel_Chua_Form.TabIndex = 0;
+            Panel_Chua_Form.BackColor = Color.Transparent;
+            Panel_Chua_Form.BorderColor = Color.Aquamarine;
+            Panel_Chua_Form.BorderRadius = 15;
+            Panel_Chua_Form.BorderThickness = 2;
+            Panel_Chua_Form.Controls.Add(btn_quaylaidk);
+            Panel_Chua_Form.Controls.Add(btn_quenmatkhau);
+            Panel_Chua_Form.Controls.Add(btn_dangnhap);
+            Panel_Chua_Form.Controls.Add(tb_matkhau);
+            Panel_Chua_Form.Controls.Add(tb_username);
+            Panel_Chua_Form.Controls.Add(lb_pass);
+            Panel_Chua_Form.Controls.Add(lb_user);
+            Panel_Chua_Form.Controls.Add(lb_dangnhap);
+            Panel_Chua_Form.CustomizableEdges = customizableEdges11;
+            Panel_Chua_Form.FillColor = Color.FromArgb(200, 0, 0, 0);
+            Panel_Chua_Form.Location = new Point(163, 50);
+            Panel_Chua_Form.Margin = new Padding(4, 5, 4, 5);
+            Panel_Chua_Form.Name = "Panel_Chua_Form";
+            Panel_Chua_Form.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            Panel_Chua_Form.Size = new Size(504, 518);
+            Panel_Chua_Form.TabIndex = 0;
             // 
             // Form_Dang_Nhap
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(20)))), ((int)(((byte)(30)))));
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(667, 554);
-            this.Controls.Add(this.Panel_Chua_Form);
-            this.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.MaximizeBox = false;
-            this.Name = "Form_Dang_Nhap";
-            this.Text = "Đăng Nhập";
-            this.Panel_Chua_Form.ResumeLayout(false);
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(15, 20, 30);
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(852, 617);
+            Controls.Add(Panel_Chua_Form);
+            ForeColor = Color.DarkGoldenrod;
+            Margin = new Padding(3, 1, 3, 1);
+            MaximizeBox = false;
+            Name = "Form_Dang_Nhap";
+            Text = "Đăng Nhập";
+            Panel_Chua_Form.ResumeLayout(false);
+            ResumeLayout(false);
 
         }
 

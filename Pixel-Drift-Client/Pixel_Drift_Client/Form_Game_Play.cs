@@ -30,10 +30,10 @@ namespace Pixel_Drift
         private Image Img_Green_Car = Properties.Resources.Green_Car;
         private Image Img_Red_Car = Properties.Resources.Red_Car;
 
-        private Size Size_Player = new Size(60, 120);
-        private Size Size_Road = new Size(600, 735);
-        private Size Size_Item = new Size(50, 50);
-        private Size Size_AICar = new Size(60, 120);
+        private Size Size_Player = new Size(80, 175);
+        private Size Size_Road = new Size(610, 910);
+        private Size Size_Item = new Size(60, 60);
+        private Size Size_AICar = new Size(80, 175);
 
         private bool Is_Left_Pressed = false;
         private bool Is_Right_Pressed = false;
