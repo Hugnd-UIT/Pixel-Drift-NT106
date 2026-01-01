@@ -110,6 +110,7 @@ Pixel-Drift/
 6. Chọn **Join Network** 
 7. Nhập Network name: **Pixel Drift** và Password: **0123456789**
 8. Mở Game và bắt đầu chơi thôi!!!  
+  
 Lưu ý: Nếu xuất hiện Windows protected thì chọn More info -> Run anyway
 ---
 <div align="center">
