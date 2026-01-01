@@ -109,7 +109,7 @@ Pixel-Drift/
 5. Mở Radmin chọn **Network**
 6. Chọn **Join Network** 
 7. Nhập Network name: **Pixel Drift** và Password: **0123456789**
-8. Mở Game và bắt đầu chơi thôi!!!
+8. Mở Game và bắt đầu chơi thôi!!!  
 Lưu ý: Nếu xuất hiện Windows protected thì chọn More info -> Run anyway
 ---
 <div align="center">
