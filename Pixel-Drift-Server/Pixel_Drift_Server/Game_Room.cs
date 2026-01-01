@@ -37,17 +37,17 @@ namespace Pixel_Drift_Server
         private bool P2_Left;
         private bool P2_Right;
         private int P1_Score = 0;
-        private int P1_Speed = 10;
+        private int P1_Speed = 11;
         private int P2_Score = 0;
-        private int P2_Speed = 10;
+        private int P2_Speed = 11;
         private int Game_Time_Remaining = 60;
         private const int Player_Move_Speed = 10;
 
         private const int Game_Height = 800;
-        private const int P1_Min_X = 0;
-        private const int P1_Max_X = 475;
-        private const int P2_Min_X = 0;
-        private const int P2_Max_X = 475;
+        private const int P1_Min_X = 6;
+        private const int P1_Max_X = 600;
+        private const int P2_Min_X = 6;
+        private const int P2_Max_X = 600;
 
         private Random Rand = new Random();
 
