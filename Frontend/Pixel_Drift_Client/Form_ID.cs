@@ -12,7 +12,11 @@ namespace Pixel_Drift
 {
     public partial class Form_ID : Form
     {
-        public string Room_ID { get; private set; }
+        public string Room_ID
+        {
+            get;
+            private set;
+        }
 
         public Form_ID()
         {

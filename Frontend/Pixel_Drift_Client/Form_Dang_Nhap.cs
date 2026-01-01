@@ -37,7 +37,10 @@ namespace Pixel_Drift
                 {
                     string IP = Network_Handle.Get_Server_IP();
 
-                    if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
+                    if (string.IsNullOrEmpty(IP))
+                    {
+                        IP = "127.0.0.1";
+                    }
 
                     if (!Network_Handle.Connect(IP, 1111))
                     {
@@ -55,7 +58,10 @@ namespace Pixel_Drift
                     Network_Handle.Start_Global_Listening();
                 }
 
-                string Response_Key = Network_Handle.Send_And_Wait(new { action = "get_public_key" });
+                string Response_Key = Network_Handle.Send_And_Wait(new
+                {
+                    action = "get_public_key"
+                });
 
                 var Json_Key = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Response_Key);
                 string Public_Key = Json_Key["public_key"].GetString();

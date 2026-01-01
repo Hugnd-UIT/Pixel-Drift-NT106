@@ -16,7 +16,6 @@ namespace Pixel_Drift
                 try
                 {
                     Private_Key = RSA.ToXmlString(true);
-
                     Public_Key = RSA.ToXmlString(false);
                 }
                 finally
@@ -35,6 +34,7 @@ namespace Pixel_Drift
                     RSA.FromXmlString(Public_Key);
                     byte[] Data = Encoding.UTF8.GetBytes(PlainText);
                     byte[] Encrypted_Data = RSA.Encrypt(Data, false);
+
                     return Convert.ToBase64String(Encrypted_Data);
                 }
                 catch
@@ -53,6 +53,7 @@ namespace Pixel_Drift
                     RSA.FromXmlString(Private_Key);
                     byte[] Data = Convert.FromBase64String(CipherText);
                     byte[] Decrypted_Data = RSA.Decrypt(Data, false);
+
                     return Encoding.UTF8.GetString(Decrypted_Data);
                 }
                 catch
