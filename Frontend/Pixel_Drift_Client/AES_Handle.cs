@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
-using System.IO;
 
 namespace Pixel_Drift
 {
@@ -26,6 +26,7 @@ namespace Pixel_Drift
                     AES.Key = Encoding.UTF8.GetBytes(Key);
                     AES.IV = IV;
                     ICryptoTransform Encryptor = AES.CreateEncryptor(AES.Key, AES.IV);
+
                     using (MemoryStream ms = new MemoryStream())
                     {
                         using (CryptoStream cs = new CryptoStream(ms, Encryptor, CryptoStreamMode.Write))
@@ -68,9 +69,9 @@ namespace Pixel_Drift
                     }
                 }
             }
-            catch 
-            { 
-                return null; 
+            catch
+            {
+                return null;
             }
         }
     }

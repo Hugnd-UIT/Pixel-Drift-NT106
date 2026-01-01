@@ -41,7 +41,10 @@ namespace Pixel_Drift
             {
                 string IP = Network_Handle.Get_Server_IP();
 
-                if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
+                if (string.IsNullOrEmpty(IP))
+                {
+                    IP = "127.0.0.1";
+                }
 
                 if (!Network_Handle.Connect(IP, 1111))
                 {
@@ -61,7 +64,10 @@ namespace Pixel_Drift
 
             try
             {
-                string Response_Key = Network_Handle.Send_And_Wait(new { action = "get_public_key" });
+                string Response_Key = Network_Handle.Send_And_Wait(new
+                {
+                    action = "get_public_key"
+                });
 
                 var Json_Key = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Response_Key);
                 string Public_Key = Json_Key["public_key"].GetString();
@@ -92,8 +98,7 @@ namespace Pixel_Drift
 
                 if (Dict.ContainsKey("status") && Dict["status"] == "success")
                 {
-                    MessageBox.Show(Dict["message"], "Success",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Dict["message"], "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     Form_Dang_Nhap Existing_Login = Application.OpenForms.OfType<Form_Dang_Nhap>().FirstOrDefault();
 

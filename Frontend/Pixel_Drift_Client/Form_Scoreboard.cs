@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Net.Sockets;
 using System.Text.Json;
 using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace Pixel_Drift
 {
@@ -21,14 +21,20 @@ namespace Pixel_Drift
 
         private void Handle_Server_Message(string Message)
         {
-            if (this.Disposing || this.IsDisposed || !this.IsHandleCreated) return;
+            if (this.Disposing || this.IsDisposed || !this.IsHandleCreated)
+            {
+                return;
+            }
 
             this.Invoke(new Action(() =>
             {
                 try
                 {
                     var Data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Message);
-                    if (!Data.ContainsKey("action")) return;
+                    if (!Data.ContainsKey("action"))
+                    {
+                        return;
+                    }
 
                     string Action = Data["action"].GetString();
 
@@ -41,13 +47,19 @@ namespace Pixel_Drift
                         }
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }));
         }
 
         private void Load_Score_Board()
         {
-            var Request = new { action = "get_scoreboard", top_count = 50 };
+            var Request = new
+            {
+                action = "get_scoreboard",
+                top_count = 50
+            };
             Network_Handle.Send_And_Forget(Request);
         }
 
@@ -114,7 +126,11 @@ namespace Pixel_Drift
                 Load_Score_Board();
                 return;
             }
-            var Request = new { action = "search_player", search_text = Search_Text };
+            var Request = new
+            {
+                action = "search_player",
+                search_text = Search_Text
+            };
             Network_Handle.Send_And_Forget(Request);
         }
 

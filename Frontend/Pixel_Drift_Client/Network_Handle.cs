@@ -25,9 +25,18 @@ namespace Pixel_Drift
         private static bool Is_Handshaking = false;
         private static bool Is_Heartbeating = false;
 
-        public static TcpClient Get_Client() => Tcp_Client;
+        public static TcpClient Get_Client()
+        {
+            return Tcp_Client;
+        }
 
-        public static bool Is_Connected => Tcp_Client != null && Tcp_Client.Connected;
+        public static bool Is_Connected
+        {
+            get
+            {
+                return Tcp_Client != null && Tcp_Client.Connected;
+            }
+        }
 
         public static string Get_Server_IP()
         {
@@ -46,17 +55,24 @@ namespace Pixel_Drift
                         IPEndPoint Server_Ep = new IPEndPoint(IPAddress.Any, 0);
                         byte[] Received_Bytes = Udp_Client.EndReceive(Async_Result, ref Server_Ep);
                         if (Encoding.UTF8.GetString(Received_Bytes) == "server_here")
+                        {
                             Server_IP = Server_Ep.Address.ToString();
+                        }
                     }
                 }
             }
-            catch { }
+            catch
+            {
+            }
             return Server_IP;
         }
 
         private static void Start_Heartbeat()
         {
-            if (Is_Heartbeating) return;
+            if (Is_Heartbeating)
+            {
+                return;
+            }
             Is_Heartbeating = true;
 
             Task.Run(async () =>
@@ -72,13 +88,12 @@ namespace Pixel_Drift
                         }
                     }
                 }
-                catch 
-                { 
-
+                catch
+                {
                 }
-                finally 
-                { 
-                    Is_Heartbeating = false; 
+                finally
+                {
+                    Is_Heartbeating = false;
                 }
             });
         }
@@ -91,7 +106,10 @@ namespace Pixel_Drift
                 Tcp_Client = new TcpClient();
 
                 string Final_IP = string.IsNullOrEmpty(IP) ? Get_Server_IP() : IP;
-                if (string.IsNullOrEmpty(Final_IP)) Final_IP = "127.0.0.1";
+                if (string.IsNullOrEmpty(Final_IP))
+                {
+                    Final_IP = "127.0.0.1";
+                }
 
                 Tcp_Client.Connect(Final_IP, Port);
                 Network_Stream = Tcp_Client.GetStream();
@@ -100,7 +118,10 @@ namespace Pixel_Drift
                 Start_Heartbeat();
                 return true;
             }
-            catch { return false; }
+            catch
+            {
+                return false;
+            }
         }
 
         public static bool Secure()
@@ -109,10 +130,16 @@ namespace Pixel_Drift
             {
                 Is_Handshaking = true;
 
-                Stream_Writer.WriteLine(JsonSerializer.Serialize(new { action = "get_public_key" }));
+                Stream_Writer.WriteLine(JsonSerializer.Serialize(new
+                {
+                    action = "get_public_key"
+                }));
 
                 string KeyJson = Stream_Reader.ReadLine();
-                if (string.IsNullOrEmpty(KeyJson)) return false;
+                if (string.IsNullOrEmpty(KeyJson))
+                {
+                    return false;
+                }
 
                 var Json_Key = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(KeyJson);
                 string PublicKey = Json_Key["public_key"].GetString();
@@ -120,7 +147,11 @@ namespace Pixel_Drift
                 string Temp_Key = AES_Handle.Generate_Key();
                 string Encrypted_AES_Key = RSA_Handle.Encrypt(Temp_Key, PublicKey);
 
-                var Handshake_Data = new { action = "get_aes_key", aes_key = Encrypted_AES_Key };
+                var Handshake_Data = new
+                {
+                    action = "get_aes_key",
+                    aes_key = Encrypted_AES_Key
+                };
                 Stream_Writer.WriteLine(JsonSerializer.Serialize(Handshake_Data));
 
                 string Encrypted_Response = Stream_Reader.ReadLine();
@@ -131,7 +162,7 @@ namespace Pixel_Drift
 
                     if (Decrypted != null && Decrypted.Contains("success"))
                     {
-                        My_AES_Key = Temp_Key; 
+                        My_AES_Key = Temp_Key;
                         return true;
                     }
                 }
@@ -150,9 +181,12 @@ namespace Pixel_Drift
 
         public static void Start_Global_Listening()
         {
-            if (Is_Listening) return;
-                Is_Listening = true;
-                
+            if (Is_Listening)
+            {
+                return;
+            }
+            Is_Listening = true;
+
             Task.Run(async () =>
             {
                 try
@@ -166,14 +200,20 @@ namespace Pixel_Drift
                         }
 
                         string Message = await Stream_Reader.ReadLineAsync();
-                        if (Message == null) break;
+                        if (Message == null)
+                        {
+                            break;
+                        }
 
                         string Real_Data = Message;
 
                         if (!string.IsNullOrEmpty(My_AES_Key) && !Message.Trim().StartsWith("{"))
                         {
                             string Decrypted = AES_Handle.Decrypt(Message, My_AES_Key);
-                            if (Decrypted != null) Real_Data = Decrypted;
+                            if (Decrypted != null)
+                            {
+                                Real_Data = Decrypted;
+                            }
                         }
 
                         if (Pending_Request != null && !Pending_Request.Task.IsCompleted)
@@ -186,25 +226,42 @@ namespace Pixel_Drift
                         }
                     }
                 }
-                catch { Close_Connection(); }
-                finally { Is_Listening = false; }
+                catch
+                {
+                    Close_Connection();
+                }
+                finally
+                {
+                    Is_Listening = false;
+                }
             });
         }
 
         public static string Send_And_Wait(object Request_Data)
         {
-            if (!Is_Connected || Is_Handshaking) return null; 
+            if (!Is_Connected || Is_Handshaking)
+            {
+                return null;
+            }
 
             Pending_Request = new TaskCompletionSource<string>();
 
             try
             {
-                string Json = JsonSerializer.Serialize(Request_Data);
-                string Data_To_Send = Json;
+                string Json_Raw = JsonSerializer.Serialize(Request_Data);
+                var Dict_Data = JsonSerializer.Deserialize<Dictionary<string, object>>(Json_Raw);
+
+                if (!Dict_Data.ContainsKey("timestamp"))
+                {
+                    Dict_Data["timestamp"] = DateTime.UtcNow.Ticks;
+                }
+
+                string Json_Final = JsonSerializer.Serialize(Dict_Data);
+                string Data_To_Send = Json_Final;
 
                 if (!string.IsNullOrEmpty(My_AES_Key))
                 {
-                    Data_To_Send = AES_Handle.Encrypt(Json, My_AES_Key);
+                    Data_To_Send = AES_Handle.Encrypt(Json_Final, My_AES_Key);
                 }
 
                 Stream_Writer.WriteLine(Data_To_Send);
@@ -221,7 +278,11 @@ namespace Pixel_Drift
                     return null;
                 }
             }
-            catch { Close_Connection(); return null; }
+            catch
+            {
+                Close_Connection();
+                return null;
+            }
         }
 
         public static void Send_And_Forget(object Data)
@@ -230,28 +291,43 @@ namespace Pixel_Drift
             {
                 try
                 {
-                    string Json = JsonSerializer.Serialize(Data);
-                    string Data_To_Send = Json;
+                    string Json_Raw = JsonSerializer.Serialize(Data);
+                    var Dict_Data = JsonSerializer.Deserialize<Dictionary<string, object>>(Json_Raw);
+
+                    if (!Dict_Data.ContainsKey("timestamp"))
+                    {
+                        Dict_Data["timestamp"] = DateTime.UtcNow.Ticks;
+                    }
+
+                    string Json_Final = JsonSerializer.Serialize(Dict_Data);
+                    string Data_To_Send = Json_Final;
 
                     if (!string.IsNullOrEmpty(My_AES_Key))
                     {
-                        Data_To_Send = AES_Handle.Encrypt(Json, My_AES_Key);
+                        Data_To_Send = AES_Handle.Encrypt(Json_Final, My_AES_Key);
                     }
                     Stream_Writer.WriteLine(Data_To_Send);
                 }
-                catch { Close_Connection(); }
+                catch
+                {
+                    Close_Connection();
+                }
             }
         }
 
         public static void Close_Connection()
         {
             Is_Listening = false;
-            try 
-            { 
-                Tcp_Client?.Close(); 
-                Stream_Writer?.Close(); 
-                Stream_Reader?.Close(); 
-            } catch { }
+            try
+            {
+                Tcp_Client?.Close();
+                Stream_Writer?.Close();
+                Stream_Reader?.Close();
+            }
+            catch
+            {
+                // Continue
+            }
             Tcp_Client = null;
             My_AES_Key = null;
         }

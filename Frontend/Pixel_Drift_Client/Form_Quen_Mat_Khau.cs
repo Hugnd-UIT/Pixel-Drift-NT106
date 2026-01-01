@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Text.Json;
 using System.Windows.Forms;
 
-
 namespace Pixel_Drift
 {
     public partial class Form_Quen_Mat_Khau : Form
@@ -29,7 +28,10 @@ namespace Pixel_Drift
             {
                 string IP = Network_Handle.Get_Server_IP();
 
-                if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
+                if (string.IsNullOrEmpty(IP))
+                {
+                    IP = "127.0.0.1";
+                }
 
                 if (!Network_Handle.Connect(IP, 1111))
                 {
@@ -89,8 +91,7 @@ namespace Pixel_Drift
             }
             catch (SocketException)
             {
-                MessageBox.Show("Cannot Connect To Server. Check IP And Port!", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Cannot Connect To Server. Check IP And Port!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (JsonException)
             {

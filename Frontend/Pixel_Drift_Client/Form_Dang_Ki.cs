@@ -23,22 +23,27 @@ namespace Pixel_Drift
             InitializeComponent();
         }
 
-        // Hàm chuẩn hóa định dạng ngày
         private string Dinh_Dang_Ngay(string Day)
         {
             if (DateTime.TryParse(Day, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime Parsed_Day))
+            {
                 return Parsed_Day.ToString("yyyy-MM-dd");
+            }
             return null;
         }
 
-        // Kiểm tra độ mạnh của mật khẩu
         private bool Kiem_Tra_Do_Manh_Mat_Khau(string Password)
         {
-            if (Password.Length < 8) return false;
+            if (Password.Length < 8)
+            {
+                return false;
+            }
+
             bool Co_Chu_Hoa = Regex.IsMatch(Password, "[A-Z]");
             bool Co_Chu_Thuong = Regex.IsMatch(Password, "[a-z]");
             bool Co_So = Regex.IsMatch(Password, "[0-9]");
             bool Co_Ky_Tu_Dac_Biet = Regex.IsMatch(Password, @"[@$!%*?&#]");
+
             return Co_Chu_Hoa && Co_Chu_Thuong && Co_So && Co_Ky_Tu_Dac_Biet;
         }
 
@@ -50,7 +55,6 @@ namespace Pixel_Drift
             string Email = tb_email.Text.Trim();
             string Birthday = tb_birthday.Text.Trim();
 
-            // Kiểm tra dữ liệu đầu vào
             if (Username == "" || Password == "" || Email == "")
             {
                 MessageBox.Show("Please Enter Full Information!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -73,8 +77,7 @@ namespace Pixel_Drift
 
             if (!Kiem_Tra_Do_Manh_Mat_Khau(Password))
             {
-                MessageBox.Show("Password Must Have At Least 8 Characters, Including Uppercase, Lowercase, Numbers And Special Characters!",
-                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Password Must Have At Least 8 Characters, Including Uppercase, Lowercase, Numbers And Special Characters!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -90,7 +93,10 @@ namespace Pixel_Drift
                 {
                     string IP = Network_Handle.Get_Server_IP();
 
-                    if (string.IsNullOrEmpty(IP)) IP = "127.0.0.1";
+                    if (string.IsNullOrEmpty(IP))
+                    {
+                        IP = "127.0.0.1";
+                    }
 
                     if (!Network_Handle.Connect(IP, 1111))
                     {
@@ -108,7 +114,10 @@ namespace Pixel_Drift
                     Network_Handle.Start_Global_Listening();
                 }
 
-                string Response_Key = Network_Handle.Send_And_Wait(new { action = "get_public_key" });
+                string Response_Key = Network_Handle.Send_And_Wait(new
+                {
+                    action = "get_public_key"
+                });
 
                 var Json_Key = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Response_Key);
                 string Public_Key = Json_Key["public_key"].GetString();

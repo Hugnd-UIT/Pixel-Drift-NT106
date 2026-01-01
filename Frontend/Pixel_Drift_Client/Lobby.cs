@@ -22,7 +22,10 @@ namespace Pixel_Drift
 
         private void Handle_Server_Message(string Message)
         {
-            if (this.Disposing || this.IsDisposed || !this.IsHandleCreated) return;
+            if (this.Disposing || this.IsDisposed || !this.IsHandleCreated)
+            {
+                return;
+            }
 
             this.Invoke(new Action(() =>
             {
@@ -30,8 +33,14 @@ namespace Pixel_Drift
                 {
                     var Data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Message);
                     string Status = "";
-                    if (Data.ContainsKey("status")) Status = Data["status"].GetString();
-                    else if (Data.ContainsKey("action")) Status = Data["action"].GetString();
+                    if (Data.ContainsKey("status"))
+                    {
+                        Status = Data["status"].GetString();
+                    }
+                    else if (Data.ContainsKey("action"))
+                    {
+                        Status = Data["action"].GetString();
+                    }
 
                     if (Status == "create_room_success" || Status == "join_room_success")
                     {
@@ -42,7 +51,10 @@ namespace Pixel_Drift
 
                         Game_Form.FormClosed += (s, args) =>
                         {
-                            if (!this.IsDisposed) this.Show();
+                            if (!this.IsDisposed)
+                            {
+                                this.Show();
+                            }
                         };
 
                         this.Hide();
@@ -61,13 +73,19 @@ namespace Pixel_Drift
                         MessageBox.Show(Data["message"].GetString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }));
         }
 
         private void btn_CreateRoom_Click(object sender, EventArgs e)
         {
-            Network_Handle.Send_And_Forget(new { action = "create_room", username = My_Username });
+            Network_Handle.Send_And_Forget(new
+            {
+                action = "create_room",
+                username = My_Username
+            });
         }
 
         private void btn_JoinRoom_Click(object sender, EventArgs e)
@@ -76,7 +94,12 @@ namespace Pixel_Drift
             {
                 if (Input_Form.ShowDialog() == DialogResult.OK)
                 {
-                    Network_Handle.Send_And_Forget(new { action = "join_room", room_id = Input_Form.Room_ID, username = My_Username });
+                    Network_Handle.Send_And_Forget(new
+                    {
+                        action = "join_room",
+                        room_id = Input_Form.Room_ID,
+                        username = My_Username
+                    });
                 }
             }
         }
@@ -90,7 +113,10 @@ namespace Pixel_Drift
         private void btn_Scoreboard_Click(object sender, EventArgs e)
         {
             var Sb = Application.OpenForms.OfType<Form_ScoreBoard>().FirstOrDefault();
-            if (Sb != null) Sb.Show();
+            if (Sb != null)
+            {
+                Sb.Show();
+            }
             else
             {
                 new Form_ScoreBoard(Network_Handle.Get_Client()).Show();

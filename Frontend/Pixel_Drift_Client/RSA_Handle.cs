@@ -16,7 +16,6 @@ namespace Pixel_Drift
                 try
                 {
                     Private_Key = RSA.ToXmlString(true);
-
                     Public_Key = RSA.ToXmlString(false);
                 }
                 finally

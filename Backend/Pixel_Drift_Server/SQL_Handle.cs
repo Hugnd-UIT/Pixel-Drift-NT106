@@ -14,8 +14,8 @@ namespace Pixel_Drift_Server
         {
             try
             {
-                using (SqlConnection Connection = new SqlConnection(Connection_String)) 
-                { 
+                using (SqlConnection Connection = new SqlConnection(Connection_String))
+                {
                     Connection.Open();
 
                     string Create_User = @"
@@ -25,7 +25,7 @@ namespace Pixel_Drift_Server
                         Username NVARCHAR(50) UNIQUE NOT NULL,
                         Email NVARCHAR(100) UNIQUE NOT NULL,
                         Password NVARCHAR(256) NOT NULL,
-                        Birthday DATETIME NULL,          
+                        Birthday DATETIME NULL,            
                         Created_Time DATETIME DEFAULT GETDATE()
                     )";
 
@@ -74,8 +74,10 @@ namespace Pixel_Drift_Server
                     {
                         Cmd.Parameters.AddWithValue("@u", Username);
                         Cmd.Parameters.AddWithValue("@e", Email);
-                        if ((int)Cmd.ExecuteScalar() > 0) 
-                            return -1; 
+                        if ((int)Cmd.ExecuteScalar() > 0)
+                        {
+                            return -1;
+                        }
                     }
 
                     string Hashed_Password = BCrypt.Net.BCrypt.HashPassword(Password);
@@ -87,17 +89,25 @@ namespace Pixel_Drift_Server
                         Cmd.Parameters.AddWithValue("@u", Username);
                         Cmd.Parameters.AddWithValue("@e", Email);
                         Cmd.Parameters.AddWithValue("@p", Hashed_Password);
-                        if (DateTime.TryParse(Birthday, out DateTime dt)) 
+
+                        if (DateTime.TryParse(Birthday, out DateTime dt))
+                        {
                             Cmd.Parameters.AddWithValue("@b", dt);
-                        else Cmd.Parameters.AddWithValue("@b", DBNull.Value);
+                        }
+                        else
+                        {
+                            Cmd.Parameters.AddWithValue("@b", DBNull.Value);
+                        }
+
                         Cmd.ExecuteNonQuery();
-                        return 1; 
+                        return 1;
                     }
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine($"[Error] {ex.Message}");
-                return 0; 
+                return 0;
             }
         }
 
@@ -116,7 +126,10 @@ namespace Pixel_Drift_Server
                         Cmd.Parameters.AddWithValue("@u", Username);
                         object Result = Cmd.ExecuteScalar();
 
-                        if (Result == null) return false;
+                        if (Result == null)
+                        {
+                            return false;
+                        }
 
                         bool Is_Valid = BCrypt.Net.BCrypt.Verify(Password, Result.ToString());
                         return Is_Valid;
@@ -156,9 +169,9 @@ namespace Pixel_Drift_Server
                 }
                 return "";
             }
-            catch 
-            { 
-                return ""; 
+            catch
+            {
+                return "";
             }
         }
 
@@ -182,9 +195,9 @@ namespace Pixel_Drift_Server
                     }
                 }
             }
-            catch 
-            { 
-                return false; 
+            catch
+            {
+                return false;
             }
         }
 
@@ -206,9 +219,9 @@ namespace Pixel_Drift_Server
                     }
                 }
             }
-            catch 
-            { 
-                return ""; 
+            catch
+            {
+                return "";
             }
         }
 
@@ -225,7 +238,7 @@ namespace Pixel_Drift_Server
                     {
                         Cmd.Parameters.AddWithValue("@e", Email);
                         object Result = Cmd.ExecuteScalar();
-                        return Result?.ToString(); 
+                        return Result?.ToString();
                     }
                 }
             }
@@ -253,9 +266,9 @@ namespace Pixel_Drift_Server
                     }
                 }
             }
-            catch 
-            { 
-                return -1; 
+            catch
+            {
+                return -1;
             }
         }
 
@@ -294,7 +307,7 @@ namespace Pixel_Drift_Server
                 using (SqlConnection Connection = new SqlConnection(Connection_String))
                 {
                     Connection.Open();
-                    
+
                     string Query = @"
                         SELECT TOP (@limit)
                             u.Username,

@@ -17,7 +17,6 @@ namespace Pixel_Drift
         private string My_Username;
         private bool Is_Returning_To_Lobby = false;
 
-        // Lưu tọa độ vật thể
         private Dictionary<string, Point> Object_Positions = new Dictionary<string, Point>();
 
         private Image Img_Player_1 = Properties.Resources.Player_Car_1;
@@ -36,11 +35,13 @@ namespace Pixel_Drift
         private Size Size_Item = new Size(50, 50);
         private Size Size_AICar = new Size(60, 120);
 
-        // Biến điều khiển
         private bool Is_Left_Pressed = false;
         private bool Is_Right_Pressed = false;
         private WindowsMediaPlayer Music;
-        private SoundPlayer CountDown_5Sec, Buff, Debuff, Car_Hit;
+        private SoundPlayer CountDown_5Sec;
+        private SoundPlayer Buff;
+        private SoundPlayer Debuff;
+        private SoundPlayer Car_Hit;
         private long Player1_Score = 0;
         private long Player2_Score = 0;
         private int Crash_Count = 0;
@@ -56,7 +57,11 @@ namespace Pixel_Drift
             this.KeyPreview = true;
             this.My_Username = Username;
             this.My_Player_Number = Player_Num;
-            if (btn_ID != null) btn_ID.Text = "ID: " + Room_ID;
+
+            if (btn_ID != null)
+            {
+                btn_ID.Text = "ID: " + Room_ID;
+            }
 
             string Player_Color = (My_Player_Number == 1) ? "Red Car" : "Blue Car";
             this.Text = $"Pixel Drift - PLAYER {My_Player_Number} ({Player_Color}) - {My_Username}";
@@ -64,7 +69,10 @@ namespace Pixel_Drift
             Network_Handle.On_Message_Received += Handle_Server_Message;
         }
 
-        public Game_Window() { InitializeComponent(); }
+        public Game_Window()
+        {
+            InitializeComponent();
+        }
 
         private void Game_Window_Load(object sender, EventArgs e)
         {
@@ -90,7 +98,10 @@ namespace Pixel_Drift
 
         private void Enable_Panel_DoubleBuffer(Panel p)
         {
-            if (p == null) return;
+            if (p == null)
+            {
+                return;
+            }
             typeof(Panel).InvokeMember("DoubleBuffered",
                 BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
                 null, p, new object[] { true });
@@ -103,10 +114,19 @@ namespace Pixel_Drift
                 var itemsToRemove = new List<Control>();
                 foreach (Control c in controls)
                 {
-                    if (c is PictureBox && c.Name.StartsWith("ptb_")) itemsToRemove.Add(c);
-                    if (c.HasChildren) ScanAndRemove(c.Controls);
+                    if (c is PictureBox && c.Name.StartsWith("ptb_"))
+                    {
+                        itemsToRemove.Add(c);
+                    }
+                    if (c.HasChildren)
+                    {
+                        ScanAndRemove(c.Controls);
+                    }
                 }
-                foreach (var item in itemsToRemove) controls.Remove(item);
+                foreach (var item in itemsToRemove)
+                {
+                    controls.Remove(item);
+                }
             }
             ScanAndRemove(this.Controls);
         }
@@ -156,16 +176,24 @@ namespace Pixel_Drift
             }
         }
 
+
+
         private void Handle_Server_Message(string Message)
         {
-            if (this.Disposing || this.IsDisposed || !this.IsHandleCreated) return;
+            if (this.Disposing || this.IsDisposed || !this.IsHandleCreated)
+            {
+                return;
+            }
 
             this.Invoke(new Action(() =>
             {
                 try
                 {
                     var Data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Message);
-                    if (!Data.ContainsKey("action")) return;
+                    if (!Data.ContainsKey("action"))
+                    {
+                        return;
+                    }
 
                     string Action = Data["action"].GetString();
 
@@ -178,13 +206,21 @@ namespace Pixel_Drift
                         case "update_score":
                             Player1_Score = Data["p1_score"].GetInt64();
                             Player2_Score = Data["p2_score"].GetInt64();
-                            if (lbl_Score1 != null) lbl_Score1.Text = "Score: " + Player1_Score;
-                            if (lbl_Score2 != null) lbl_Score2.Text = "Score: " + Player2_Score;
+                            if (lbl_Score1 != null)
+                            {
+                                lbl_Score1.Text = "Score: " + Player1_Score;
+                            }
+                            if (lbl_Score2 != null)
+                            {
+                                lbl_Score2.Text = "Score: " + Player2_Score;
+                            }
                             break;
 
                         case "update_time":
                             if (lbl_GameTimer != null)
+                            {
                                 lbl_GameTimer.Text = "Time: " + Data["time"].GetInt32();
+                            }
                             break;
 
                         case "start_game":
@@ -197,7 +233,11 @@ namespace Pixel_Drift
                                 lbl_Countdown.Visible = true;
                                 int Time = Data["time"].GetInt32();
                                 lbl_Countdown.Text = Time.ToString();
-                                if (Time == 5) { Music.controls.stop(); CountDown_5Sec?.Play(); }
+                                if (Time == 5)
+                                {
+                                    Music.controls.stop();
+                                    CountDown_5Sec?.Play();
+                                }
                             }
                             break;
 
@@ -206,8 +246,14 @@ namespace Pixel_Drift
                             string P2_Name = Data["player2_name"].GetString();
                             bool P1_Ready = Data["player1_ready"].GetBoolean();
                             bool P2_Ready = Data["player2_ready"].GetBoolean();
-                            if (lbl_P1_Status != null) lbl_P1_Status.Text = $"P1 ({P1_Name}): {(P1_Ready ? "Ready" : "...")}";
-                            if (lbl_P2_Status != null) lbl_P2_Status.Text = $"P2 ({P2_Name}): {(P2_Ready ? "Ready" : "...")}";
+                            if (lbl_P1_Status != null)
+                            {
+                                lbl_P1_Status.Text = $"P1 ({P1_Name}): {(P1_Ready ? "Ready" : "...")}";
+                            }
+                            if (lbl_P2_Status != null)
+                            {
+                                lbl_P2_Status.Text = $"P2 ({P2_Name}): {(P2_Ready ? "Ready" : "...")}";
+                            }
                             break;
 
                         case "game_over":
@@ -240,7 +286,9 @@ namespace Pixel_Drift
                             break;
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }));
         }
 
@@ -248,7 +296,10 @@ namespace Pixel_Drift
         {
             foreach (var key in Data.Keys)
             {
-                if (key == "action") continue;
+                if (key == "action")
+                {
+                    continue;
+                }
                 try
                 {
                     JsonElement El = Data[key];
@@ -259,18 +310,32 @@ namespace Pixel_Drift
                         Object_Positions[key] = new Point(xVal.GetInt32(), yVal.GetInt32());
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }
-            // Yêu cầu vẽ lại cả 2 Panel
-            if (panel1 != null) panel1.Invalidate();
-            if (panel2 != null) panel2.Invalidate();
+            if (panel1 != null)
+            {
+                panel1.Invalidate();
+            }
+            if (panel2 != null)
+            {
+                panel2.Invalidate();
+            }
         }
 
-        private void Send(object Msg) => Network_Handle.Send_And_Forget(Msg);
+        private void Send(object Msg)
+        {
+            Network_Handle.Send_And_Forget(Msg);
+        }
 
         private void btn_Ready_Click(object sender, EventArgs e)
         {
-            Send(new { action = "set_ready", ready_status = "true" });
+            Send(new
+            {
+                action = "set_ready",
+                ready_status = "true"
+            });
             btn_Ready.Enabled = false;
             btn_Ready.Text = "Waiting...";
             this.Focus();
@@ -281,19 +346,33 @@ namespace Pixel_Drift
             string Direction = null;
             if (e.KeyCode == Keys.Left)
             {
-                if (Is_Left_Pressed) return;
+                if (Is_Left_Pressed)
+                {
+                    return;
+                }
                 Is_Left_Pressed = true;
                 Direction = "left";
             }
             else if (e.KeyCode == Keys.Right)
             {
-                if (Is_Right_Pressed) return;
+                if (Is_Right_Pressed)
+                {
+                    return;
+                }
                 Is_Right_Pressed = true;
                 Direction = "right";
             }
 
             if (Direction != null)
-                Send(new { action = "move", player = My_Player_Number, direction = Direction, state = "down" });
+            {
+                Send(new
+                {
+                    action = "move",
+                    player = My_Player_Number,
+                    direction = Direction,
+                    state = "down"
+                });
+            }
         }
 
         private void Game_Window_KeyUp(object sender, KeyEventArgs e)
@@ -311,7 +390,15 @@ namespace Pixel_Drift
             }
 
             if (Direction != null)
-                Send(new { action = "move", player = My_Player_Number, direction = Direction, state = "up" });
+            {
+                Send(new
+                {
+                    action = "move",
+                    player = My_Player_Number,
+                    direction = Direction,
+                    state = "up"
+                });
+            }
         }
 
         private void Game_Window_FormClosing(object sender, FormClosingEventArgs e)
@@ -319,10 +406,16 @@ namespace Pixel_Drift
             Network_Handle.On_Message_Received -= Handle_Server_Message;
             try
             {
-                Music?.controls.stop(); Music?.close();
-                CountDown_5Sec?.Stop(); Car_Hit?.Stop(); Buff?.Stop(); Debuff?.Stop();
+                Music?.controls.stop();
+                Music?.close();
+                CountDown_5Sec?.Stop();
+                Car_Hit?.Stop();
+                Buff?.Stop();
+                Debuff?.Stop();
             }
-            catch { }
+            catch
+            {
+            }
 
             if (!Is_Returning_To_Lobby)
             {
@@ -341,9 +434,14 @@ namespace Pixel_Drift
                 Buff = new SoundPlayer("buff.wav");
                 Debuff = new SoundPlayer("debuff.wav");
                 Car_Hit = new SoundPlayer("crash.wav");
-                CountDown_5Sec.LoadAsync(); Buff.LoadAsync(); Debuff.LoadAsync(); Car_Hit.LoadAsync();
+                CountDown_5Sec.LoadAsync();
+                Buff.LoadAsync();
+                Debuff.LoadAsync();
+                Car_Hit.LoadAsync();
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private void Play_Music_Loop(string Music_File)
@@ -351,29 +449,59 @@ namespace Pixel_Drift
             try
             {
                 string Path_File = System.IO.Path.Combine(Application.StartupPath, Music_File);
-                if (System.IO.File.Exists(Path_File)) { Music.URL = Path_File; Music.controls.play(); }
+                if (System.IO.File.Exists(Path_File))
+                {
+                    Music.URL = Path_File;
+                    Music.controls.play();
+                }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private void Play_Sound_Effect(string Sound_Type)
         {
-            if (Sound_Type == "buff") Buff?.Play();
-            else if (Sound_Type == "debuff") Debuff?.Play();
-            else if (Sound_Type == "hit_car") { Car_Hit?.Play(); Crash_Count++; }
+            if (Sound_Type == "buff")
+            {
+                Buff?.Play();
+            }
+            else if (Sound_Type == "debuff")
+            {
+                Debuff?.Play();
+            }
+            else if (Sound_Type == "hit_car")
+            {
+                Car_Hit?.Play();
+                Crash_Count++;
+            }
         }
 
         private void Start_Game()
         {
-            Crash_Count = 0; Player1_Score = 0; Player2_Score = 0;
-            btn_Ready.Visible = false; lbl_P1_Status.Visible = false;
-            lbl_P2_Status.Visible = false; lbl_Countdown.Visible = false;
-            btn_Scoreboard.Enabled = false; btn_Scoreboard.Visible = false;
+            Crash_Count = 0;
+            Player1_Score = 0;
+            Player2_Score = 0;
+            btn_Ready.Visible = false;
+            lbl_P1_Status.Visible = false;
+            lbl_P2_Status.Visible = false;
+            lbl_Countdown.Visible = false;
+            btn_Scoreboard.Enabled = false;
+            btn_Scoreboard.Visible = false;
             btn_ID.Visible = false;
 
-            lbl_GameTimer.Visible = true; lbl_GameTimer.Text = "Time: 60";
-            if (lbl_Score1 != null) { lbl_Score1.Visible = true; lbl_Score1.Text = "Score: 0"; }
-            if (lbl_Score2 != null) { lbl_Score2.Visible = true; lbl_Score2.Text = "Score: 0"; }
+            lbl_GameTimer.Visible = true;
+            lbl_GameTimer.Text = "Time: 60";
+            if (lbl_Score1 != null)
+            {
+                lbl_Score1.Visible = true;
+                lbl_Score1.Text = "Score: 0";
+            }
+            if (lbl_Score2 != null)
+            {
+                lbl_Score2.Visible = true;
+                lbl_Score2.Text = "Score: 0";
+            }
 
             CountDown_5Sec?.Stop();
             Play_Music_Loop("compete.wav");
@@ -386,17 +514,34 @@ namespace Pixel_Drift
             Play_Music_Loop("wait.wav");
 
             Object_Positions.Clear();
-            if (panel1 != null) panel1.Invalidate();
-            if (panel2 != null) panel2.Invalidate();
+            if (panel1 != null)
+            {
+                panel1.Invalidate();
+            }
+            if (panel2 != null)
+            {
+                panel2.Invalidate();
+            }
 
-            btn_Ready.Visible = true; btn_Ready.Enabled = true; btn_Ready.Text = "Ready";
-            lbl_P1_Status.Visible = true; lbl_P2_Status.Visible = true;
-            btn_Scoreboard.Enabled = true; btn_Scoreboard.Visible = true;
+            btn_Ready.Visible = true;
+            btn_Ready.Enabled = true;
+            btn_Ready.Text = "Ready";
+            lbl_P1_Status.Visible = true;
+            lbl_P2_Status.Visible = true;
+            btn_Scoreboard.Enabled = true;
+            btn_Scoreboard.Visible = true;
             btn_ID.Visible = true;
 
-            lbl_Countdown.Visible = false; lbl_GameTimer.Visible = false;
-            if (lbl_Score1 != null) lbl_Score1.Visible = false;
-            if (lbl_Score2 != null) lbl_Score2.Visible = false;
+            lbl_Countdown.Visible = false;
+            lbl_GameTimer.Visible = false;
+            if (lbl_Score1 != null)
+            {
+                lbl_Score1.Visible = false;
+            }
+            if (lbl_Score2 != null)
+            {
+                lbl_Score2.Visible = false;
+            }
 
             btn_Ready.Focus();
         }
@@ -406,11 +551,20 @@ namespace Pixel_Drift
             try
             {
                 int Win_Count = 0;
-                if (My_Player_Number == 1 && Player1_Score > Player2_Score) Win_Count = 1;
-                else if (My_Player_Number == 2 && Player2_Score > Player1_Score) Win_Count = 1;
+                if (My_Player_Number == 1 && Player1_Score > Player2_Score)
+                {
+                    Win_Count = 1;
+                }
+                else if (My_Player_Number == 2 && Player2_Score > Player1_Score)
+                {
+                    Win_Count = 1;
+                }
 
                 double Total_Score = Player1_Score + (Win_Count * 500) - (Crash_Count * 50);
-                if (My_Player_Number == 2) Total_Score = Player2_Score + (Win_Count * 500) - (Crash_Count * 50);
+                if (My_Player_Number == 2)
+                {
+                    Total_Score = Player2_Score + (Win_Count * 500) - (Crash_Count * 50);
+                }
 
                 var Score_Data = new
                 {
@@ -422,14 +576,25 @@ namespace Pixel_Drift
                 };
                 Send(Score_Data);
             }
-            catch { }
-            finally { Crash_Count = 0; Player1_Score = 0; Player2_Score = 0; }
+            catch
+            {
+                // Continue
+            }
+            finally
+            {
+                Crash_Count = 0;
+                Player1_Score = 0;
+                Player2_Score = 0;
+            }
         }
 
         private void btn_Scoreboard_Click(object sender, EventArgs e)
         {
             var Sb = Application.OpenForms.OfType<Form_ScoreBoard>().FirstOrDefault();
-            if (Sb != null) Sb.Show();
+            if (Sb != null)
+            {
+                Sb.Show();
+            }
             else
             {
                 new Form_ScoreBoard(Network_Handle.Get_Client()).Show();
