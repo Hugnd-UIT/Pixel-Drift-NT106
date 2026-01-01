@@ -72,16 +72,16 @@ Dự án mô phỏng quy trình phòng thủ chiều sâu (Defense in Depth) v�
     * Xử lý: Server tự động từ chối gói tin có độ trễ > 10 giây.
 
 > **Minh họa phòng thủ Replay Attack**
-> *Server phát hiện gói tin có Timestamp cũ và từ chối xử lý.*  
-> ![Replay Block Log](<img width="1147" height="312" alt="Image" src="https://github.com/user-attachments/assets/6a6e3e35-0d6b-42ee-8815-71503c79e726" />)
+> *Server phát hiện gói tin có Timestamp cũ và tự động ngắt kết nối.*  
+> ![Replay Block Log](https://github.com/user-attachments/assets/8d2e5c6c-bfc9-48e7-9c69-bafc18b41620)
 
 * **Chống quá tải & Spam (Anti-DoS):**
     * Cơ chế: Rate Limiting (Giới hạn 20 gói tin/giây/IP).
     * Xử lý: Tự động **Ban IP 5 phút** nếu vi phạm.
 
 > **Minh họa phòng thủ DoS Attack**
-> *Server phát hiện IP gửi request liên tục và tự động ngắt kết nối/Ban IP.*  
-> ![DoS Block Log](https://github.com/user-attachments/assets/1fb3b4a4-df1a-4b03-ad29-a3b5008e29d1)
+> *Server phát hiện IP gửi request liên tục và tự động ngắt kết nối.*  
+> ![DoS Block Log](https://github.com/user-attachments/assets/628c3df1-2dc8-4327-96b5-3281aec0c04c)
 
 * **Chống tràn bộ nhớ (Anti-Buffer Overflow):**
     * Cơ chế: Kiểm tra kích thước gói tin đầu vào
@@ -89,7 +89,7 @@ Dự án mô phỏng quy trình phòng thủ chiều sâu (Defense in Depth) v�
 
 > **Minh họa phòng thủ Buffer Overflow Attack**
 > *Server phát hiện gói tin có kích thước bất thường và ngắt kết nối để bảo vệ RAM.*  
-> ![Overflow Block Log](https://github.com/user-attachments/assets/e89bad46-5303-4159-adce-09bd0c483086)
+> ![Overflow Block Log](https://github.com/user-attachments/assets/89a38661-eb9b-4ec9-b3be-b8323c338a97)
 
 ### 4. Giả lập tấn công (Red Teaming)
 * Bộ công cụ **Python Scripts** đi kèm để giả lập các đợt tấn công thực tế, dùng để kiểm thử tính hiệu quả của hệ thống phòng thủ.
