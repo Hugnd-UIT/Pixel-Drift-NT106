@@ -39,6 +39,7 @@
             this.tb_ID.ForeColor = System.Drawing.Color.DarkCyan;
             this.tb_ID.Location = new System.Drawing.Point(144, 53);
             this.tb_ID.Margin = new System.Windows.Forms.Padding(4);
+            this.tb_ID.MaxLength = 50;
             this.tb_ID.Name = "tb_ID";
             this.tb_ID.Size = new System.Drawing.Size(227, 27);
             this.tb_ID.TabIndex = 1;

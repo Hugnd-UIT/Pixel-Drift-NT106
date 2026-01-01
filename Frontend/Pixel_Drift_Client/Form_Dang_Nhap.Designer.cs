@@ -105,6 +105,7 @@ namespace Pixel_Drift
             this.tb_username.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tb_username.Location = new System.Drawing.Point(35, 125);
             this.tb_username.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.tb_username.MaxLength = 50;
             this.tb_username.Name = "tb_username";
             this.tb_username.PlaceholderText = "Username";
             this.tb_username.SelectedText = "";
@@ -124,6 +125,7 @@ namespace Pixel_Drift
             this.tb_matkhau.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tb_matkhau.Location = new System.Drawing.Point(35, 211);
             this.tb_matkhau.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_matkhau.MaxLength = 50;
             this.tb_matkhau.Name = "tb_matkhau";
             this.tb_matkhau.PasswordChar = '*';
             this.tb_matkhau.PlaceholderText = "Password";

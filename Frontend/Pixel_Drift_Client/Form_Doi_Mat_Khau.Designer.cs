@@ -54,6 +54,7 @@
             this.txt_mkcu.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.txt_mkcu.Location = new System.Drawing.Point(259, 52);
             this.txt_mkcu.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txt_mkcu.MaxLength = 50;
             this.txt_mkcu.Name = "txt_mkcu";
             this.txt_mkcu.PlaceholderForeColor = System.Drawing.Color.Black;
             this.txt_mkcu.PlaceholderText = "Token...";
@@ -78,6 +79,7 @@
             this.txt_mkmoi.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.txt_mkmoi.Location = new System.Drawing.Point(259, 116);
             this.txt_mkmoi.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txt_mkmoi.MaxLength = 50;
             this.txt_mkmoi.Name = "txt_mkmoi";
             this.txt_mkmoi.PasswordChar = '●';
             this.txt_mkmoi.PlaceholderForeColor = System.Drawing.Color.Black;
@@ -104,6 +106,7 @@
             this.txt_xacnhanmk.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.txt_xacnhanmk.Location = new System.Drawing.Point(259, 187);
             this.txt_xacnhanmk.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txt_xacnhanmk.MaxLength = 50;
             this.txt_xacnhanmk.Name = "txt_xacnhanmk";
             this.txt_xacnhanmk.PasswordChar = '●';
             this.txt_xacnhanmk.PlaceholderForeColor = System.Drawing.Color.Black;
