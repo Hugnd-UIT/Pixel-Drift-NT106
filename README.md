@@ -1,4 +1,4 @@
-<img width="962" height="574" alt="{D9E691D5-C1E7-4F79-97A0-43270AF6B860}" src="https://github.com/user-attachments/assets/cbcf74d6-5e59-4df2-9906-339665acb8c1" /># 🏎️ Pixel Drift - Real-time Multiplayer Racing
+# 🏎️ Pixel Drift - Real-time Multiplayer Racing
 
 <div align="center">
 
@@ -26,22 +26,22 @@
 ---
 ## 📸 Demo
 **Mở Đầu Game**
-> ![Image](<img width="855" height="570" alt="Image" src="https://github.com/user-attachments/assets/6a1f0a08-fa5f-4e12-86a8-69a11e5c5b28" />)
+> ![Image](https://github.com/user-attachments/assets/6a1f0a08-fa5f-4e12-86a8-69a11e5c5b28)
 
 **Đăng Kí**
-> ![Image](<img width="1325" height="945" alt="Image" src="https://github.com/user-attachments/assets/d31222a7-8305-447f-92c2-18d6762b6189" />)
+> ![Image](https://github.com/user-attachments/assets/d31222a7-8305-447f-92c2-18d6762b6189)
 
 **Đăng Nhập**
-> ![Image](<img width="619" height="555" alt="Image" src="https://github.com/user-attachments/assets/8b76c7e7-92f6-4446-9c17-5766744eca13" />)
+> ![Image](https://github.com/user-attachments/assets/8b76c7e7-92f6-4446-9c17-5766744eca13)
 
 **Thông Tin Người Dùng**
-> ![Image](<img width="1081" height="755" alt="Image" src="https://github.com/user-attachments/assets/df7efa71-9583-4644-b585-6c6f8cf5a434" />)
+> ![Image](https://github.com/user-attachments/assets/df7efa71-9583-4644-b585-6c6f8cf5a434)
 
 **Lobby**
-> ![Image](<img width="994" height="551" alt="Image" src="https://github.com/user-attachments/assets/7c778e5e-c940-4c55-a157-651f759af5ce" />)
+> ![Image](https://github.com/user-attachments/assets/7c778e5e-c940-4c55-a157-651f759af5ce)
 
 **Game Play**
-> ![Image](<img width="1208" height="897" alt="Image" src="https://github.com/user-attachments/assets/3fd301da-926f-4834-8535-a91686722f65" />)
+> ![Image](https://github.com/user-attachments/assets/3fd301da-926f-4834-8535-a91686722f65)
 
 --- 
 
@@ -61,10 +61,10 @@ Dự án mô phỏng quy trình phòng thủ chiều sâu (Defense in Depth) v�
 > **Dashboard Kibana: Giám sát log và phát hiện tấn công**
 
 > *Minh họa báo cáo*
-> ![Kibana Dashboard](<img width="1013" height="557" alt="Image" src="https://github.com/user-attachments/assets/a6559db5-315b-4f31-b981-dc9d6aa7638c" />)
+> ![Kibana Dashboard](https://github.com/user-attachments/assets/a6559db5-315b-4f31-b981-dc9d6aa7638c)
 
 > *Minh họa báo cáo*
-> ![Kibana Dashboard](<img width="1011" height="554" alt="Image" src="https://github.com/user-attachments/assets/2d30d754-8cd2-445b-88ca-44d1fd051640" />)
+> ![Kibana Dashboard](https://github.com/user-attachments/assets/2d30d754-8cd2-445b-88ca-44d1fd051640)
 
 ### 3. Giả lập phòng thủ (Blue Teaming)
 * **Chống Tấn công Phát lại (Anti-Replay):**
@@ -81,7 +81,7 @@ Dự án mô phỏng quy trình phòng thủ chiều sâu (Defense in Depth) v�
 
 > **Minh họa phòng thủ DoS Attack**
 > *Server phát hiện IP gửi request liên tục và tự động ngắt kết nối/Ban IP.*  
-> ![DoS Block Log](<img width="1488" height="784" alt="Image" src="https://github.com/user-attachments/assets/1fb3b4a4-df1a-4b03-ad29-a3b5008e29d1" />)
+> ![DoS Block Log](https://github.com/user-attachments/assets/1fb3b4a4-df1a-4b03-ad29-a3b5008e29d1)
 
 * **Chống tràn bộ nhớ (Anti-Buffer Overflow):**
     * Cơ chế: Kiểm tra kích thước gói tin đầu vào
@@ -89,22 +89,22 @@ Dự án mô phỏng quy trình phòng thủ chiều sâu (Defense in Depth) v�
 
 > **Minh họa phòng thủ Buffer Overflow Attack**
 > *Server phát hiện gói tin có kích thước bất thường và ngắt kết nối để bảo vệ RAM.*  
-> ![Overflow Block Log](<img width="1478" height="447" alt="Image" src="https://github.com/user-attachments/assets/e89bad46-5303-4159-adce-09bd0c483086" />)
+> ![Overflow Block Log](https://github.com/user-attachments/assets/e89bad46-5303-4159-adce-09bd0c483086)
 
 ### 4. Giả lập tấn công (Red Teaming)
 * Bộ công cụ **Python Scripts** đi kèm để giả lập các đợt tấn công thực tế, dùng để kiểm thử tính hiệu quả của hệ thống phòng thủ.
 
 > **Minh họa tấn công Replay:**
 > *Script Python gửi gói tin cũ và bị Server ngắt kết nối cưỡng chế*  
-> ![Replay Attack Log](<img width="983" height="69" alt="Image" src="https://github.com/user-attachments/assets/b291fcab-6065-4d03-9e67-b5d2ede1fee4" />)
+> ![Replay Attack Log](https://github.com/user-attachments/assets/b291fcab-6065-4d03-9e67-b5d2ede1fee4)
 
 > **Minh họa tấn công Overflow:**
 > *Script Python gửi gói tin lớn và bị Server ngắt kết nối cưỡng chế*  
-> ![Overflow Attack Log](<img width="539" height="89" alt="Image" src="https://github.com/user-attachments/assets/37eb924c-f5ae-4f61-b645-308503238ece" />)
+> ![Overflow Attack Log](https://github.com/user-attachments/assets/37eb924c-f5ae-4f61-b645-308503238ece)
 
 > **Minh họa tấn công DoS:**
 > *Script Python gửi gói tin liên tục và bị Server ngắt kết nối cưỡng chế*  
-> ![DoS Block Attack Log](<img width="962" height="574" alt="Image" src="https://github.com/user-attachments/assets/b4253932-5d69-4810-9732-62ffbda5bfd6" />)
+> ![DoS Block Attack Log](https://github.com/user-attachments/assets/b4253932-5d69-4810-9732-62ffbda5bfd6)
 
 ---
 
