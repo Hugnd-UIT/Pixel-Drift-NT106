@@ -151,14 +151,14 @@ Chi tiết các kỹ thuật tấn công đã được mô phỏng và ngăn ch�
 
 ```bash
 Pixel-Drift/
-├── 📂 Pixel-Drift-Server/     # Backend (.NET 8.0 Console App)
+├── 📂 Pixel-Drift-Server/     # Backend 
 │   ├── Backend.sln            
 │   ├── Pixel_Drift_Server/    
 │   │   ├── TCP_Handler.cs     
 │   │   ├── Security_Logger.cs 
 │   │   └── ...
 │
-├── 📂 Pixel-Drift-Client/     # Frontend (Windows Forms)
+├── 📂 Pixel-Drift-Client/     # Frontend
 │   ├── Frontend.sln           
 │   ├── Setup_Game/            
 │   ├── Pixel_Drift_Client/    
@@ -169,7 +169,7 @@ Pixel-Drift/
 │   ├── docker-compose.yml     
 │   └── logstash.conf         
 │
-├── 📂 Attack-Scripts/         # Bộ công cụ tấn công giả lập (Python)
+├── 📂 Attack-Scripts/         # Bộ công cụ tấn công giả lập
 │   ├── DoS_Attack.py         
 │   ├── Replay_Attack.py       
 │   └── Overflow_Attack.py     
