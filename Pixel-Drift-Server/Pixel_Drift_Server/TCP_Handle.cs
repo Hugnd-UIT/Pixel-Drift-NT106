@@ -19,7 +19,9 @@ namespace Pixel_Drift_Server
         private NetworkStream Stream;
 
         private string Session_AES_Key = null;
+        private const int MAX_CONNECTIONS_PER_IP = 3;
         private static Dictionary<string, int> Login_Attempts = new Dictionary<string, int>();
+        private static Dictionary<string, int> IP_Connection_Count = new Dictionary<string, int>();
         private static Dictionary<string, DateTime> IP_Block_List = new Dictionary<string, DateTime>();
 
         private int Request_Count = 0;
@@ -37,7 +39,7 @@ namespace Pixel_Drift_Server
             this.Stream = TCP_Client.GetStream();
         }
 
-        private string Get_Client_IP()
+        private string Handle_Get_IP()
         {
             try
             {
@@ -48,6 +50,7 @@ namespace Pixel_Drift_Server
             }
             catch
             {
+                // Continue
             }
             return "Unknown";
         }
@@ -63,7 +66,63 @@ namespace Pixel_Drift_Server
                 while (true)
                 {
                     TcpClient TCP_Client = TCP_Listener.AcceptTcpClient();
-                    Console.WriteLine($"[TCP] Client Connected: {TCP_Client.Client.RemoteEndPoint}");
+                    string IP = ((IPEndPoint)TCP_Client.Client.RemoteEndPoint).Address.ToString();
+
+                    lock (IP_Block_List)
+                    {
+                        if (IP_Block_List.ContainsKey(IP))
+                        {
+                            if (DateTime.Now < IP_Block_List[IP])
+                            {
+                                Console.WriteLine($"[SECURITY] Rejected Blacklisted IP: {IP}");
+                                TCP_Client.Close();
+                                continue; 
+                            }
+                            else
+                            {
+                                IP_Block_List.Remove(IP);
+                            }
+                        }
+                    }
+
+                    lock (IP_Connection_Count)
+                    {
+                        if (IP_Connection_Count.ContainsKey(IP) && IP_Connection_Count[IP] >= MAX_CONNECTIONS_PER_IP)
+                        {
+                            DateTime Ban_Until = DateTime.Now.AddMinutes(5);
+
+                            lock (IP_Block_List)
+                            {
+                                if (!IP_Block_List.ContainsKey(IP))
+                                {
+                                    IP_Block_List[IP] = Ban_Until;
+                                }
+                                else
+                                {
+                                    IP_Block_List[IP] = Ban_Until;
+                                }
+                            }
+
+                            Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "DoS Detected! Too Many Concurrent Connections");
+                            
+                            try
+                            {
+                                TCP_Client.Close();
+                                Console.WriteLine($"[TCP] Client {IP} Disconnected");
+                            }
+                            catch
+                            {
+                                // Continue
+                            }
+                            continue;
+                        }
+
+                        if (!IP_Connection_Count.ContainsKey(IP))
+                            IP_Connection_Count[IP] = 1;
+                        else
+                            IP_Connection_Count[IP]++;
+                    }
+
                     Task.Run(() => new TCP_Handler(TCP_Client).Process());
                 }
             }
@@ -87,20 +146,34 @@ namespace Pixel_Drift_Server
                         continue;
                     }
 
-                    string IP = Get_Client_IP();
+                    string IP = Handle_Get_IP();
+
+                    lock (IP_Block_List)
+                    {
+                        if (IP_Block_List.ContainsKey(IP) && DateTime.Now < IP_Block_List[IP])
+                        {
+                            Console.WriteLine($"[SECURITY] Dropping Packet From Banned IP: {IP}");
+                            break; 
+                        }
+                    }
 
                     if (Message.Length > 4096)
                     {
-                        Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Buffer Overflow Detected! Packet Size {Message.Length} > 4096 Bytes");
+                        DateTime Ban_Until = DateTime.Now.AddMinutes(5);
 
-                        try 
-                        { 
-                            Client.Close(); 
-                        } 
-                        catch 
+                        lock (IP_Block_List)
                         {
-                            // Continue
+                            if (!IP_Block_List.ContainsKey(IP))
+                            {
+                                IP_Block_List[IP] = Ban_Until;
+                            }
+                            else
+                            {
+                                IP_Block_List[IP] = Ban_Until;
+                            }
                         }
+
+                        Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Buffer Overflow Detected! Packet Size {Message.Length} > 4096 Bytes");
                         break;
                     }
 
@@ -130,15 +203,6 @@ namespace Pixel_Drift_Server
                             }
 
                             Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Spam Detected!");
-
-                            try
-                            {
-                                Client.Close();
-                            }
-                            catch
-                            {
-                            }
-
                             break;
                         }
                     }
@@ -172,6 +236,20 @@ namespace Pixel_Drift_Server
 
                             if (Diff_Seconds > 5.0)
                             {
+                                DateTime Ban_Until = DateTime.Now.AddMinutes(5);
+
+                                lock (IP_Block_List)
+                                {
+                                    if (!IP_Block_List.ContainsKey(IP))
+                                    {
+                                        IP_Block_List[IP] = Ban_Until;
+                                    }
+                                    else
+                                    {
+                                        IP_Block_List[IP] = Ban_Until;
+                                    }
+                                }
+
                                 Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Replay Detected! Delay: {Diff_Seconds:F2}s");
                             }
                         }
@@ -263,6 +341,7 @@ namespace Pixel_Drift_Server
             }
             catch
             {
+                // Continue
             }
             finally
             {
@@ -335,7 +414,7 @@ namespace Pixel_Drift_Server
 
         private string Handle_Login(Dictionary<string, JsonElement> Data)
         {
-            string IP = Get_Client_IP();
+            string IP = Handle_Get_IP();
 
             if (IP_Block_List.ContainsKey(IP))
             {
@@ -468,7 +547,7 @@ namespace Pixel_Drift_Server
 
         private string Handle_Register(Dictionary<string, JsonElement> Data)
         {
-            string IP = Get_Client_IP();
+            string IP = Handle_Get_IP();
             string Username = Data["username"].GetString();
             string Email = Data["email"].GetString();
             string Birthday = Data.ContainsKey("birthday") ? Data["birthday"].GetString() : "";
@@ -520,7 +599,7 @@ namespace Pixel_Drift_Server
             if (!string.IsNullOrEmpty(Info))
             {
                 var Parts = Info.Split('|');
-                Console.WriteLine($"[Info] Retrieved Info For User: {User}");
+                Console.WriteLine($"[TCP] Retrieved Info For User: {User}");
                 return JsonSerializer.Serialize(new
                 {
                     status = "success",
@@ -538,7 +617,7 @@ namespace Pixel_Drift_Server
 
         private string Handle_Forgot_Password(Dictionary<string, JsonElement> Data)
         {
-            string IP = Get_Client_IP();
+            string IP = Handle_Get_IP();
             string Email = Data["email"].GetString();
             string Username = SQL_Handle.Handle_Get_Username(Email);
 
@@ -580,7 +659,7 @@ namespace Pixel_Drift_Server
 
         private string Handle_Change_Password(Dictionary<string, JsonElement> Data)
         {
-            string IP = Get_Client_IP();
+            string IP = Handle_Get_IP();
             string Email = Data["email"].GetString();
             string Token = Data["token"].GetString();
             string Username = SQL_Handle.Handle_Get_Username(Email);
@@ -711,7 +790,9 @@ namespace Pixel_Drift_Server
         {
             try
             {
-                Console.WriteLine($"[TCP] Client {Client.Client.RemoteEndPoint} Disconnected");
+                string IP = Handle_Get_IP();
+
+                Console.WriteLine($"[TCP] Client {IP} Disconnected");
 
                 if (Client_Room_Map.ContainsKey(Client))
                 {
@@ -729,6 +810,16 @@ namespace Pixel_Drift_Server
                         }
                     }
                     Client_Room_Map.Remove(Client);
+                }
+
+                lock (IP_Connection_Count)
+                {
+                    if (IP_Connection_Count.ContainsKey(IP))
+                    {
+                        IP_Connection_Count[IP]--;
+                        if (IP_Connection_Count[IP] <= 0)
+                            IP_Connection_Count.Remove(IP);
+                    }
                 }
 
                 lock (Active_Connections)
@@ -759,6 +850,7 @@ namespace Pixel_Drift_Server
             }
             catch
             {
+                // Continue
             }
         }
 
