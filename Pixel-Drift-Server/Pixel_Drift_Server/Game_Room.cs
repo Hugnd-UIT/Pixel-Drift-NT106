@@ -30,7 +30,7 @@ namespace Pixel_Drift_Server
 
         private Dictionary<string, Size> Object_Sizes = new Dictionary<string, Size>();
         private Dictionary<string, Point> Game_Objects = new Dictionary<string, Point>();
-        private Dictionary<string, object> Reusable_Game_State = new Dictionary<string, object>();
+        private Dictionary<string, object> Game_State = new Dictionary<string, object>();
 
         private bool P1_Left;
         private bool P1_Right;
@@ -54,7 +54,7 @@ namespace Pixel_Drift_Server
         public Game_Room(string ID)
         {
             this.Room_ID = ID;
-            Reusable_Game_State["action"] = "update_game_state";
+            Game_State["action"] = "update_game_state";
         }
 
         private string Clean_Username(string Username)
@@ -539,10 +539,10 @@ namespace Pixel_Drift_Server
             {
                 foreach (var Kvp in Game_Objects)
                 {
-                    Reusable_Game_State[Kvp.Key] = Kvp.Value;
+                    Game_State[Kvp.Key] = Kvp.Value;
                 }
             }
-            Broadcast(JsonSerializer.Serialize(Reusable_Game_State));
+            Broadcast(JsonSerializer.Serialize(Game_State));
         }
 
         private void Initialize_Game()

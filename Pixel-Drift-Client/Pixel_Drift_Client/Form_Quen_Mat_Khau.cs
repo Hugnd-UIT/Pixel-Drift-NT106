@@ -46,7 +46,7 @@ namespace Pixel_Drift
                     return;
                 }
 
-                Network_Handle.Start_Global_Listening();
+                Network_Handle.Start_Listening();
             }
 
             try

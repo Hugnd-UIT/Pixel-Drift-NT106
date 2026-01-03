@@ -14,10 +14,8 @@ namespace Pixel_Drift
         {
             InitializeComponent();
             My_Username = Username;
-
-            Network_Handle.Start_Global_Listening();
-
-            Network_Handle.On_Message_Received += Handle_Server_Message;
+            Network_Handle.Start_Listening();
+            Network_Handle.Incoming_Request += Handle_Server_Message;
         }
 
         private void Handle_Server_Message(string Message)
@@ -33,6 +31,7 @@ namespace Pixel_Drift
                 {
                     var Data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Message);
                     string Status = "";
+
                     if (Data.ContainsKey("status"))
                     {
                         Status = Data["status"].GetString();
@@ -106,7 +105,7 @@ namespace Pixel_Drift
 
         private void Lobby_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Network_Handle.On_Message_Received -= Handle_Server_Message;
+            Network_Handle.Incoming_Request -= Handle_Server_Message;
             Application.Exit();
         }
 

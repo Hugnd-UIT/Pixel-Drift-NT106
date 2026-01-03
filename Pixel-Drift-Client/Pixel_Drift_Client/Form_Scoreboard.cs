@@ -14,7 +14,7 @@ namespace Pixel_Drift
         {
             InitializeComponent();
 
-            Network_Handle.On_Message_Received += Handle_Server_Message;
+            Network_Handle.Incoming_Request += Handle_Server_Message;
 
             Load_Score_Board();
         }
@@ -179,7 +179,7 @@ namespace Pixel_Drift
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            Network_Handle.On_Message_Received -= Handle_Server_Message;
+            Network_Handle.Incoming_Request -= Handle_Server_Message;
             base.OnFormClosing(e);
         }
     }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BCrypt.Net;
+using Pixel_Drift;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,8 +11,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BCrypt.Net;
-using Pixel_Drift;
 
 namespace Pixel_Drift_Server
 {
@@ -18,19 +19,19 @@ namespace Pixel_Drift_Server
         private TcpClient Client;
         private NetworkStream Stream;
 
-        private string Session_AES_Key = null;
-        private const int MAX_CONNECTIONS_PER_IP = 3;
-        private static Dictionary<string, int> Login_Attempts = new Dictionary<string, int>();
-        private static Dictionary<string, int> IP_Connection_Count = new Dictionary<string, int>();
-        private static Dictionary<string, DateTime> IP_Block_List = new Dictionary<string, DateTime>();
+        private string Session_Key = null;
+        private const int Max_Connect_Per_IP = 3;
+        private static ConcurrentDictionary<string, int> Attempts_Per_IP = new ConcurrentDictionary<string, int>();
+        private static ConcurrentDictionary<string, int> Connections_Per_IP = new ConcurrentDictionary<string, int>();
+        private static ConcurrentDictionary<string, DateTime> Blocks_Per_IP = new ConcurrentDictionary<string, DateTime>();
 
         private int Request_Count = 0;
-        private const int MAX_REQUESTS_PER_SECOND = 20;
-        private DateTime Last_Request_Time = DateTime.Now;
+        private DateTime Request_Time = DateTime.Now;
+        private const int Max_Requests_Per_Second = 20;
 
-        private static Dictionary<string, TcpClient> Active_Connections = new Dictionary<string, TcpClient>();
-        private static Dictionary<TcpClient, string> Client_Room_Map = new Dictionary<TcpClient, string>();
-        private static Dictionary<string, string> Reset_Tokens = new Dictionary<string, string>();
+        private static ConcurrentDictionary<string, TcpClient> Client_By_Email = new ConcurrentDictionary<string, TcpClient>();
+        private static ConcurrentDictionary<TcpClient, string> Client_By_Room = new ConcurrentDictionary<TcpClient, string>();
+        private static ConcurrentDictionary<string, string> Token_By_Email = new ConcurrentDictionary<string, string>();
 
         public TCP_Handler(TcpClient TCP_Client)
         {
@@ -68,60 +69,47 @@ namespace Pixel_Drift_Server
                     TcpClient TCP_Client = TCP_Listener.AcceptTcpClient();
                     string IP = ((IPEndPoint)TCP_Client.Client.RemoteEndPoint).Address.ToString();
 
-                    lock (IP_Block_List)
+                    if (Blocks_Per_IP.TryGetValue(IP, out DateTime Ban_Time))
                     {
-                        if (IP_Block_List.ContainsKey(IP))
+                        if (Blocks_Per_IP.ContainsKey(IP))
                         {
-                            if (DateTime.Now < IP_Block_List[IP])
+                            if (DateTime.Now < Blocks_Per_IP[IP])
                             {
-                                Console.WriteLine($"[SECURITY] Rejected Blacklisted IP: {IP}");
                                 TCP_Client.Close();
                                 continue; 
                             }
                             else
                             {
-                                IP_Block_List.Remove(IP);
+                                Blocks_Per_IP.TryRemove(IP, out _);
                             }
                         }
                     }
 
-                    lock (IP_Connection_Count)
+                    int Current_Connenctions = Connections_Per_IP.AddOrUpdate(IP, 1, (Key, Old_Value) => Old_Value + 1);
+
+                    if (Connections_Per_IP.ContainsKey(IP) && Connections_Per_IP[IP] >= Max_Connect_Per_IP)
                     {
-                        if (IP_Connection_Count.ContainsKey(IP) && IP_Connection_Count[IP] >= MAX_CONNECTIONS_PER_IP)
-                        {
-                            DateTime Ban_Until = DateTime.Now.AddMinutes(5);
+                        DateTime Ban_Until = DateTime.Now.AddMinutes(5);
+                        Blocks_Per_IP.AddOrUpdate(IP, Ban_Until, (Key, Old_Value) => Ban_Until);
 
-                            lock (IP_Block_List)
-                            {
-                                if (!IP_Block_List.ContainsKey(IP))
-                                {
-                                    IP_Block_List[IP] = Ban_Until;
-                                }
-                                else
-                                {
-                                    IP_Block_List[IP] = Ban_Until;
-                                }
-                            }
-
-                            Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "DoS Detected! Too Many Concurrent Connections");
+                        Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "DoS Detected! Too Many Concurrent Connections");
                             
-                            try
-                            {
-                                TCP_Client.Close();
-                                Console.WriteLine($"[TCP] Client {IP} Disconnected");
-                            }
-                            catch
-                            {
-                                // Continue
-                            }
-                            continue;
+                        try
+                        {
+                            TCP_Client.Close();
+                            Console.WriteLine($"[TCP] Client {IP} Disconnected");
                         }
-
-                        if (!IP_Connection_Count.ContainsKey(IP))
-                            IP_Connection_Count[IP] = 1;
-                        else
-                            IP_Connection_Count[IP]++;
+                        catch
+                        {
+                            // Continue
+                        }
+                        continue;
                     }
+
+                    if (!Connections_Per_IP.ContainsKey(IP))
+                        Connections_Per_IP[IP] = 1;
+                    else
+                        Connections_Per_IP[IP]++;
 
                     Task.Run(() => new TCP_Handler(TCP_Client).Process());
                 }
@@ -148,59 +136,36 @@ namespace Pixel_Drift_Server
 
                     string IP = Handle_Get_IP();
 
-                    lock (IP_Block_List)
+                    if (Blocks_Per_IP.TryGetValue(IP, out DateTime banUntil))
                     {
-                        if (IP_Block_List.ContainsKey(IP) && DateTime.Now < IP_Block_List[IP])
+                        if (DateTime.Now < banUntil)
                         {
-                            Console.WriteLine($"[SECURITY] Dropping Packet From Banned IP: {IP}");
-                            break; 
+                            break;
                         }
                     }
 
                     if (Message.Length > 4096)
                     {
-                        DateTime Ban_Until = DateTime.Now.AddMinutes(5);
-
-                        lock (IP_Block_List)
-                        {
-                            if (!IP_Block_List.ContainsKey(IP))
-                            {
-                                IP_Block_List[IP] = Ban_Until;
-                            }
-                            else
-                            {
-                                IP_Block_List[IP] = Ban_Until;
-                            }
-                        }
-
+                        DateTime Ban_Time = DateTime.Now.AddMinutes(5);
+                        Blocks_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
+                        
                         Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Buffer Overflow Detected! Packet Size {Message.Length} > 4096 Bytes");
                         break;
                     }
 
-                    TimeSpan Diff = DateTime.Now - Last_Request_Time;
+                    TimeSpan Diff = DateTime.Now - Request_Time;
                     if (Diff.TotalSeconds >= 1)
                     {
-                        Last_Request_Time = DateTime.Now;
+                        Request_Time = DateTime.Now;
                         Request_Count = 0;
                     }
                     else
                     {
                         Request_Count++;
-                        if (Request_Count > MAX_REQUESTS_PER_SECOND)
+                        if (Request_Count > Max_Requests_Per_Second)
                         {
-                            DateTime Ban_Until = DateTime.Now.AddMinutes(5);
-
-                            lock (IP_Block_List)
-                            {
-                                if (!IP_Block_List.ContainsKey(IP))
-                                {
-                                    IP_Block_List[IP] = Ban_Until;
-                                }
-                                else
-                                {
-                                    IP_Block_List[IP] = Ban_Until;
-                                }
-                            }
+                            DateTime Ban_Time = DateTime.Now.AddMinutes(5);
+                            Blocks_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
 
                             Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Spam Detected!");
                             break;
@@ -208,10 +173,9 @@ namespace Pixel_Drift_Server
                     }
 
                     string Json = Message;
-
-                    if (!string.IsNullOrEmpty(Session_AES_Key) && !Message.Trim().StartsWith("{"))
+                    if (!string.IsNullOrEmpty(Session_Key) && !Message.Trim().StartsWith("{"))
                     {
-                        string Decrypted = AES_Handle.Decrypt(Message, Session_AES_Key);
+                        string Decrypted = AES_Handle.Decrypt(Message, Session_Key);
                         if (Decrypted != null)
                         {
                             Json = Decrypted;
@@ -230,27 +194,15 @@ namespace Pixel_Drift_Server
                         if (Data.ContainsKey("timestamp"))
                         {
                             long Client_Ticks = Data["timestamp"].GetInt64();
-                            long Server_Ticks = DateTime.UtcNow.Ticks;
-
-                            double Diff_Seconds = Math.Abs(TimeSpan.FromTicks(Server_Ticks - Client_Ticks).TotalSeconds);
+                            double Diff_Seconds = Math.Abs(TimeSpan.FromTicks(DateTime.UtcNow.Ticks - Client_Ticks).TotalSeconds);
 
                             if (Diff_Seconds > 5.0)
                             {
-                                DateTime Ban_Until = DateTime.Now.AddMinutes(5);
-
-                                lock (IP_Block_List)
-                                {
-                                    if (!IP_Block_List.ContainsKey(IP))
-                                    {
-                                        IP_Block_List[IP] = Ban_Until;
-                                    }
-                                    else
-                                    {
-                                        IP_Block_List[IP] = Ban_Until;
-                                    }
-                                }
+                                DateTime Ban_Time = DateTime.Now.AddMinutes(5);
+                                Blocks_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
 
                                 Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Replay Detected! Delay: {Diff_Seconds:F2}s");
+                                break;
                             }
                         }
 
@@ -355,9 +307,9 @@ namespace Pixel_Drift_Server
             {
                 if (Client.Connected && Stream.CanWrite)
                 {
-                    if (!string.IsNullOrEmpty(Session_AES_Key))
+                    if (!string.IsNullOrEmpty(Session_Key))
                     {
-                        Message = AES_Handle.Encrypt(Message, Session_AES_Key);
+                        Message = AES_Handle.Encrypt(Message, Session_Key);
                     }
 
                     byte[] Buffer = Encoding.UTF8.GetBytes(Message + "\n");
@@ -379,7 +331,7 @@ namespace Pixel_Drift_Server
 
                 if (Decrypted_Key != null && Decrypted_Key.Length == 32)
                 {
-                    this.Session_AES_Key = Decrypted_Key;
+                    this.Session_Key = Decrypted_Key;
                     return JsonSerializer.Serialize(new
                     {
                         status = "success",
@@ -399,9 +351,9 @@ namespace Pixel_Drift_Server
 
         private void Handle_Game_Action(Dictionary<string, JsonElement> Data, string Action)
         {
-            if (Client_Room_Map.ContainsKey(Client))
+            if (Client_By_Room.ContainsKey(Client))
             {
-                string Room_ID = Client_Room_Map[Client];
+                string Room_ID = Client_By_Room[Client];
                 lock (Program.Rooms)
                 {
                     if (Program.Rooms.ContainsKey(Room_ID))
@@ -416,11 +368,11 @@ namespace Pixel_Drift_Server
         {
             string IP = Handle_Get_IP();
 
-            if (IP_Block_List.ContainsKey(IP))
+            if (Blocks_Per_IP.ContainsKey(IP))
             {
-                if (DateTime.Now < IP_Block_List[IP])
+                if (DateTime.Now < Blocks_Per_IP[IP])
                 {
-                    TimeSpan Remaining_Time = IP_Block_List[IP] - DateTime.Now;
+                    TimeSpan Remaining_Time = Blocks_Per_IP[IP] - DateTime.Now;
                     Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Brute Force Detected! Remaining {Remaining_Time.TotalSeconds:F0}s");
                     return JsonSerializer.Serialize(new
                     {
@@ -430,10 +382,10 @@ namespace Pixel_Drift_Server
                 }
                 else
                 {
-                    IP_Block_List.Remove(IP);
-                    if (Login_Attempts.ContainsKey(IP))
+                    Blocks_Per_IP.TryRemove(IP, out _);
+                    if (Attempts_Per_IP.ContainsKey(IP))
                     {
-                        Login_Attempts.Remove(IP);
+                        Attempts_Per_IP.TryRemove(IP, out _);
                     }
                 }
             }
@@ -449,8 +401,8 @@ namespace Pixel_Drift_Server
 
             string User = Data["username"].GetString();
             string Encrypted_Pass = Data["password"].GetString();
-
             string Decrypted_Pass = RSA_Handle.Decrypt(Encrypted_Pass, Program.SERVER_PRIVATE_KEY);
+
             if (Decrypted_Pass == null)
             {
                 Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", "Decryption Failed");
@@ -465,44 +417,34 @@ namespace Pixel_Drift_Server
             {
                 string Email = SQL_Handle.Handle_Get_Email(User);
 
-                lock (Active_Connections)
+                if (Email != null)
                 {
-                    if (Email != null)
+                    Client_By_Email.AddOrUpdate(Email, Client, (Key, Old_Client) => 
                     {
-                        if (Active_Connections.ContainsKey(Email))
+                        try
                         {
-                            try
+                            if (Old_Client.Connected)
                             {
-                                var Old_Client = Active_Connections[Email];
-                                if (Old_Client.Connected)
+                                string Kick_Msg = JsonSerializer.Serialize(new
                                 {
-                                    string Kick_Msg = JsonSerializer.Serialize(new
-                                    {
-                                        status = "force_logout",
-                                        message = "Account Logged In From Another Location"
-                                    });
-                                    byte[] Bytes = Encoding.UTF8.GetBytes(Kick_Msg + "\n");
-                                    Old_Client.GetStream().Write(Bytes, 0, Bytes.Length);
-                                    Old_Client.Close();
-                                }
+                                    status = "force_logout",
+                                    message = "Account Logged In From Another Location"
+                                });
+                                byte[] Bytes = Encoding.UTF8.GetBytes(Kick_Msg + "\n");
+                                Old_Client.GetStream().Write(Bytes, 0, Bytes.Length);
+                                Old_Client.Close();
                             }
-                            catch
-                            {
-                            }
-                            Active_Connections.Remove(Email);
                         }
-                        Active_Connections[Email] = Client;
-                    }
+                        catch 
+                        { 
+                            // Continue
+                        }
+                        return Client;
+                    });
                 }
 
-                if (Login_Attempts.ContainsKey(IP))
-                {
-                    Login_Attempts.Remove(IP);
-                }
-                if (IP_Block_List.ContainsKey(IP))
-                {
-                    IP_Block_List.Remove(IP);
-                }
+                Attempts_Per_IP.TryRemove(IP, out _);
+                Blocks_Per_IP.TryRemove(IP, out _);
 
                 Security_Logger.Log(Security_Logger.Level.INFO, IP, "SUCCESS", $"User {User} Logged In");
                 return JsonSerializer.Serialize(new
@@ -514,17 +456,17 @@ namespace Pixel_Drift_Server
             }
             else
             {
-                if (!Login_Attempts.ContainsKey(IP))
+                if (!Attempts_Per_IP.ContainsKey(IP))
                 {
-                    Login_Attempts[IP] = 0;
+                    Attempts_Per_IP[IP] = 0;
                 }
-                Login_Attempts[IP]++;
+                Attempts_Per_IP[IP]++;
 
                 int Max_Attempts = 5;
 
-                if (Login_Attempts[IP] >= Max_Attempts)
+                if (Attempts_Per_IP[IP] >= Max_Attempts)
                 {
-                    IP_Block_List[IP] = DateTime.Now.AddMinutes(5);
+                    Blocks_Per_IP[IP] = DateTime.Now.AddMinutes(5);
                     Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Brute Force Detected!");
                     return JsonSerializer.Serialize(new
                     {
@@ -534,7 +476,7 @@ namespace Pixel_Drift_Server
                 }
                 else
                 {
-                    int Remaining = Max_Attempts - Login_Attempts[IP];
+                    int Remaining = Max_Attempts - Attempts_Per_IP[IP];
                     Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", $"User {User} Entered Wrong Password");
                     return JsonSerializer.Serialize(new
                     {
@@ -624,10 +566,8 @@ namespace Pixel_Drift_Server
             if (!string.IsNullOrEmpty(Username))
             {
                 string Token = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
-                lock (Reset_Tokens)
-                {
-                    Reset_Tokens[Email] = Token;
-                }
+
+                Token_By_Email.AddOrUpdate(Email, Token, (Key, Old_Value) => Token);
 
                 bool Sent = Send_Email(Email, "Reset Password - Pixel Drift", $"Hello {Username}, your verification code is: {Token}");
 
@@ -675,13 +615,14 @@ namespace Pixel_Drift_Server
                 });
             }
 
-            lock (Reset_Tokens)
+            if (Token_By_Email.TryGetValue(Email, out string savedToken))
             {
-                if (Reset_Tokens.ContainsKey(Email) && Reset_Tokens[Email] == Token)
+                if (savedToken == Token)
                 {
                     if (SQL_Handle.Handle_Change_Password(Email, Decrypted_Pass))
                     {
-                        Reset_Tokens.Remove(Email);
+                        Token_By_Email.TryRemove(Email, out _);
+
                         Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "SUCCESS", $"User {Username} Changed Password");
                         return JsonSerializer.Serialize(new
                         {
@@ -704,27 +645,26 @@ namespace Pixel_Drift_Server
         {
             string User = Data["username"].GetString();
             string Room_ID = new Random().Next(100000, 999999).ToString();
+            Game_Room New_Room;
 
-            lock (Program.Rooms)
+            do
             {
-                while (Program.Rooms.ContainsKey(Room_ID))
-                {
-                    Room_ID = new Random().Next(100000, 999999).ToString();
-                }
-
-                Game_Room New_Room = new Game_Room(Room_ID);
-                int P_Num = New_Room.Add_Player(Client, User);
-
-                Program.Rooms.Add(Room_ID, New_Room);
-                Client_Room_Map[Client] = Room_ID;
-                Console.WriteLine($"[Success] User {User} Created Room {Room_ID}");
-                return JsonSerializer.Serialize(new
-                {
-                    status = "create_room_success",
-                    room_id = Room_ID,
-                    player_number = P_Num
-                });
+                Room_ID = new Random().Next(100000, 999999).ToString();
+                New_Room = new Game_Room(Room_ID);
+                New_Room.Add_Player(Client, User);
             }
+            while (!Program.Rooms.TryAdd(Room_ID, New_Room));
+
+            Client_By_Room.AddOrUpdate(Client, Room_ID, (k, v) => Room_ID);
+
+            Console.WriteLine($"[Success] User {User} Created Room {Room_ID}");
+
+            return JsonSerializer.Serialize(new
+            {
+                status = "create_room_success",
+                room_id = Room_ID,
+                player_number = 1
+            });
         }
 
         private string Handle_Join_Room(Dictionary<string, JsonElement> Data)
@@ -732,31 +672,30 @@ namespace Pixel_Drift_Server
             string User = Data["username"].GetString();
             string Room_ID = Data["room_id"].GetString();
 
-            lock (Program.Rooms)
+            if (Program.Rooms.TryGetValue(Room_ID, out Game_Room Room))
             {
-                if (Program.Rooms.ContainsKey(Room_ID))
-                {
-                    Game_Room Room = Program.Rooms[Room_ID];
-                    int P_Num = Room.Add_Player(Client, User);
+                int P_Num = Room.Add_Player(Client, User);
 
-                    if (P_Num != -1)
-                    {
-                        Client_Room_Map[Client] = Room_ID;
-                        Console.WriteLine($"[Success] User {User} Joined Room {Room_ID}");
-                        return JsonSerializer.Serialize(new
-                        {
-                            status = "join_room_success",
-                            room_id = Room_ID,
-                            player_number = P_Num
-                        });
-                    }
+                if (P_Num != -1)
+                {
+                    Client_By_Room.AddOrUpdate(Client, Room_ID, (k, v) => Room_ID);
+
+                    Console.WriteLine($"[Success] User {User} Joined Room {Room_ID}");
                     return JsonSerializer.Serialize(new
                     {
-                        status = "error",
-                        message = "Room Is Full"
+                        status = "join_room_success",
+                        room_id = Room_ID,
+                        player_number = P_Num
                     });
                 }
+
+                return JsonSerializer.Serialize(new
+                {
+                    status = "error",
+                    message = "Room Is Full"
+                });
             }
+
             return JsonSerializer.Serialize(new
             {
                 status = "error",
@@ -794,48 +733,30 @@ namespace Pixel_Drift_Server
 
                 Console.WriteLine($"[TCP] Client {IP} Disconnected");
 
-                if (Client_Room_Map.ContainsKey(Client))
+                if (Client_By_Room.TryRemove(Client, out string Room_ID))
                 {
-                    string Room_ID = Client_Room_Map[Client];
                     lock (Program.Rooms)
                     {
-                        if (Program.Rooms.ContainsKey(Room_ID))
+                        if (Program.Rooms.TryGetValue(Room_ID, out Game_Room Room))
                         {
-                            Program.Rooms[Room_ID].Remove_Player(Client);
-                            if (Program.Rooms[Room_ID].Is_Empty())
+                            Room.Remove_Player(Client);
+                            if (Room.Is_Empty())
                             {
-                                Program.Rooms.Remove(Room_ID);
+                                Program.Rooms.TryRemove(Room_ID, out _);
                                 Console.WriteLine($"[Success] Room {Room_ID} Has Been Cancelled");
                             }
                         }
                     }
-                    Client_Room_Map.Remove(Client);
                 }
 
-                lock (IP_Connection_Count)
-                {
-                    if (IP_Connection_Count.ContainsKey(IP))
-                    {
-                        IP_Connection_Count[IP]--;
-                        if (IP_Connection_Count[IP] <= 0)
-                            IP_Connection_Count.Remove(IP);
-                    }
-                }
+                Connections_Per_IP.AddOrUpdate(IP, 0, (key, count) => Math.Max(0, count - 1));
 
-                lock (Active_Connections)
+                foreach (var tmp in Client_By_Email)
                 {
-                    string Key_To_Remove = null;
-                    foreach (var kvp in Active_Connections)
+                    if (tmp.Value == Client)
                     {
-                        if (kvp.Value == Client)
-                        {
-                            Key_To_Remove = kvp.Key;
-                            break;
-                        }
-                    }
-                    if (Key_To_Remove != null)
-                    {
-                        Active_Connections.Remove(Key_To_Remove);
+                        Client_By_Email.TryRemove(tmp.Key, out _);
+                        break; 
                     }
                 }
 

@@ -17,8 +17,8 @@ namespace Pixel_Drift
         private static StreamReader Stream_Reader;
         private static NetworkStream Network_Stream;
 
-        private static string My_AES_Key = null;
-        public static event Action<string> On_Message_Received;
+        private static string Session_Key = null;
+        public static event Action<string> Incoming_Request;
         private static TaskCompletionSource<string> Pending_Request = null;
 
         private static bool Is_Listening = false;
@@ -67,7 +67,7 @@ namespace Pixel_Drift
             return Server_IP;
         }
 
-        private static void Start_Heartbeat()
+        private static void Start_Heartbeating()
         {
             if (Is_Heartbeating)
             {
@@ -116,7 +116,7 @@ namespace Pixel_Drift
                 Network_Stream = Tcp_Client.GetStream();
                 Stream_Writer = new StreamWriter(Network_Stream, Encoding.UTF8) { AutoFlush = true };
                 Stream_Reader = new StreamReader(Network_Stream, Encoding.UTF8);
-                Start_Heartbeat();
+                Start_Heartbeating();
                 return true;
             }
             catch
@@ -163,7 +163,7 @@ namespace Pixel_Drift
 
                     if (Decrypted != null && Decrypted.Contains("success"))
                     {
-                        My_AES_Key = Temp_Key;
+                        Session_Key = Temp_Key;
                         return true;
                     }
                 }
@@ -171,7 +171,7 @@ namespace Pixel_Drift
             }
             catch
             {
-                My_AES_Key = null;
+                Session_Key = null;
                 return false;
             }
             finally
@@ -180,7 +180,7 @@ namespace Pixel_Drift
             }
         }
 
-        public static void Start_Global_Listening()
+        public static void Start_Listening()
         {
             if (Is_Listening)
             {
@@ -208,9 +208,9 @@ namespace Pixel_Drift
 
                         string Real_Data = Message;
 
-                        if (!string.IsNullOrEmpty(My_AES_Key) && !Message.Trim().StartsWith("{"))
+                        if (!string.IsNullOrEmpty(Session_Key) && !Message.Trim().StartsWith("{"))
                         {
-                            string Decrypted = AES_Handle.Decrypt(Message, My_AES_Key);
+                            string Decrypted = AES_Handle.Decrypt(Message, Session_Key);
                             if (Decrypted != null)
                             {
                                 Real_Data = Decrypted;
@@ -223,7 +223,7 @@ namespace Pixel_Drift
                         }
                         else
                         {
-                            On_Message_Received?.Invoke(Real_Data);
+                            Incoming_Request?.Invoke(Real_Data);
                         }
                     }
                 }
@@ -260,9 +260,9 @@ namespace Pixel_Drift
                 string Json_Final = JsonSerializer.Serialize(Dict_Data);
                 string Data_To_Send = Json_Final;
 
-                if (!string.IsNullOrEmpty(My_AES_Key))
+                if (!string.IsNullOrEmpty(Session_Key))
                 {
-                    Data_To_Send = AES_Handle.Encrypt(Json_Final, My_AES_Key);
+                    Data_To_Send = AES_Handle.Encrypt(Json_Final, Session_Key);
                 }
 
                 Stream_Writer.WriteLine(Data_To_Send);
@@ -303,9 +303,9 @@ namespace Pixel_Drift
                     string Json_Final = JsonSerializer.Serialize(Dict_Data);
                     string Data_To_Send = Json_Final;
 
-                    if (!string.IsNullOrEmpty(My_AES_Key))
+                    if (!string.IsNullOrEmpty(Session_Key))
                     {
-                        Data_To_Send = AES_Handle.Encrypt(Json_Final, My_AES_Key);
+                        Data_To_Send = AES_Handle.Encrypt(Json_Final, Session_Key);
                     }
                     Stream_Writer.WriteLine(Data_To_Send);
                 }
@@ -330,7 +330,7 @@ namespace Pixel_Drift
                 // Continue
             }
             Tcp_Client = null;
-            My_AES_Key = null;
+            Session_Key = null;
         }
     }
 }
