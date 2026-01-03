@@ -90,6 +90,7 @@ namespace Pixel_Drift
                 }
                 catch
                 {
+                    // Continue
                 }
                 finally
                 {
