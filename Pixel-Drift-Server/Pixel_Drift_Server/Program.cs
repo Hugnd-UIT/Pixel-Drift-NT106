@@ -1,5 +1,6 @@
 ﻿using Pixel_Drift;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -13,7 +14,7 @@ namespace Pixel_Drift_Server
 
         public static string SERVER_PRIVATE_KEY;
 
-        public static Dictionary<string, Game_Room> Rooms = new Dictionary<string, Game_Room>();
+        public static ConcurrentDictionary<string, Game_Room> Rooms = new ConcurrentDictionary<string, Game_Room>();
 
         static void Main(string[] args)
         {

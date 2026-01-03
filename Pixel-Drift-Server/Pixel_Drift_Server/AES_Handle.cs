@@ -10,11 +10,14 @@ namespace Pixel_Drift_Server
 {
     public static class AES_Handle
     {
-        private static readonly byte[] IV = Encoding.UTF8.GetBytes("PixelDrift2025!!");
-
         public static string Generate_Key()
         {
-            return Guid.NewGuid().ToString("N").Substring(0, 32);
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                byte[] keyBytes = new byte[32]; 
+                rng.GetBytes(keyBytes);
+                return BitConverter.ToString(keyBytes).Replace("-", "").ToLower().Substring(0, 32);
+            }
         }
 
         public static string Encrypt(string PlainText, string Key)
@@ -24,12 +27,14 @@ namespace Pixel_Drift_Server
                 using (Aes AES = Aes.Create())
                 {
                     AES.Key = Encoding.UTF8.GetBytes(Key);
-                    AES.IV = IV;
+                    AES.GenerateIV();
+                    byte[] IV = AES.IV;
 
-                    ICryptoTransform Encryptor = AES.CreateEncryptor(AES.Key, AES.IV);
+                    ICryptoTransform Encryptor = AES.CreateEncryptor(AES.Key, IV);
 
                     using (MemoryStream ms = new MemoryStream())
                     {
+                        ms.Write(IV, 0, IV.Length);
                         using (CryptoStream cs = new CryptoStream(ms, Encryptor, CryptoStreamMode.Write))
                         {
                             using (StreamWriter sw = new StreamWriter(cs))
@@ -56,11 +61,17 @@ namespace Pixel_Drift_Server
                 using (Aes AES = Aes.Create())
                 {
                     AES.Key = Encoding.UTF8.GetBytes(Key);
-                    AES.IV = IV;
 
+                    byte[] IV = new byte[16];
+                    byte[] Cipher = new byte[Buffer.Length - 16];
+
+                    Array.Copy(Buffer, 0, IV, 0, 16);
+                    Array.Copy(Buffer, 16, Cipher, 0, Cipher.Length);
+
+                    AES.IV = IV;
                     ICryptoTransform Decryptor = AES.CreateDecryptor(AES.Key, AES.IV);
 
-                    using (MemoryStream ms = new MemoryStream(Buffer))
+                    using (MemoryStream ms = new MemoryStream(Cipher))
                     {
                         using (CryptoStream cs = new CryptoStream(ms, Decryptor, CryptoStreamMode.Read))
                         {

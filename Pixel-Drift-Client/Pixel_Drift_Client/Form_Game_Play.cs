@@ -66,7 +66,7 @@ namespace Pixel_Drift
             string Player_Color = (My_Player_Number == 1) ? "Red Car" : "Blue Car";
             this.Text = $"Pixel Drift - PLAYER {My_Player_Number} ({Player_Color}) - {My_Username}";
 
-            Network_Handle.On_Message_Received += Handle_Server_Message;
+            Network_Handle.Incoming_Request += Handle_Server_Message;
         }
 
         public Game_Window()
@@ -403,7 +403,7 @@ namespace Pixel_Drift
 
         private void Game_Window_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Network_Handle.On_Message_Received -= Handle_Server_Message;
+            Network_Handle.Incoming_Request -= Handle_Server_Message;
             try
             {
                 Music?.controls.stop();
