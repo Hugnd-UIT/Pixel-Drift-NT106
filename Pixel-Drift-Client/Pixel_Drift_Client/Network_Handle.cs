@@ -18,6 +18,7 @@ namespace Pixel_Drift
         private static NetworkStream Network_Stream;
 
         private static string Session_Key = null;
+        public static string Public_Key = null;
         public static event Action<string> Incoming_Request;
         private static TaskCompletionSource<string> Pending_Request = null;
 
@@ -63,6 +64,7 @@ namespace Pixel_Drift
             }
             catch
             {
+                // Continue
             }
             return Server_IP;
         }
@@ -143,15 +145,15 @@ namespace Pixel_Drift
                 }
 
                 var Json_Key = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(KeyJson);
-                string PublicKey = Json_Key["public_key"].GetString();
+                Public_Key = Json_Key["public_key"].GetString();
 
                 string Temp_Key = AES_Handle.Generate_Key();
-                string Encrypted_AES_Key = RSA_Handle.Encrypt(Temp_Key, PublicKey);
+                string Encrypted_AES_Key = RSA_Handle.Encrypt(Temp_Key, Public_Key);
 
                 var Handshake_Data = new
                 {
-                    action = "get_aes_key",
-                    aes_key = Encrypted_AES_Key
+                    action = "get_session_key",
+                    session_key = Encrypted_AES_Key
                 };
                 Stream_Writer.WriteLine(JsonSerializer.Serialize(Handshake_Data));
 

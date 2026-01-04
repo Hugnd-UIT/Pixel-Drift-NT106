@@ -64,14 +64,7 @@ namespace Pixel_Drift
 
             try
             {
-                string Response_Key = Network_Handle.Send_And_Wait(new
-                {
-                    action = "get_public_key"
-                });
-
-                var Json_Key = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Response_Key);
-                string Public_Key = Json_Key["public_key"].GetString();
-                string Secure_Pass = RSA_Handle.Encrypt(New_Pass, Public_Key);
+                string Secure_Pass = RSA_Handle.Encrypt(New_Pass, Network_Handle.Public_Key);
 
                 if (Secure_Pass == null)
                 {
