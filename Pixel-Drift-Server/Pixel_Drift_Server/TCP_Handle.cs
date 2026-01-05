@@ -394,7 +394,7 @@ namespace Pixel_Drift_Server
                 {
                     if (Program.Rooms.ContainsKey(Room_ID))
                     {
-                        Program.Rooms[Room_ID].Handle_Input(Client, Action, Data);
+                        Program.Rooms[Room_ID].Handle_Request(Client, Action, Data);
                     }
                 }
             }
@@ -409,7 +409,7 @@ namespace Pixel_Drift_Server
                 if (DateTime.Now < Ban_Peroid_Per_IP[IP])
                 {
                     TimeSpan Remaining_Time = Ban_Peroid_Per_IP[IP] - DateTime.Now;
-                    Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Brute Force Detected! Remaining {Remaining_Time.TotalSeconds:F0}s");
+                    Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", $"Brute Force Detected! Remaining {Remaining_Time.TotalSeconds:F0}s");
                     return JsonSerializer.Serialize(new
                     {
                         status = "error",
@@ -519,7 +519,7 @@ namespace Pixel_Drift_Server
                             SQL_Handle.Handle_Add_Blacklist(IP, "Brute Force");
                             OS_Handle.Handle_Block(IP);
 
-                            Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "Brute Force Detected! Persistent Attacker Blocked By Firewall!");
+                            Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Brute Force Detected! Persistent Attacker Blocked By Firewall!");
 
                             try 
                             { 
@@ -534,7 +534,7 @@ namespace Pixel_Drift_Server
                         return Message;
                     }
 
-                    Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Brute Force Detected! Soft Ban 5 mins.");
+                    Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "Brute Force Detected! Soft Ban 5 mins.");
                     
                     return JsonSerializer.Serialize(new
                     {
@@ -718,7 +718,7 @@ namespace Pixel_Drift_Server
             {
                 Room_ID = new Random().Next(100000, 999999).ToString();
                 New_Room = new Game_Room(Room_ID);
-                New_Room.Add_Player(Client, User);
+                New_Room.Handle_Player_Join(Client, User);
             }
             while (!Program.Rooms.TryAdd(Room_ID, New_Room));
 
@@ -741,7 +741,7 @@ namespace Pixel_Drift_Server
 
             if (Program.Rooms.TryGetValue(Room_ID, out Game_Room Room))
             {
-                int P_Num = Room.Add_Player(Client, User);
+                int P_Num = Room.Handle_Player_Join(Client, User);
 
                 if (P_Num != -1)
                 {
@@ -806,7 +806,7 @@ namespace Pixel_Drift_Server
                     {
                         if (Program.Rooms.TryGetValue(Room_ID, out Game_Room Room))
                         {
-                            Room.Remove_Player(Client);
+                            Room.Handle_Player_Leave(Client);
                             if (Room.Is_Empty())
                             {
                                 Program.Rooms.TryRemove(Room_ID, out _);
