@@ -20,7 +20,7 @@ namespace Pixel_Drift
             InitializeComponent();
         }
 
-        private void btn_dangnhap_Click(object sender, EventArgs e)
+        private void btn_dang_nhap_Click(object sender, EventArgs e)
         {
             string Username = tb_username.Text.Trim();
             string Password = tb_matkhau.Text.Trim();

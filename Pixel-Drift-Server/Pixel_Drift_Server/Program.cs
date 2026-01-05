@@ -19,8 +19,13 @@ namespace Pixel_Drift_Server
         static void Main(string[] args)
         {
             Console.WriteLine("PIXEL DRIFT");
-
             Console.WriteLine("Server Is Running, Press 'E' For Exit.");
+
+            List<string> Blacklist = SQL_Handle.Handle_Get_Blacklist();
+            foreach (var IP in Blacklist)
+            {
+                OS_Handle.Handle_Block(IP);
+            }
 
             RSA_Handle.Generate_Keys(out SERVER_PUBLIC_KEY, out SERVER_PRIVATE_KEY);
 

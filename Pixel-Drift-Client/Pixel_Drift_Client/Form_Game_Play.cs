@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -46,6 +46,11 @@ namespace Pixel_Drift
         private long Player2_Score = 0;
         private int Crash_Count = 0;
 
+        private Dictionary<string, Point> Target_Positions = new Dictionary<string, Point>();
+        private Dictionary<string, PointF> Current_Positions_F = new Dictionary<string, PointF>();
+        private float Lerp_Speed = 0.4f;
+        private System.Windows.Forms.Timer Game_Loop_Timer;
+
         public Game_Window(string Username, int Player_Num, string Room_ID)
         {
             InitializeComponent();
@@ -85,7 +90,10 @@ namespace Pixel_Drift
                 panel2.Paint += Panel2_Paint;
                 panel1.BackColor = Color.Black;
                 panel2.BackColor = Color.Black;
-
+                Game_Loop_Timer = new System.Windows.Forms.Timer();
+                Game_Loop_Timer.Interval = 16;
+                Game_Loop_Timer.Tick += Game_Loop_Timer_Tick;
+                Game_Loop_Timer.Start();
                 Init_Audio();
                 Reset_To_Lobby();
             }
@@ -175,8 +183,6 @@ namespace Pixel_Drift
                 g.DrawImage(img, p.X, p.Y, size.Width, size.Height);
             }
         }
-
-
 
         private void Handle_Server_Message(string Message)
         {
@@ -297,31 +303,27 @@ namespace Pixel_Drift
         {
             foreach (var key in Data.Keys)
             {
-                if (key == "action")
-                {
-                    continue;
-                }
+                if (key == "action") continue;
+
                 try
                 {
                     JsonElement El = Data[key];
-                    if (El.ValueKind == JsonValueKind.Object &&
-                        El.TryGetProperty("X", out var xVal) &&
-                        El.TryGetProperty("Y", out var yVal))
+                    if (El.ValueKind == JsonValueKind.Object && El.TryGetProperty("X", out var xVal) && El.TryGetProperty("Y", out var yVal))
                     {
-                        Object_Positions[key] = new Point(xVal.GetInt32(), yVal.GetInt32());
+                        int X = xVal.GetInt32();
+                        int Y = yVal.GetInt32();
+                        Target_Positions[key] = new Point(X, Y);
+                        if (!Current_Positions_F.ContainsKey(key))
+                        {
+                            Current_Positions_F[key] = new PointF(X, Y);
+                            Object_Positions[key] = new Point(X, Y);
+                        }
                     }
                 }
-                catch
+                catch 
                 {
+                    // Continue
                 }
-            }
-            if (panel1 != null)
-            {
-                panel1.Invalidate();
-            }
-            if (panel2 != null)
-            {
-                panel2.Invalidate();
             }
         }
 
@@ -407,6 +409,8 @@ namespace Pixel_Drift
             Network_Handle.Incoming_Request -= Handle_Server_Message;
             try
             {
+                Game_Loop_Timer?.Stop();
+                Game_Loop_Timer?.Dispose();
                 Music?.controls.stop();
                 Music?.close();
                 CountDown_5Sec?.Stop();
@@ -442,6 +446,7 @@ namespace Pixel_Drift
             }
             catch
             {
+                // Continue
             }
         }
 
@@ -458,6 +463,7 @@ namespace Pixel_Drift
             }
             catch
             {
+                // Continue
             }
         }
 
@@ -509,12 +515,66 @@ namespace Pixel_Drift
             this.Focus();
         }
 
+        private void Game_Loop_Timer_Tick(object sender, EventArgs e)
+        {
+            bool Need_Redraw = false;
+
+            foreach (var Key in Target_Positions.Keys.ToList())
+            {
+                if (!Current_Positions_F.ContainsKey(Key)) continue;
+
+                Point Target = Target_Positions[Key];     
+                PointF Current = Current_Positions_F[Key]; 
+
+                float Diff_X = Target.X - Current.X;
+                float Diff_Y = Target.Y - Current.Y;
+
+                if (Math.Abs(Diff_Y) > 300 || Math.Abs(Diff_X) > 300)
+                {
+                    Current.X = Target.X;
+                    Current.Y = Target.Y;
+
+                    Current_Positions_F[Key] = Current;
+                    Object_Positions[Key] = Target;
+                    Need_Redraw = true;
+                    continue; 
+                }
+
+                if (Math.Abs(Diff_X) > 0.5f || Math.Abs(Diff_Y) > 0.5f)
+                {
+                    Current.X += Diff_X * Lerp_Speed;
+                    Current.Y += Diff_Y * Lerp_Speed;
+
+                    Current_Positions_F[Key] = Current;
+                    Object_Positions[Key] = new Point((int)Current.X, (int)Current.Y);
+                    Need_Redraw = true;
+                }
+                else
+                {
+                    if (Current.X != Target.X || Current.Y != Target.Y)
+                    {
+                        Current_Positions_F[Key] = new PointF(Target.X, Target.Y);
+                        Object_Positions[Key] = Target;
+                        Need_Redraw = true;
+                    }
+                }
+            }
+
+            if (Need_Redraw)
+            {
+                if (panel1 != null) panel1.Invalidate();
+                if (panel2 != null) panel2.Invalidate();
+            }
+        }
+
         private void Reset_To_Lobby()
         {
             CountDown_5Sec?.Stop();
             Play_Music_Loop("wait.wav");
 
             Object_Positions.Clear();
+            Target_Positions.Clear();      
+            Current_Positions_F.Clear();
             if (panel1 != null)
             {
                 panel1.Invalidate();

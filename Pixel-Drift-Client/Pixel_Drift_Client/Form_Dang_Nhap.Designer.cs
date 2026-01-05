@@ -39,20 +39,20 @@ namespace Pixel_Drift
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Dang_Nhap));
             lb_pass = new Guna.UI2.WinForms.Guna2HtmlLabel();
             lb_user = new Guna.UI2.WinForms.Guna2HtmlLabel();
             lb_dangnhap = new Guna.UI2.WinForms.Guna2HtmlLabel();
             tb_username = new Guna.UI2.WinForms.Guna2TextBox();
             tb_matkhau = new Guna.UI2.WinForms.Guna2TextBox();
-            btn_dangnhap = new Guna.UI2.WinForms.Guna2Button();
             btn_quenmatkhau = new Guna.UI2.WinForms.Guna2Button();
             btn_quaylaidk = new Guna.UI2.WinForms.Guna2Button();
             Panel_Chua_Form = new Guna.UI2.WinForms.Guna2Panel();
+            btn_dang_nhap = new Guna.UI2.WinForms.Guna2GradientButton();
             Panel_Chua_Form.SuspendLayout();
             SuspendLayout();
             // 
@@ -94,7 +94,7 @@ namespace Pixel_Drift
             lb_dangnhap.Location = new Point(198, 29);
             lb_dangnhap.Margin = new Padding(4, 5, 4, 5);
             lb_dangnhap.Name = "lb_dangnhap";
-            lb_dangnhap.Size = new Size(211, 86);
+            lb_dangnhap.Size = new Size(120, 54);
             lb_dangnhap.TabIndex = 9;
             lb_dangnhap.Text = "LOGIN";
             // 
@@ -143,34 +143,11 @@ namespace Pixel_Drift
             tb_matkhau.Size = new Size(427, 55);
             tb_matkhau.TabIndex = 4;
             // 
-            // btn_dangnhap
-            // 
-            btn_dangnhap.BorderColor = Color.Orange;
-            btn_dangnhap.BorderRadius = 15;
-            btn_dangnhap.BorderThickness = 3;
-            btn_dangnhap.CustomizableEdges = customizableEdges5;
-            btn_dangnhap.DisabledState.BorderColor = Color.DarkGray;
-            btn_dangnhap.DisabledState.CustomBorderColor = Color.DarkGray;
-            btn_dangnhap.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btn_dangnhap.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btn_dangnhap.FillColor = Color.FromArgb(255, 128, 0);
-            btn_dangnhap.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btn_dangnhap.ForeColor = Color.White;
-            btn_dangnhap.HoverState.FillColor = Color.FromArgb(255, 192, 128);
-            btn_dangnhap.Location = new Point(89, 349);
-            btn_dangnhap.Margin = new Padding(4, 5, 4, 5);
-            btn_dangnhap.Name = "btn_dangnhap";
-            btn_dangnhap.ShadowDecoration.CustomizableEdges = customizableEdges6;
-            btn_dangnhap.Size = new Size(320, 69);
-            btn_dangnhap.TabIndex = 5;
-            btn_dangnhap.Text = "Login";
-            btn_dangnhap.Click += btn_dangnhap_Click;
-            // 
             // btn_quenmatkhau
             // 
             btn_quenmatkhau.BackColor = Color.Transparent;
             btn_quenmatkhau.BorderColor = Color.Transparent;
-            btn_quenmatkhau.CustomizableEdges = customizableEdges7;
+            btn_quenmatkhau.CustomizableEdges = customizableEdges5;
             btn_quenmatkhau.DisabledState.BorderColor = Color.DarkGray;
             btn_quenmatkhau.DisabledState.CustomBorderColor = Color.DarkGray;
             btn_quenmatkhau.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -182,7 +159,7 @@ namespace Pixel_Drift
             btn_quenmatkhau.Location = new Point(3, 448);
             btn_quenmatkhau.Margin = new Padding(3, 1, 3, 1);
             btn_quenmatkhau.Name = "btn_quenmatkhau";
-            btn_quenmatkhau.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btn_quenmatkhau.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btn_quenmatkhau.Size = new Size(254, 39);
             btn_quenmatkhau.TabIndex = 0;
             btn_quenmatkhau.Text = "Forgot / Change password";
@@ -192,7 +169,7 @@ namespace Pixel_Drift
             // 
             btn_quaylaidk.BackColor = Color.Transparent;
             btn_quaylaidk.BorderColor = Color.Transparent;
-            btn_quaylaidk.CustomizableEdges = customizableEdges9;
+            btn_quaylaidk.CustomizableEdges = customizableEdges7;
             btn_quaylaidk.DisabledState.BorderColor = Color.DarkGray;
             btn_quaylaidk.DisabledState.CustomBorderColor = Color.DarkGray;
             btn_quaylaidk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -204,7 +181,7 @@ namespace Pixel_Drift
             btn_quaylaidk.Location = new Point(242, 448);
             btn_quaylaidk.Margin = new Padding(3, 1, 3, 1);
             btn_quaylaidk.Name = "btn_quaylaidk";
-            btn_quaylaidk.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            btn_quaylaidk.ShadowDecoration.CustomizableEdges = customizableEdges8;
             btn_quaylaidk.Size = new Size(248, 39);
             btn_quaylaidk.TabIndex = 6;
             btn_quaylaidk.Text = "Don't have an account yet?";
@@ -216,9 +193,9 @@ namespace Pixel_Drift
             Panel_Chua_Form.BorderColor = Color.Aquamarine;
             Panel_Chua_Form.BorderRadius = 15;
             Panel_Chua_Form.BorderThickness = 2;
+            Panel_Chua_Form.Controls.Add(btn_dang_nhap);
             Panel_Chua_Form.Controls.Add(btn_quaylaidk);
             Panel_Chua_Form.Controls.Add(btn_quenmatkhau);
-            Panel_Chua_Form.Controls.Add(btn_dangnhap);
             Panel_Chua_Form.Controls.Add(tb_matkhau);
             Panel_Chua_Form.Controls.Add(tb_username);
             Panel_Chua_Form.Controls.Add(lb_pass);
@@ -232,6 +209,33 @@ namespace Pixel_Drift
             Panel_Chua_Form.ShadowDecoration.CustomizableEdges = customizableEdges12;
             Panel_Chua_Form.Size = new Size(504, 518);
             Panel_Chua_Form.TabIndex = 0;
+            // 
+            // btn_dang_nhap
+            // 
+            btn_dang_nhap.Anchor = AnchorStyles.None;
+            btn_dang_nhap.BorderRadius = 20;
+            btn_dang_nhap.BorderThickness = 2;
+            btn_dang_nhap.CustomizableEdges = customizableEdges9;
+            btn_dang_nhap.DisabledState.BorderColor = Color.DarkGray;
+            btn_dang_nhap.DisabledState.CustomBorderColor = Color.DarkGray;
+            btn_dang_nhap.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btn_dang_nhap.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btn_dang_nhap.FillColor = Color.DodgerBlue;
+            btn_dang_nhap.FillColor2 = Color.LightCoral;
+            btn_dang_nhap.Font = new Font("Segoe UI Black", 18F, FontStyle.Bold);
+            btn_dang_nhap.ForeColor = Color.White;
+            btn_dang_nhap.HoverState.BorderColor = Color.White;
+            btn_dang_nhap.HoverState.FillColor = Color.FromArgb(128, 128, 255);
+            btn_dang_nhap.HoverState.FillColor2 = Color.FromArgb(255, 128, 255);
+            btn_dang_nhap.ImageSize = new Size(30, 30);
+            btn_dang_nhap.Location = new Point(84, 351);
+            btn_dang_nhap.Margin = new Padding(4, 5, 4, 5);
+            btn_dang_nhap.Name = "btn_dang_nhap";
+            btn_dang_nhap.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            btn_dang_nhap.Size = new Size(342, 81);
+            btn_dang_nhap.TabIndex = 10;
+            btn_dang_nhap.Text = "LOGIN";
+            btn_dang_nhap.Click += btn_dang_nhap_Click;
             // 
             // Form_Dang_Nhap
             // 
@@ -259,9 +263,9 @@ namespace Pixel_Drift
         private Guna.UI2.WinForms.Guna2HtmlLabel lb_dangnhap;
         private Guna.UI2.WinForms.Guna2TextBox tb_username;
         private Guna.UI2.WinForms.Guna2TextBox tb_matkhau;
-        private Guna.UI2.WinForms.Guna2Button btn_dangnhap;
         private Guna.UI2.WinForms.Guna2Button btn_quenmatkhau;
         private Guna.UI2.WinForms.Guna2Button btn_quaylaidk;
         private Guna.UI2.WinForms.Guna2Panel Panel_Chua_Form;
+        private Guna.UI2.WinForms.Guna2GradientButton btn_dang_nhap;
     }
 }

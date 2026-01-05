@@ -220,7 +220,7 @@ namespace Pixel_Drift_Server
             }
         }
 
-        private async void Send_Message(NetworkStream Stream, string Message)
+        private void Send_Message(NetworkStream Stream, string Message)
         {
             if (Stream == null || !Stream.CanWrite)
             {
@@ -230,7 +230,10 @@ namespace Pixel_Drift_Server
             try
             {
                 byte[] Buffer = Encoding.UTF8.GetBytes(Message + "\n");
-                await Stream.WriteAsync(Buffer, 0, Buffer.Length);
+                lock (Stream)
+                {
+                    Stream.Write(Buffer, 0, Buffer.Length);
+                }
             }
             catch (Exception ex)
             {
@@ -403,7 +406,7 @@ namespace Pixel_Drift_Server
             {
                 action = "game_over"
             }));
-
+            Game_Objects.Clear();
             lock (Player_Lock)
             {
                 if (Player_1 != null)
@@ -422,6 +425,8 @@ namespace Pixel_Drift_Server
         {
             lock (Player_Lock)
             {
+                if (!Is_Game_Running) return;
+
                 if (Player_1 != null)
                 {
                     Point P = Game_Objects["ptb_player1"];
@@ -433,6 +438,7 @@ namespace Pixel_Drift_Server
                     {
                         P.X += Player_Move_Speed;
                     }
+                    P.X = Math.Clamp(P.X, P1_Min_X, P1_Max_X - Object_Sizes["ptb_player1"].Width);
                     Game_Objects["ptb_player1"] = P;
                 }
 
@@ -447,6 +453,7 @@ namespace Pixel_Drift_Server
                     {
                         P.X += Player_Move_Speed;
                     }
+                    P.X = Math.Clamp(P.X, P2_Min_X, P2_Max_X - Object_Sizes["ptb_player2"].Width);
                     Game_Objects["ptb_player2"] = P;
                 }
 

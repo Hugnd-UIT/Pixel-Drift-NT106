@@ -30,8 +30,6 @@ namespace Pixel_Drift_Server
                 };
 
                 Process.Start(Proc_Info);
-
-                Console.WriteLine($"[SUCCESS] IP {IP} Has Been HARD-BLOCKED By Windows Firewall!");
             }
             catch (Exception ex)
             {

@@ -21,6 +21,7 @@ namespace Pixel_Drift_Server
 
         private string Session_Key = null;
         private const int Max_Connect_Per_IP = 3;
+        private Dictionary<string, DateTime> Action_Cooldowns_Per_IP = new Dictionary<string, DateTime>();
         private static ConcurrentDictionary<string, int> Attempts_Per_IP = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, int> Connections_Per_IP = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, int> SoftBan_Count_Per_IP = new ConcurrentDictionary<string, int>();
@@ -28,7 +29,7 @@ namespace Pixel_Drift_Server
 
         private int Request_Count = 0;
         private DateTime Request_Time = DateTime.Now;
-        private const int Max_Requests_Per_Second = 20;
+        private const int Max_Requests_Per_Second = 40;
 
         private static ConcurrentDictionary<string, TcpClient> Client_By_Email = new ConcurrentDictionary<string, TcpClient>();
         private static ConcurrentDictionary<TcpClient, string> Client_By_Room = new ConcurrentDictionary<TcpClient, string>();
@@ -37,7 +38,8 @@ namespace Pixel_Drift_Server
         public TCP_Handler(TcpClient TCP_Client)
         {
             this.Client = TCP_Client;
-            this.Client.ReceiveTimeout = 10000;
+            this.Client.ReceiveTimeout = 5000;
+            this.Client.SendTimeout = 5000;
             this.Stream = TCP_Client.GetStream();
         }
 
@@ -94,7 +96,7 @@ namespace Pixel_Drift_Server
                         Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Until, (Key, Old_Value) => Ban_Until);
 
                         Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "DoS Detected! Too Many Concurrent Connections");
-
+                        SQL_Handle.Handle_Add_Blacklist(IP, "DDoS");
                         OS_Handle.Handle_Block(IP);
 
                         try
@@ -118,11 +120,25 @@ namespace Pixel_Drift_Server
             }
         }
 
+        private bool Handle_Spam_Cooldown(string Action_Name, int Cooldown_Milliseconds)
+        {
+            if (Action_Cooldowns_Per_IP.TryGetValue(Action_Name, out DateTime Allowed_Time))
+            {
+                if (DateTime.Now < Allowed_Time)
+                {
+                    return false; 
+                }
+            }
+            Action_Cooldowns_Per_IP[Action_Name] = DateTime.Now.AddMilliseconds(Cooldown_Milliseconds);
+            return true; 
+        }
+
         public void Process()
         {
             try
             {
                 StreamReader Reader = new StreamReader(Stream, Encoding.UTF8);
+                bool Is_Handshake = true;
                 string Message;
 
                 while ((Message = Reader.ReadLine()) != null)
@@ -140,7 +156,7 @@ namespace Pixel_Drift_Server
                         Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
                         
                         Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", $"Buffer Overflow Detected! Packet Size {Message.Length} > 4096 Bytes");
-
+                        SQL_Handle.Handle_Add_Blacklist(IP, "Buffer Overflow");
                         OS_Handle.Handle_Block(IP);
                        
                         break;
@@ -161,7 +177,7 @@ namespace Pixel_Drift_Server
                             Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
 
                             Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "Spam Detected!");
-
+                            SQL_Handle.Handle_Add_Blacklist(IP, "Spam");
                             OS_Handle.Handle_Block(IP);
 
                             break;
@@ -198,7 +214,7 @@ namespace Pixel_Drift_Server
                                 Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
 
                                 Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", $"Replay Detected! Delay: {Diff_Seconds:F2}s");
-
+                                SQL_Handle.Handle_Add_Blacklist(IP, "Replay Attack");
                                 OS_Handle.Handle_Block(IP);
 
                                 break;
@@ -213,6 +229,16 @@ namespace Pixel_Drift_Server
                         string Action = Data["action"].GetString();
                         string Response = null;
 
+                        if (Is_Handshake)
+                        {
+                            if (Action != "get_public_key")
+                            {
+                                Security_Logger.Log(Security_Logger.Level.WARNING, IP, "KICKED", $"Protocol Violation Detected! First Packet Was '{Action}'");
+                                break; 
+                            }
+                            Is_Handshake = false;
+                        }
+
                         if (Action != "move" && Action != "ping")
                         {
                             Console.WriteLine($"[TCP] {Client.Client.RemoteEndPoint}: {Action}");
@@ -225,11 +251,7 @@ namespace Pixel_Drift_Server
                                 break;
 
                             case "get_public_key":
-                                string Key = JsonSerializer.Serialize(new
-                                {
-                                    status = "success",
-                                    public_key = Program.SERVER_PUBLIC_KEY
-                                });
+                                string Key = JsonSerializer.Serialize(new { status = "success", public_key = Program.SERVER_PUBLIC_KEY });
                                 Send_Message(Key);
                                 break;
 
@@ -254,14 +276,28 @@ namespace Pixel_Drift_Server
                                 break;
 
                             case "create_room":
+                                if (!Handle_Spam_Cooldown("create_room", 2000))
+                                {
+                                    Send_Message(JsonSerializer.Serialize(new { status = "error", message = "Too Fast! Please Wait 2 Seconds." }));
+                                    break;
+                                }
                                 Response = Handle_Create_Room(Data);
                                 break;
 
                             case "join_room":
+                                if (!Handle_Spam_Cooldown("join_room", 1000))
+                                {
+                                    Send_Message(JsonSerializer.Serialize(new { status = "error", message = "Too Fast! Please Wait 1 Seconds." }));
+                                    break;
+                                }
                                 Response = Handle_Join_Room(Data);
                                 break;
 
                             case "get_scoreboard":
+                                if (!Handle_Spam_Cooldown("db_query", 1000))
+                                {
+                                    break;
+                                }
                                 Response = Handle_Get_Scoreboard(Data);
                                 break;
 
@@ -331,6 +367,7 @@ namespace Pixel_Drift_Server
                 if (Decrypted_Key != null && Decrypted_Key.Length == 32)
                 {
                     this.Session_Key = Decrypted_Key;
+                    this.Client.ReceiveTimeout = 20000;
                     return JsonSerializer.Serialize(new
                     {
                         status = "success",
@@ -478,15 +515,15 @@ namespace Pixel_Drift_Server
 
                         Task.Run(async () =>
                         {
-                            await Task.Delay(500); 
-
+                            await Task.Delay(500);
+                            SQL_Handle.Handle_Add_Blacklist(IP, "Brute Force");
                             OS_Handle.Handle_Block(IP);
 
                             Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "Brute Force Detected! Persistent Attacker Blocked By Firewall!");
 
                             try 
                             { 
-                                Client.Close(); 
+                                Client.Close();
                             } 
                             catch 
                             {
