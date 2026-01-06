@@ -11,47 +11,48 @@ namespace Pixel_Drift_Server
 {
     public class Game_Room
     {
+        // --- Properties ---
         public string Room_ID { get; private set; }
-        private Game_Player Player_1;
-        private Game_Player Player_2;
-        private readonly object Player_Lock = new object();
 
-        // Config Constants
+        // --- Constants & Config ---
         private const int Config_Logic_FPS = 60;
         private const int Config_Network_FPS = 40;
         private const int Config_Game_Duration = 60;
         private const int Config_Move_Speed = 10;
-        private const int Config_Map_Height = 800;
+        private const int Map_Height = 800;
+        private const int Map_Min_X = 6;
+        private const int Map_Max_X = 600;
 
-        // Game State
-        private bool State_Is_Running = false;
-        private int State_Time_Remaining = 60;
-        private DateTime State_Last_Network_Send = DateTime.Now;
-        private Timer State_Countdown_Timer;
-        private int State_Countdown_Value = 5;
+        // --- Player Data ---
+        private Game_Player Player_1;
+        private Game_Player Player_2;
+        private readonly object Lock_Object = new object();
 
-        // Physics Data
-        private Dictionary<string, Size> Dict_Object_Sizes = new Dictionary<string, Size>();
-        private Dictionary<string, Point> Dict_Object_Pos = new Dictionary<string, Point>();
-        private Dictionary<string, object> Dict_Game_State_Packet = new Dictionary<string, object>();
-        private Random Rand = new Random();
+        // --- Game State ---
+        private bool Is_Running = false;
+        private int Time_Remaining = 60;
+        private DateTime Last_Network_Send_Time = DateTime.Now;
+        private Timer Countdown_Timer;
+        private int Countdown_Value = 5;
 
-        // Player Inputs
+        // --- Physics & Inputs ---
+        private Dictionary<string, Size> Object_Sizes = new Dictionary<string, Size>();
+        private Dictionary<string, Point> Object_Positions = new Dictionary<string, Point>();
+        private Dictionary<string, object> Game_State_Packet = new Dictionary<string, object>();
+        private Random Random_Gen = new Random();
+
+        // Inputs
         private bool Input_P1_Left, Input_P1_Right;
         private bool Input_P2_Left, Input_P2_Right;
 
-        // Player Stats (Score, Speed, Crash)
-        private int Stats_P1_Score = 0, Stats_P1_Speed = 12, Stats_P1_Crash = 0;
-        private int Stats_P2_Score = 0, Stats_P2_Speed = 12, Stats_P2_Crash = 0;
-
-        // Map Boundaries
-        private const int Map_P1_MinX = 6, Map_P1_MaxX = 600;
-        private const int Map_P2_MinX = 6, Map_P2_MaxX = 600;
+        // Stats
+        private int Score_P1 = 0, Speed_P1 = 12, Crash_Count_P1 = 0;
+        private int Score_P2 = 0, Speed_P2 = 12, Crash_Count_P2 = 0;
 
         public Game_Room(string ID)
         {
             this.Room_ID = ID;
-            Dict_Game_State_Packet["action"] = "update_game_state";
+            Game_State_Packet["action"] = "update_game_state";
         }
 
         public bool Is_Empty()
@@ -59,12 +60,14 @@ namespace Pixel_Drift_Server
             return Player_1 == null && Player_2 == null;
         }
 
-        public int Handle_Player_Join(TcpClient Client, string Username)
+        // --- Public Methods (Join, Leave, Action) ---
+
+        public int Add_Player(TcpClient Client, string Raw_Username)
         {
-            lock (Player_Lock)
+            lock (Lock_Object)
             {
-                if (State_Is_Running) return -1;
-                string Clean_Name = Format_Username(Username);
+                if (Is_Running) return -1;
+                string Clean_Name = Clean_Username(Raw_Username);
 
                 if (Player_1 == null)
                 {
@@ -82,191 +85,191 @@ namespace Pixel_Drift_Server
             }
         }
 
-        public void Handle_Player_Leave(TcpClient Client)
+        public void Remove_Player(TcpClient Client)
         {
-            lock (Player_Lock)
+            lock (Lock_Object)
             {
-                string Left_User = "Unknown";
-                Game_Player Remaining_Player = null;
+                string Leaver_Name = "Unknown";
+                Game_Player Survivor = null;
 
                 if (Player_1 != null && Player_1.Client == Client)
                 {
-                    Left_User = Player_1.Username;
+                    Leaver_Name = Player_1.Username;
                     Player_1 = null;
-                    Remaining_Player = Player_2;
+                    Survivor = Player_2;
                 }
                 else if (Player_2 != null && Player_2.Client == Client)
                 {
-                    Left_User = Player_2.Username;
+                    Leaver_Name = Player_2.Username;
                     Player_2 = null;
-                    Remaining_Player = Player_1;
+                    Survivor = Player_1;
                 }
 
-                Handle_Game_Stop();
-                var Disconnect_Msg = new
+                Stop_Game();
+
+                var Msg = new
                 {
                     action = "player_disconnected",
-                    name = Left_User,
-                    target_action = (Remaining_Player != null) ? "opponent_left" : null
+                    name = Leaver_Name,
+                    target_action = (Survivor != null) ? "opponent_left" : null
                 };
-                Broadcast_Message(JsonSerializer.Serialize(Disconnect_Msg));
+                Broadcast_To_All(JsonSerializer.Serialize(Msg));
                 Broadcast_Ready_Status();
             }
         }
 
-        public void Handle_Game_Action(TcpClient Client, string Action, Dictionary<string, JsonElement> Data)
+        public void Process_Player_Action(TcpClient Client, string Action, Dictionary<string, JsonElement> Data)
         {
-            int Player_ID = 0;
-            if (Player_1 != null && Player_1.Client == Client) Player_ID = 1;
-            else if (Player_2 != null && Player_2.Client == Client) Player_ID = 2;
-            if (Player_ID == 0) return;
+            int PID = 0;
+            if (Player_1 != null && Player_1.Client == Client) PID = 1;
+            else if (Player_2 != null && Player_2.Client == Client) PID = 2;
+
+            if (PID == 0) return;
 
             switch (Action)
             {
                 case "set_ready":
-                    if (State_Is_Running) return;
+                    if (Is_Running) return;
                     bool Ready = Data["ready_status"].GetString() == "true";
-                    lock (Player_Lock)
+                    lock (Lock_Object)
                     {
-                        if (Player_ID == 1) Player_1.Is_Ready = Ready;
+                        if (PID == 1) Player_1.Is_Ready = Ready;
                         else Player_2.Is_Ready = Ready;
                     }
                     Broadcast_Ready_Status();
-                    Handle_Countdown_Check();
+                    Check_Start_Condition();
                     break;
 
                 case "move":
-                    if (!State_Is_Running) return;
-                    string Direction = Data["direction"].GetString();
-                    string State = Data["state"].GetString();
-                    bool Is_Pressed = (State == "down");
-                    lock (Player_Lock)
+                    if (!Is_Running) return;
+                    string Dir = Data["direction"].GetString();
+                    bool Is_Pressed = Data["state"].GetString() == "down";
+
+                    lock (Lock_Object)
                     {
-                        if (Player_ID == 1)
+                        if (PID == 1)
                         {
-                            if (Direction == "left") Input_P1_Left = Is_Pressed;
-                            else if (Direction == "right") Input_P1_Right = Is_Pressed;
+                            if (Dir == "left") Input_P1_Left = Is_Pressed;
+                            else if (Dir == "right") Input_P1_Right = Is_Pressed;
                         }
                         else
                         {
-                            if (Direction == "left") Input_P2_Left = Is_Pressed;
-                            else if (Direction == "right") Input_P2_Right = Is_Pressed;
+                            if (Dir == "left") Input_P2_Left = Is_Pressed;
+                            else if (Dir == "right") Input_P2_Right = Is_Pressed;
                         }
                     }
                     break;
 
                 case "leave_room":
-                    Handle_Player_Leave(Client);
+                    Remove_Player(Client);
                     break;
             }
         }
 
-        private void Handle_Countdown_Check()
+        // --- Game Flow Control ---
+
+        private void Check_Start_Condition()
         {
-            lock (Player_Lock)
+            lock (Lock_Object)
             {
-                if (Player_1 != null && Player_1.Is_Ready && Player_2 != null && Player_2.Is_Ready && State_Countdown_Timer == null)
+                if (Player_1 != null && Player_1.Is_Ready && Player_2 != null && Player_2.Is_Ready && Countdown_Timer == null)
                 {
-                    State_Countdown_Value = 5;
-                    State_Countdown_Timer = new Timer(Handle_Countdown_Tick, null, 0, 1000);
+                    Countdown_Value = 5;
+                    Countdown_Timer = new Timer(On_Countdown_Tick, null, 0, 1000);
                 }
             }
         }
 
-        private void Handle_Countdown_Tick(object State)
+        private void On_Countdown_Tick(object State)
         {
-            if (State_Countdown_Value > 0)
+            if (Countdown_Value > 0)
             {
-                Broadcast_Message(JsonSerializer.Serialize(new { action = "countdown", time = State_Countdown_Value }));
-                State_Countdown_Value--;
+                Broadcast_To_All(JsonSerializer.Serialize(new { action = "countdown", time = Countdown_Value }));
+                Countdown_Value--;
             }
             else
             {
-                State_Countdown_Timer?.Dispose();
-                State_Countdown_Timer = null;
-                Handle_Game_Start();
+                Countdown_Timer?.Dispose();
+                Countdown_Timer = null;
+                Start_Game();
             }
         }
 
-        private void Handle_Game_Start()
+        private void Start_Game()
         {
-            Init_Game_Session();
-            State_Is_Running = true;
-            Broadcast_Message(JsonSerializer.Serialize(new { action = "start_game" }));
-            Broadcast_State_Update();
-            Task.Run(Handle_Game_Loop_Async);
+            Initialize_Game_Session();
+            Is_Running = true;
+            Broadcast_To_All(JsonSerializer.Serialize(new { action = "start_game" }));
+            Broadcast_Game_State();
+            Task.Run(Game_Loop_Async);
         }
 
-        private void Init_Game_Session()
+        private void Initialize_Game_Session()
         {
-            lock (Player_Lock)
+            lock (Lock_Object)
             {
-                Stats_P1_Score = 0; Stats_P2_Score = 0;
-                Stats_P1_Speed = 12; Stats_P2_Speed = 12;
-                Stats_P1_Crash = 0; Stats_P2_Crash = 0;
+                Score_P1 = 0; Score_P2 = 0;
+                Speed_P1 = 12; Speed_P2 = 12;
+                Crash_Count_P1 = 0; Crash_Count_P2 = 0;
                 Input_P1_Left = false; Input_P1_Right = false;
                 Input_P2_Left = false; Input_P2_Right = false;
 
-                Dict_Object_Pos.Clear();
-                Dict_Object_Sizes.Clear();
-                Init_Object_Config();
+                Object_Positions.Clear();
+                Object_Sizes.Clear();
+                Setup_Map_Objects();
             }
         }
 
-        private async Task Handle_Game_Loop_Async()
+        private async Task Game_Loop_Async()
         {
-            State_Time_Remaining = Config_Game_Duration;
+            Time_Remaining = Config_Game_Duration;
             DateTime Last_Second_Tick = DateTime.Now;
-            int Loop_Delay = 1000 / Config_Logic_FPS;
+            int Delay_Ms = 1000 / Config_Logic_FPS;
 
-            while (State_Is_Running && State_Time_Remaining > 0)
+            while (Is_Running && Time_Remaining > 0)
             {
-                Handle_Physics_Update();
+                Update_Physics();
 
+                // 1-second interval updates
                 if ((DateTime.Now - Last_Second_Tick).TotalSeconds >= 1)
                 {
-                    State_Time_Remaining--;
+                    Time_Remaining--;
                     Last_Second_Tick = DateTime.Now;
-                    Stats_P1_Score += Stats_P1_Speed;
-                    Stats_P2_Score += Stats_P2_Speed;
+                    Score_P1 += Speed_P1;
+                    Score_P2 += Speed_P2;
 
-                    var Time_Data = new { action = "update_time", time = State_Time_Remaining };
-                    var Score_Data = new { action = "update_score", p1_score = Stats_P1_Score, p2_score = Stats_P2_Score };
-
-                    Broadcast_Message(JsonSerializer.Serialize(Time_Data));
-                    Broadcast_Message(JsonSerializer.Serialize(Score_Data));
+                    Broadcast_To_All(JsonSerializer.Serialize(new { action = "update_time", time = Time_Remaining }));
+                    Broadcast_To_All(JsonSerializer.Serialize(new { action = "update_score", p1_score = Score_P1, p2_score = Score_P2 }));
                 }
 
-                if ((DateTime.Now - State_Last_Network_Send).TotalMilliseconds >= (1000 / Config_Network_FPS))
+                // Network Sync
+                if ((DateTime.Now - Last_Network_Send_Time).TotalMilliseconds >= (1000 / Config_Network_FPS))
                 {
-                    Broadcast_State_Update();
-                    State_Last_Network_Send = DateTime.Now;
+                    Broadcast_Game_State();
+                    Last_Network_Send_Time = DateTime.Now;
                 }
 
-                await Task.Delay(Loop_Delay);
+                await Task.Delay(Delay_Ms);
             }
 
-            if (State_Is_Running)
-            {
-                Handle_Game_End();
-            }
+            if (Is_Running) End_Game();
         }
 
-        private void Handle_Game_Stop()
+        private void Stop_Game()
         {
-            State_Is_Running = false;
-            State_Countdown_Timer?.Dispose();
-            State_Countdown_Timer = null;
+            Is_Running = false;
+            Countdown_Timer?.Dispose();
+            Countdown_Timer = null;
         }
 
-        private void Handle_Game_End()
+        private void End_Game()
         {
-            State_Is_Running = false;
-            Handle_Database_Save();
-            Broadcast_Message(JsonSerializer.Serialize(new { action = "game_over" }));
+            Is_Running = false;
+            Save_Match_Results();
+            Broadcast_To_All(JsonSerializer.Serialize(new { action = "game_over" }));
 
-            Dict_Object_Pos.Clear();
-            lock (Player_Lock)
+            Object_Positions.Clear();
+            lock (Lock_Object)
             {
                 if (Player_1 != null) Player_1.Is_Ready = false;
                 if (Player_2 != null) Player_2.Is_Ready = false;
@@ -274,153 +277,165 @@ namespace Pixel_Drift_Server
             Broadcast_Ready_Status();
         }
 
-        private void Handle_Physics_Update()
+        // --- Physics Engine ---
+
+        private void Update_Physics()
         {
-            lock (Player_Lock)
+            lock (Lock_Object)
             {
-                if (!State_Is_Running) return;
+                if (!Is_Running) return;
 
-                // Update Player 1 Position
-                if (Player_1 != null && Dict_Object_Pos.ContainsKey("ptb_player1"))
+                // Player 1 Logic
+                if (Player_1 != null && Object_Positions.ContainsKey("ptb_player1"))
                 {
-                    Point P = Dict_Object_Pos["ptb_player1"];
-                    if (Input_P1_Left && P.X > Map_P1_MinX) P.X -= Config_Move_Speed;
-                    if (Input_P1_Right && P.X < Map_P1_MaxX - Dict_Object_Sizes["ptb_player1"].Width) P.X += Config_Move_Speed;
-                    P.X = Math.Clamp(P.X, Map_P1_MinX, Map_P1_MaxX - Dict_Object_Sizes["ptb_player1"].Width);
-                    Dict_Object_Pos["ptb_player1"] = P;
+                    Point P = Object_Positions["ptb_player1"];
+                    if (Input_P1_Left && P.X > Map_Min_X) P.X -= Config_Move_Speed;
+                    if (Input_P1_Right && P.X < Map_Max_X - Object_Sizes["ptb_player1"].Width) P.X += Config_Move_Speed;
+                    P.X = Math.Clamp(P.X, Map_Min_X, Map_Max_X - Object_Sizes["ptb_player1"].Width);
+                    Object_Positions["ptb_player1"] = P;
                 }
 
-                // Update Player 2 Position
-                if (Player_2 != null && Dict_Object_Pos.ContainsKey("ptb_player2"))
+                // Player 2 Logic
+                if (Player_2 != null && Object_Positions.ContainsKey("ptb_player2"))
                 {
-                    Point P = Dict_Object_Pos["ptb_player2"];
-                    if (Input_P2_Left && P.X > Map_P2_MinX) P.X -= Config_Move_Speed;
-                    if (Input_P2_Right && P.X < Map_P2_MaxX - Dict_Object_Sizes["ptb_player2"].Width) P.X += Config_Move_Speed;
-                    P.X = Math.Clamp(P.X, Map_P2_MinX, Map_P2_MaxX - Dict_Object_Sizes["ptb_player2"].Width);
-                    Dict_Object_Pos["ptb_player2"] = P;
+                    Point P = Object_Positions["ptb_player2"];
+                    if (Input_P2_Left && P.X > Map_Min_X) P.X -= Config_Move_Speed;
+                    if (Input_P2_Right && P.X < Map_Max_X - Object_Sizes["ptb_player2"].Width) P.X += Config_Move_Speed;
+                    P.X = Math.Clamp(P.X, Map_Min_X, Map_Max_X - Object_Sizes["ptb_player2"].Width);
+                    Object_Positions["ptb_player2"] = P;
                 }
 
-                Handle_Object_Movement();
-                Handle_Collision_Check();
+                Move_All_Objects();
+                Check_Collisions();
             }
         }
 
-        private void Handle_Object_Movement()
+        private void Move_All_Objects()
         {
-            Process_Object_Down("ptb_road_1", Stats_P1_Speed, Config_Map_Height, true);
-            Process_Object_Down("ptb_road_1_dup", Stats_P1_Speed, Config_Map_Height, true);
-            Process_Object_Down("ptb_AICar1", Stats_P1_Speed, Config_Map_Height, false, Map_P1_MinX, Map_P1_MaxX);
-            Process_Object_Down("ptb_AICar5", Stats_P1_Speed, Config_Map_Height, false, Map_P1_MinX, Map_P1_MaxX);
-            Process_Object_Down("ptb_buff_road_1", Stats_P1_Speed, Config_Map_Height, false, Map_P1_MinX, Map_P1_MaxX);
-            Process_Object_Down("ptb_debuff_road_1", Stats_P1_Speed, Config_Map_Height, false, Map_P1_MinX, Map_P1_MaxX);
+            Move_Item_Down("ptb_road_1", Speed_P1, true);
+            Move_Item_Down("ptb_road_1_dup", Speed_P1, true);
+            Move_Item_Down("ptb_AICar1", Speed_P1, false);
+            Move_Item_Down("ptb_AICar5", Speed_P1, false);
+            Move_Item_Down("ptb_buff_road_1", Speed_P1, false);
+            Move_Item_Down("ptb_debuff_road_1", Speed_P1, false);
 
-            Process_Object_Down("ptb_road_2", Stats_P2_Speed, Config_Map_Height, true);
-            Process_Object_Down("ptb_road_2_dup", Stats_P2_Speed, Config_Map_Height, true);
-            Process_Object_Down("ptb_AICar3", Stats_P2_Speed, Config_Map_Height, false, Map_P2_MinX, Map_P2_MaxX);
-            Process_Object_Down("ptb_AICar6", Stats_P2_Speed, Config_Map_Height, false, Map_P2_MinX, Map_P2_MaxX);
-            Process_Object_Down("ptb_buff_road_2", Stats_P2_Speed, Config_Map_Height, false, Map_P2_MinX, Map_P2_MaxX);
-            Process_Object_Down("ptb_debuff_road_2", Stats_P2_Speed, Config_Map_Height, false, Map_P2_MinX, Map_P2_MaxX);
+            Move_Item_Down("ptb_road_2", Speed_P2, true);
+            Move_Item_Down("ptb_road_2_dup", Speed_P2, true);
+            Move_Item_Down("ptb_AICar3", Speed_P2, false);
+            Move_Item_Down("ptb_AICar6", Speed_P2, false);
+            Move_Item_Down("ptb_buff_road_2", Speed_P2, false);
+            Move_Item_Down("ptb_debuff_road_2", Speed_P2, false);
         }
 
-        private void Process_Object_Down(string Name, int Speed, int Screen_Height, bool Is_Road, int Min_X = 0, int Max_X = 0)
+        private void Move_Item_Down(string Name, int Speed, bool Is_Road)
         {
-            if (!Dict_Object_Pos.ContainsKey(Name)) return;
-            Point Pos = Dict_Object_Pos[Name];
+            if (!Object_Positions.ContainsKey(Name)) return;
+            Point Pos = Object_Positions[Name];
             Pos.Y += Speed;
 
-            if (Pos.Y > Screen_Height)
+            if (Pos.Y > Map_Height)
             {
                 if (Is_Road)
                 {
                     string Dup_Name = (Name == "ptb_road_1") ? "ptb_road_1_dup" :
-                                      (Name == "ptb_road_1_dup") ? "ptb_road_1" :
-                                      (Name == "ptb_road_2") ? "ptb_road_2_dup" : "ptb_road_2";
-                    Pos.Y = Dict_Object_Pos[Dup_Name].Y - Screen_Height;
+                                     (Name == "ptb_road_1_dup") ? "ptb_road_1" :
+                                     (Name == "ptb_road_2") ? "ptb_road_2_dup" : "ptb_road_2";
+                    Pos.Y = Object_Positions[Dup_Name].Y - Map_Height;
                 }
                 else
                 {
-                    Pos = Calculate_New_Position(Name, Min_X, Max_X);
+                    Pos = Calculate_Respawn_Position(Name, Map_Min_X, Map_Max_X);
                 }
             }
-            Dict_Object_Pos[Name] = Pos;
+            Object_Positions[Name] = Pos;
         }
 
-        private void Handle_Collision_Check()
+        private void Check_Collisions()
         {
+            // Player 1
             if (Player_1 != null)
             {
-                if (Is_Colliding("ptb_player1", "ptb_buff_road_1")) { Stats_P1_Speed += 3; Calculate_New_Position("ptb_buff_road_1", Map_P1_MinX, Map_P1_MaxX); Send_Sound(Player_1, "buff"); }
-                if (Is_Colliding("ptb_player1", "ptb_debuff_road_1")) { Stats_P1_Speed -= 3; Calculate_New_Position("ptb_debuff_road_1", Map_P1_MinX, Map_P1_MaxX); Send_Sound(Player_1, "debuff"); }
-                if (Is_Colliding("ptb_player1", "ptb_AICar1")) { Stats_P1_Speed -= 4; Stats_P1_Crash++; Calculate_New_Position("ptb_AICar1", Map_P1_MinX, Map_P1_MaxX); Send_Sound(Player_1, "hit_car"); }
-                if (Is_Colliding("ptb_player1", "ptb_AICar5")) { Stats_P1_Speed -= 4; Stats_P1_Crash++; Calculate_New_Position("ptb_AICar5", Map_P1_MinX, Map_P1_MaxX); Send_Sound(Player_1, "hit_car"); }
-                Stats_P1_Speed = Math.Max(4, Stats_P1_Speed);
+                if (Is_Colliding("ptb_player1", "ptb_buff_road_1")) { Speed_P1 += 3; Respawn_Object("ptb_buff_road_1"); Send_Sound_To_Player(Player_1, "buff"); }
+                if (Is_Colliding("ptb_player1", "ptb_debuff_road_1")) { Speed_P1 -= 3; Respawn_Object("ptb_debuff_road_1"); Send_Sound_To_Player(Player_1, "debuff"); }
+                if (Is_Colliding("ptb_player1", "ptb_AICar1")) { Speed_P1 -= 4; Crash_Count_P1++; Respawn_Object("ptb_AICar1"); Send_Sound_To_Player(Player_1, "hit_car"); }
+                if (Is_Colliding("ptb_player1", "ptb_AICar5")) { Speed_P1 -= 4; Crash_Count_P1++; Respawn_Object("ptb_AICar5"); Send_Sound_To_Player(Player_1, "hit_car"); }
+                Speed_P1 = Math.Max(4, Speed_P1);
             }
 
+            // Player 2
             if (Player_2 != null)
             {
-                if (Is_Colliding("ptb_player2", "ptb_buff_road_2")) { Stats_P2_Speed += 3; Calculate_New_Position("ptb_buff_road_2", Map_P2_MinX, Map_P2_MaxX); Send_Sound(Player_2, "buff"); }
-                if (Is_Colliding("ptb_player2", "ptb_debuff_road_2")) { Stats_P2_Speed -= 3; Calculate_New_Position("ptb_debuff_road_2", Map_P2_MinX, Map_P2_MaxX); Send_Sound(Player_2, "debuff"); }
-                if (Is_Colliding("ptb_player2", "ptb_AICar3")) { Stats_P2_Speed -= 4; Stats_P2_Crash++; Calculate_New_Position("ptb_AICar3", Map_P2_MinX, Map_P2_MaxX); Send_Sound(Player_2, "hit_car"); }
-                if (Is_Colliding("ptb_player2", "ptb_AICar6")) { Stats_P2_Speed -= 4; Stats_P2_Crash++; Calculate_New_Position("ptb_AICar6", Map_P2_MinX, Map_P2_MaxX); Send_Sound(Player_2, "hit_car"); }
-                Stats_P2_Speed = Math.Max(4, Stats_P2_Speed);
+                if (Is_Colliding("ptb_player2", "ptb_buff_road_2")) { Speed_P2 += 3; Respawn_Object("ptb_buff_road_2"); Send_Sound_To_Player(Player_2, "buff"); }
+                if (Is_Colliding("ptb_player2", "ptb_debuff_road_2")) { Speed_P2 -= 3; Respawn_Object("ptb_debuff_road_2"); Send_Sound_To_Player(Player_2, "debuff"); }
+                if (Is_Colliding("ptb_player2", "ptb_AICar3")) { Speed_P2 -= 4; Crash_Count_P2++; Respawn_Object("ptb_AICar3"); Send_Sound_To_Player(Player_2, "hit_car"); }
+                if (Is_Colliding("ptb_player2", "ptb_AICar6")) { Speed_P2 -= 4; Crash_Count_P2++; Respawn_Object("ptb_AICar6"); Send_Sound_To_Player(Player_2, "hit_car"); }
+                Speed_P2 = Math.Max(4, Speed_P2);
             }
         }
 
-        private bool Is_Colliding(string Player, string Obj)
+        private bool Is_Colliding(string Player_Key, string Obj_Key)
         {
-            if (!Dict_Object_Pos.ContainsKey(Player) || !Dict_Object_Pos.ContainsKey(Obj)) return false;
-            return new Rectangle(Dict_Object_Pos[Player], Dict_Object_Sizes[Player]).IntersectsWith(new Rectangle(Dict_Object_Pos[Obj], Dict_Object_Sizes[Obj]));
+            if (!Object_Positions.ContainsKey(Player_Key) || !Object_Positions.ContainsKey(Obj_Key)) return false;
+            return new Rectangle(Object_Positions[Player_Key], Object_Sizes[Player_Key])
+                .IntersectsWith(new Rectangle(Object_Positions[Obj_Key], Object_Sizes[Obj_Key]));
         }
 
-        private Point Calculate_New_Position(string Name, int Min_X, int Max_X)
+        private void Respawn_Object(string Name)
         {
-            Size Current_Size = Dict_Object_Sizes.ContainsKey(Name) ? Dict_Object_Sizes[Name] : new Size(30, 30);
-            int Safe_Max_X = Max_X - Current_Size.Width - 100;
+            Calculate_Respawn_Position(Name, Map_Min_X, Map_Max_X);
+        }
+
+        private Point Calculate_Respawn_Position(string Name, int Min_X, int Max_X)
+        {
+            Size Current_Size = Object_Sizes.ContainsKey(Name) ? Object_Sizes[Name] : new Size(30, 30);
+            int Safe_Max_X = Max_X - Current_Size.Width - 150;
             if (Safe_Max_X <= Min_X) Safe_Max_X = Min_X + 1;
 
             int Max_Retries = 20;
-            int Attempt = 0;
+            int Attempts = 0;
             Point New_Pos;
             bool Overlap;
 
             do
             {
                 Overlap = false;
-                New_Pos = new Point(Rand.Next(Min_X, Safe_Max_X), Rand.Next(-1000, -150));
+                New_Pos = new Point(Random_Gen.Next(Min_X, Safe_Max_X), Random_Gen.Next(-1000, -150));
                 Rectangle New_Rect = new Rectangle(New_Pos, Current_Size);
-                New_Rect.Inflate(30, 150);
+                New_Rect.Inflate(30, 150); // Margin
 
-                foreach (var Key in Dict_Object_Pos.Keys)
+                foreach (var Key in Object_Positions.Keys)
                 {
                     if (Key == Name || Key.Contains("roadtrack") || Key.Contains("player")) continue;
-                    if (Dict_Object_Sizes.ContainsKey(Key))
+                    if (Object_Sizes.ContainsKey(Key))
                     {
-                        if (New_Rect.IntersectsWith(new Rectangle(Dict_Object_Pos[Key], Dict_Object_Sizes[Key])))
+                        if (New_Rect.IntersectsWith(new Rectangle(Object_Positions[Key], Object_Sizes[Key])))
                         {
                             Overlap = true; break;
                         }
                     }
                 }
-                Attempt++;
-            } while (Overlap && Attempt < Max_Retries);
+                Attempts++;
+            } while (Overlap && Attempts < Max_Retries);
 
-            if (Overlap) New_Pos.Y -= 500;
-            if (Dict_Object_Pos.ContainsKey(Name)) Dict_Object_Pos[Name] = New_Pos;
+            if (Overlap) New_Pos.Y -= 1000;
+            if (Object_Positions.ContainsKey(Name)) Object_Positions[Name] = New_Pos;
             return New_Pos;
         }
 
-        private void Broadcast_State_Update()
+        // --- Network & Helpers ---
+
+        private void Broadcast_Game_State()
         {
-            lock (Player_Lock)
+            lock (Lock_Object)
             {
-                foreach (var Kvp in Dict_Object_Pos) Dict_Game_State_Packet[Kvp.Key] = Kvp.Value;
+                foreach (var Kvp in Object_Positions) Game_State_Packet[Kvp.Key] = Kvp.Value;
             }
-            Broadcast_Message(JsonSerializer.Serialize(Dict_Game_State_Packet));
+            Broadcast_To_All(JsonSerializer.Serialize(Game_State_Packet));
         }
 
-        private void Broadcast_Message(string Message)
+        private void Broadcast_To_All(string Message)
         {
-            lock (Player_Lock)
+            lock (Lock_Object)
             {
                 if (Player_1 != null) Send_Message(Player_1.Stream, Message);
                 if (Player_2 != null) Send_Message(Player_2.Stream, Message);
@@ -429,7 +444,7 @@ namespace Pixel_Drift_Server
 
         private void Broadcast_Ready_Status()
         {
-            lock (Player_Lock)
+            lock (Lock_Object)
             {
                 var Status = new
                 {
@@ -439,7 +454,7 @@ namespace Pixel_Drift_Server
                     player2_ready = Player_2?.Is_Ready ?? false,
                     player2_name = Player_2?.Username ?? "Waiting..."
                 };
-                Broadcast_Message(JsonSerializer.Serialize(Status));
+                Broadcast_To_All(JsonSerializer.Serialize(Status));
             }
         }
 
@@ -454,69 +469,78 @@ namespace Pixel_Drift_Server
             catch { }
         }
 
-        private void Send_Sound(Game_Player Player, string Sound_Name)
+        private void Send_Sound_To_Player(Game_Player P, string Sound_Name)
         {
-            if (Player != null)
-            {
-                Send_Message(Player.Stream, JsonSerializer.Serialize(new { action = "play_sound", sound = Sound_Name }));
-            }
+            if (P != null)
+                Send_Message(P.Stream, JsonSerializer.Serialize(new { action = "play_sound", sound = Sound_Name }));
         }
 
-        private void Handle_Database_Save()
+        private void Save_Match_Results()
         {
             try
             {
-                lock (Player_Lock)
+                lock (Lock_Object)
                 {
-                    bool P1_Win = Stats_P1_Score > Stats_P2_Score;
-                    bool P2_Win = Stats_P2_Score > Stats_P1_Score;
-                    double P1_Total = Stats_P1_Score + (P1_Win ? 500 : 0) - (Stats_P1_Crash * 50);
-                    double P2_Total = Stats_P2_Score + (P2_Win ? 500 : 0) - (Stats_P2_Crash * 50);
+                    bool P1_Win = Score_P1 > Score_P2;
+                    bool P2_Win = Score_P2 > Score_P1;
+                    double P1_Final = Score_P1 + (P1_Win ? 500 : 0) - (Crash_Count_P1 * 50);
+                    double P2_Final = Score_P2 + (P2_Win ? 500 : 0) - (Crash_Count_P2 * 50);
 
                     if (Player_1 != null && !string.IsNullOrEmpty(Player_1.Username))
-                        SQL_Handle.Handle_Match_Result(1, P1_Win, (int)P1_Total, Stats_P1_Crash);
+                        SQL_Handle.Handle_Match_Result(1, P1_Win, (int)P1_Final, Crash_Count_P1);
 
                     if (Player_2 != null && !string.IsNullOrEmpty(Player_2.Username))
-                        SQL_Handle.Handle_Match_Result(2, P2_Win, (int)P2_Total, Stats_P2_Crash);
+                        SQL_Handle.Handle_Match_Result(2, P2_Win, (int)P2_Final, Crash_Count_P2);
                 }
             }
-            catch (Exception ex)
+            catch (Exception Ex)
             {
-                Console.WriteLine($"[Error] Save Scores Failed: {ex.Message}");
+                Console.WriteLine($"[Error] Save Scores Failed: {Ex.Message}");
             }
         }
 
-        private void Init_Object_Config()
+        private void Setup_Map_Objects()
         {
-            int Road_Width = 500;
             int Safe_Margin = 50;
             int Min_X = Safe_Margin;
-            int Max_X = Road_Width - Safe_Margin;
+            int Max_X = 500 - Safe_Margin;
 
-            Dict_Object_Sizes["ptb_player1"] = new Size(72, 117);
-            Dict_Object_Pos["ptb_player1"] = new Point(202, 470);
-            Dict_Object_Sizes["ptb_player2"] = new Size(72, 117);
-            Dict_Object_Pos["ptb_player2"] = new Point(202, 470);
+            // Players
+            Object_Sizes["ptb_player1"] = new Size(72, 117);
+            Object_Positions["ptb_player1"] = new Point(202, 470);
+            Object_Sizes["ptb_player2"] = new Size(72, 117);
+            Object_Positions["ptb_player2"] = new Point(202, 470);
 
-            Dict_Object_Sizes["ptb_road_1"] = new Size(617, 734); Dict_Object_Pos["ptb_road_1"] = new Point(0, -2);
-            Dict_Object_Sizes["ptb_road_1_dup"] = new Size(617, 734); Dict_Object_Pos["ptb_road_1_dup"] = new Point(0, 734);
-            Dict_Object_Sizes["ptb_road_2"] = new Size(458, 596); Dict_Object_Pos["ptb_road_2"] = new Point(0, 2);
-            Dict_Object_Sizes["ptb_road_2_dup"] = new Size(458, 596); Dict_Object_Pos["ptb_road_2_dup"] = new Point(0, 596);
+            // Roads
+            Object_Sizes["ptb_road_1"] = new Size(617, 734); Object_Positions["ptb_road_1"] = new Point(0, -2);
+            Object_Sizes["ptb_road_1_dup"] = new Size(617, 734); Object_Positions["ptb_road_1_dup"] = new Point(0, 734);
+            Object_Sizes["ptb_road_2"] = new Size(458, 596); Object_Positions["ptb_road_2"] = new Point(0, 2);
+            Object_Sizes["ptb_road_2_dup"] = new Size(458, 596); Object_Positions["ptb_road_2_dup"] = new Point(0, 596);
 
+            // AI Cars
             string[] AI_Cars = { "ptb_AICar1", "ptb_AICar3", "ptb_AICar5", "ptb_AICar6" };
             Size AI_Size = new Size(74, 128);
-            foreach (var car in AI_Cars) { Dict_Object_Sizes[car] = AI_Size; Dict_Object_Pos[car] = Calculate_New_Position(car, Min_X, Max_X); }
+            foreach (var Car in AI_Cars)
+            {
+                Object_Sizes[Car] = AI_Size;
+                Object_Positions[Car] = Calculate_Respawn_Position(Car, Min_X, Max_X);
+            }
 
+            // Items
             string[] Items = { "ptb_buff_road_1", "ptb_debuff_road_1", "ptb_buff_road_2", "ptb_debuff_road_2" };
             Size Item_Size = new Size(30, 30);
-            foreach (var item in Items) { Dict_Object_Sizes[item] = Item_Size; Dict_Object_Pos[item] = Calculate_New_Position(item, Min_X, Max_X); }
+            foreach (var Item in Items)
+            {
+                Object_Sizes[Item] = Item_Size;
+                Object_Positions[Item] = Calculate_Respawn_Position(Item, Min_X, Max_X);
+            }
         }
 
-        private string Format_Username(string Username)
+        private string Clean_Username(string Name)
         {
-            if (string.IsNullOrEmpty(Username)) return "Unknown";
-            int Last_Paren = Username.LastIndexOf('(');
-            return (Last_Paren > 0) ? Username.Substring(0, Last_Paren).Trim() : Username.Trim();
+            if (string.IsNullOrEmpty(Name)) return "Unknown";
+            int Idx = Name.LastIndexOf('(');
+            return (Idx > 0) ? Name.Substring(0, Idx).Trim() : Name.Trim();
         }
     }
 }

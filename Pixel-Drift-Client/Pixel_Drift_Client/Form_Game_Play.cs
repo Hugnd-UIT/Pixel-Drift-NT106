@@ -13,18 +13,22 @@ namespace Pixel_Drift
 {
     public partial class Game_Window : Form
     {
-        private int My_Player_Number = 0;
+        // --- Game Configuration & State (Cấu hình và Trạng thái game) ---
+        private int My_Player_ID = 0;
         private string My_Username;
         private bool Is_Returning_To_Lobby = false;
         private bool Is_Left_Pressed = false;
         private bool Is_Right_Pressed = false;
 
+        private long Score_Player_1 = 0;
+        private long Score_Player_2 = 0;
+        private int Crash_Count = 0;
+
+        // --- Collections (Danh sách lưu trữ) ---
         private List<string> Keys_Buffer = new List<string>();
         private Dictionary<string, Point> Object_Positions = new Dictionary<string, Point>();
-        private Dictionary<string, Point> Target_Positions = new Dictionary<string, Point>();
-        private Dictionary<string, PointF> Current_Positons = new Dictionary<string, PointF>();
-        private float Lerp_Speed = 0.8f;
 
+        // --- Assets (Hình ảnh) ---
         private Image Img_Player_1 = Properties.Resources.Player_Car_1;
         private Image Img_Player_2 = Properties.Resources.Player_Car_2;
         private Image Img_Road = Properties.Resources.Road;
@@ -35,52 +39,56 @@ namespace Pixel_Drift
         private Image Img_Orange_Car = Properties.Resources.Orange_Car;
         private Image Img_Red_Car = Properties.Resources.Green_Car;
 
+        // --- Dimensions (Kích thước) ---
         private Size Size_Player = new Size(80, 175);
         private Size Size_Road = new Size(610, 910);
         private Size Size_Item = new Size(60, 60);
-        private Size Size_AICar = new Size(80, 175);
+        private Size Size_AI_Car = new Size(80, 175);
 
-        private WindowsMediaPlayer Music;
-        private SoundPlayer CountDown;
-        private SoundPlayer Buff;
-        private SoundPlayer Debuff;
-        private SoundPlayer Car_Hit;
+        // --- Audio & Timers (Âm thanh và Bộ đếm) ---
+        private WindowsMediaPlayer Music_Player;
+        private SoundPlayer SFX_Countdown;
+        private SoundPlayer SFX_Buff;
+        private SoundPlayer SFX_Debuff;
+        private SoundPlayer SFX_Crash;
         private System.Windows.Forms.Timer Game_Loop_Timer;
-
-        private long Player1_Score = 0;
-        private long Player2_Score = 0;
-        private int Crash_Count = 0;
 
         public Game_Window()
         {
             InitializeComponent();
         }
 
-        public Game_Window(string Username, int Player_Num, string Room_ID)
+        public Game_Window(string User_Name, int Player_Num, string Room_ID)
         {
             InitializeComponent();
+
+            // Tối ưu hóa đồ họa (Graphics Optimization)
             this.DoubleBuffered = true;
             this.SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
             this.UpdateStyles();
             this.KeyPreview = true;
-            this.My_Username = Username;
-            this.My_Player_Number = Player_Num;
+
+            this.My_Username = User_Name;
+            this.My_Player_ID = Player_Num;
 
             if (btn_ID != null) btn_ID.Text = "ID: " + Room_ID;
 
-            string Player_Color = (My_Player_Number == 1) ? "Red Car" : "Blue Car";
-            this.Text = $"Pixel Drift - PLAYER {My_Player_Number} ({Player_Color}) - {My_Username}";
+            string Color_Name = (My_Player_ID == 1) ? "Red Car" : "Blue Car";
+            this.Text = $"Pixel Drift - PLAYER {My_Player_ID} ({Color_Name}) - {My_Username}";
 
-            Network_Handle.Incoming_Request += Handle_Server_Message;
+            Network_Handle.Incoming_Request += On_Server_Message_Received;
         }
+
+        // --- Form Events (KHÔNG ĐỔI TÊN HÀM CONTROL) ---
 
         private void Game_Window_Load(object sender, EventArgs e)
         {
             try
             {
-                Remove_Old_Objects();
-                DoubleBuffer_Load(pn_road_left);
-                DoubleBuffer_Load(pn_road_right);
+                Clear_Old_Controls();
+                Enable_Double_Buffering(pn_road_left);
+                Enable_Double_Buffering(pn_road_right);
+
                 pn_road_left.BackColor = Color.Black;
                 pn_road_right.BackColor = Color.Black;
 
@@ -89,8 +97,8 @@ namespace Pixel_Drift
                 Game_Loop_Timer.Tick += Game_Loop_Timer_Tick;
                 Game_Loop_Timer.Start();
 
-                Audio_Load();
-                Reset_To_Lobby();
+                Initialize_Audio();
+                Reset_To_Lobby_State();
             }
             catch (Exception Ex)
             {
@@ -99,59 +107,23 @@ namespace Pixel_Drift
             }
         }
 
-        private void Audio_Load()
+        private void Game_Window_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Music = new WindowsMediaPlayer();
-            Music.settings.setMode("loop", true);
-            Music.settings.volume = 30;
+            Network_Handle.Incoming_Request -= On_Server_Message_Received;
             try
             {
-                CountDown = new SoundPlayer("countdown.wav");
-                Buff = new SoundPlayer("buff.wav");
-                Debuff = new SoundPlayer("debuff.wav");
-                Car_Hit = new SoundPlayer("crash.wav");
-                CountDown.LoadAsync();
-                Buff.LoadAsync();
-                Debuff.LoadAsync();
-                Car_Hit.LoadAsync();
+                Game_Loop_Timer?.Stop();
+                Game_Loop_Timer?.Dispose();
+                Music_Player?.controls.stop();
+                Music_Player?.close();
+                SFX_Countdown?.Stop();
+                SFX_Crash?.Stop();
+                SFX_Buff?.Stop();
+                SFX_Debuff?.Stop();
             }
             catch { }
-        }
 
-        private void DoubleBuffer_Load(Panel p)
-        {
-            if (p == null) return;
-            typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, p, new object[] { true });
-        }
-
-        private void Remove_Old_Objects()
-        {
-            void ScanAndRemove(Control.ControlCollection controls)
-            {
-                var itemsToRemove = new List<Control>();
-                foreach (Control c in controls)
-                {
-                    if (c is PictureBox && c.Name.StartsWith("ptb_")) itemsToRemove.Add(c);
-                    if (c.HasChildren) ScanAndRemove(c.Controls);
-                }
-                foreach (var item in itemsToRemove) controls.Remove(item);
-            }
-            ScanAndRemove(this.Controls);
-        }
-
-        private void btn_Ready_Click(object sender, EventArgs e)
-        {
-            Send_Message(new { action = "set_ready", ready_status = "true" });
-            btn_Ready.Enabled = false;
-            btn_Ready.Text = "Waiting...";
-            this.Focus();
-        }
-
-        private void btn_Scoreboard_Click(object sender, EventArgs e)
-        {
-            var Sb = Application.OpenForms.OfType<Form_ScoreBoard>().FirstOrDefault();
-            if (Sb != null) Sb.Show();
-            else new Form_ScoreBoard(Network_Handle.Get_Client()).Show();
+            if (!Is_Returning_To_Lobby) Send_Network_Request(new { action = "leave_room" });
         }
 
         private void Game_Window_KeyDown(object sender, KeyEventArgs e)
@@ -170,7 +142,8 @@ namespace Pixel_Drift
                 Direction = "right";
             }
 
-            if (Direction != null) Send_Message(new { action = "move", player = My_Player_Number, direction = Direction, state = "down" });
+            if (Direction != null)
+                Send_Network_Request(new { action = "move", player = My_Player_ID, direction = Direction, state = "down" });
         }
 
         private void Game_Window_KeyUp(object sender, KeyEventArgs e)
@@ -187,35 +160,71 @@ namespace Pixel_Drift
                 Direction = "right";
             }
 
-            if (Direction != null) Send_Message(new { action = "move", player = My_Player_Number, direction = Direction, state = "up" });
+            if (Direction != null)
+                Send_Network_Request(new { action = "move", player = My_Player_ID, direction = Direction, state = "up" });
         }
 
-        private void Game_Window_FormClosing(object sender, FormClosingEventArgs e)
+        private void btn_Ready_Click(object sender, EventArgs e)
         {
-            Network_Handle.Incoming_Request -= Handle_Server_Message;
-            try
-            {
-                Game_Loop_Timer?.Stop();
-                Game_Loop_Timer?.Dispose();
-                Music?.controls.stop();
-                Music?.close();
-                CountDown?.Stop();
-                Car_Hit?.Stop();
-                Buff?.Stop();
-                Debuff?.Stop();
-            }
-            catch { }
-
-            if (!Is_Returning_To_Lobby) Send_Message(new { action = "leave_room" });
+            Send_Network_Request(new { action = "set_ready", ready_status = "true" });
+            btn_Ready.Enabled = false;
+            btn_Ready.Text = "Waiting...";
+            this.Focus();
         }
 
-        private void Handle_Server_Message(string Message)
+        private void btn_Scoreboard_Click(object sender, EventArgs e)
+        {
+            var Board = Application.OpenForms.OfType<Form_ScoreBoard>().FirstOrDefault();
+            if (Board != null) Board.Show();
+            else new Form_ScoreBoard(Network_Handle.Get_Client()).Show();
+        }
+
+        private void Game_Loop_Timer_Tick(object sender, EventArgs e)
+        {
+            if (pn_road_left != null) pn_road_left.Invalidate();
+            if (pn_road_right != null) pn_road_right.Invalidate();
+        }
+
+        private void Road_Left_Paint(object sender, PaintEventArgs e)
+        {
+            Setup_Graphics_Quality(e.Graphics);
+
+            Draw_Game_Entity(e.Graphics, "ptb_road_1", Img_Road, pn_road_left.Size);
+            Draw_Game_Entity(e.Graphics, "ptb_road_1_dup", Img_Road, pn_road_left.Size);
+            Draw_Game_Entity(e.Graphics, "ptb_buff_road_1", Img_Buff, Size_Item);
+            Draw_Game_Entity(e.Graphics, "ptb_debuff_road_1", Img_Debuff, Size_Item);
+            Draw_Game_Entity(e.Graphics, "ptb_AICar1", Img_Black_Car, Size_AI_Car);
+            Draw_Game_Entity(e.Graphics, "ptb_AICar5", Img_Blue_Car, Size_AI_Car);
+            Draw_Game_Entity(e.Graphics, "ptb_player1", Img_Player_1, Size_Player);
+        }
+
+        private void Road_Right_Paint(object sender, PaintEventArgs e)
+        {
+            Setup_Graphics_Quality(e.Graphics);
+
+            Draw_Game_Entity(e.Graphics, "ptb_road_2", Img_Road, pn_road_right.Size);
+            Draw_Game_Entity(e.Graphics, "ptb_road_2_dup", Img_Road, pn_road_right.Size);
+            Draw_Game_Entity(e.Graphics, "ptb_buff_road_2", Img_Buff, Size_Item);
+            Draw_Game_Entity(e.Graphics, "ptb_debuff_road_2", Img_Debuff, Size_Item);
+            Draw_Game_Entity(e.Graphics, "ptb_AICar3", Img_Orange_Car, Size_AI_Car);
+            Draw_Game_Entity(e.Graphics, "ptb_AICar6", Img_Red_Car, Size_AI_Car);
+            Draw_Game_Entity(e.Graphics, "ptb_player2", Img_Player_2, Size_Player);
+        }
+
+        // --- Network Logic (Xử lý mạng) ---
+
+        private void Send_Network_Request(object Msg)
+        {
+            Network_Handle.Send_And_Forget(Msg);
+        }
+
+        private void On_Server_Message_Received(string Raw_Message)
         {
             if (this.Disposing || this.IsDisposed || !this.IsHandleCreated) return;
 
             try
             {
-                var Data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Message);
+                var Data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Raw_Message);
                 if (!Data.ContainsKey("action")) return;
                 string Action = Data["action"].GetString();
 
@@ -223,113 +232,117 @@ namespace Pixel_Drift
                 {
                     try
                     {
-                        switch (Action)
-                        {
-                            case "update_game_state":
-                                Handle_Game_Positions(Data);
-                                break;
-
-                            case "update_score":
-                                Player1_Score = Data["p1_score"].GetInt64();
-                                Player2_Score = Data["p2_score"].GetInt64();
-                                if (lbl_Score1 != null) lbl_Score1.Text = "Score: " + Player1_Score;
-                                if (lbl_Score2 != null) lbl_Score2.Text = "Score: " + Player2_Score;
-                                break;
-
-                            case "update_time":
-                                if (lbl_GameTimer != null) lbl_GameTimer.Text = "Time: " + Data["time"].GetInt32();
-                                break;
-
-                            case "start_game":
-                                Start_Game();
-                                break;
-
-                            case "countdown":
-                                if (lbl_Countdown != null)
-                                {
-                                    lbl_Countdown.Visible = true;
-                                    int Time = Data["time"].GetInt32();
-                                    lbl_Countdown.Text = Time.ToString();
-                                    if (Time == 5) { Music.controls.stop(); CountDown?.Play(); }
-                                }
-                                break;
-
-                            case "update_ready_status":
-                                string P1_Name = Data["player1_name"].GetString();
-                                string P2_Name = Data["player2_name"].GetString();
-                                bool P1_Ready = Data["player1_ready"].GetBoolean();
-                                bool P2_Ready = Data["player2_ready"].GetBoolean();
-                                if (lbl_P1_Status != null) lbl_P1_Status.Text = $"P1 ({P1_Name}): {(P1_Ready ? "Ready" : "...")}";
-                                if (lbl_P2_Status != null) lbl_P2_Status.Text = $"P2 ({P2_Name}): {(P2_Ready ? "Ready" : "...")}";
-                                break;
-
-                            case "game_over":
-                                Music?.controls.stop();
-                                MessageBox.Show("Time Is Up! Game Over.", "Notification");
-                                End_Game();
-                                Reset_To_Lobby();
-                                break;
-
-                            case "player_disconnected":
-                                string Name = Data.ContainsKey("name") ? Data["name"].GetString() : "Opponent";
-                                Music?.controls.stop();
-                                CountDown?.Stop();
-                                MessageBox.Show($"{Name} Has Disconnected. You Will Return To Lobby.", "Notification");
-                                Is_Returning_To_Lobby = true;
-                                Send_Message(new { action = "leave_room" });
-                                this.Close();
-                                break;
-
-                            case "play_sound":
-                                Play_Sound_Effect(Data["sound"].GetString());
-                                break;
-
-                            case "force_logout":
-                                Music?.controls.stop();
-                                MessageBox.Show("Account Logged In From Another Location!", "Warning");
-                                Application.Exit();
-                                break;
-                        }
-                    } catch { }
+                        Process_Server_Action(Action, Data);
+                    }
+                    catch { }
                 }));
             }
             catch { }
         }
 
-        private void Handle_Game_Positions(Dictionary<string, JsonElement> Data)
+        private void Process_Server_Action(string Action, Dictionary<string, JsonElement> Data)
         {
-            foreach (var key in Data.Keys)
+            switch (Action)
             {
-                if (key == "action") continue;
+                case "update_game_state":
+                    Update_Object_Positions(Data);
+                    break;
+
+                case "update_score":
+                    Score_Player_1 = Data["p1_score"].GetInt64();
+                    Score_Player_2 = Data["p2_score"].GetInt64();
+                    if (lbl_Score1 != null) lbl_Score1.Text = "Score: " + Score_Player_1;
+                    if (lbl_Score2 != null) lbl_Score2.Text = "Score: " + Score_Player_2;
+                    break;
+
+                case "update_time":
+                    if (lbl_GameTimer != null) lbl_GameTimer.Text = "Time: " + Data["time"].GetInt32();
+                    break;
+
+                case "start_game":
+                    Start_Game_Session();
+                    break;
+
+                case "countdown":
+                    if (lbl_Countdown != null)
+                    {
+                        lbl_Countdown.Visible = true;
+                        int Time = Data["time"].GetInt32();
+                        lbl_Countdown.Text = Time.ToString();
+                        if (Time == 5) { Music_Player.controls.stop(); SFX_Countdown?.Play(); }
+                    }
+                    break;
+
+                case "update_ready_status":
+                    string P1_Name = Data["player1_name"].GetString();
+                    string P2_Name = Data["player2_name"].GetString();
+                    bool P1_Ready = Data["player1_ready"].GetBoolean();
+                    bool P2_Ready = Data["player2_ready"].GetBoolean();
+                    if (lbl_P1_Status != null) lbl_P1_Status.Text = $"P1 ({P1_Name}): {(P1_Ready ? "Ready" : "...")}";
+                    if (lbl_P2_Status != null) lbl_P2_Status.Text = $"P2 ({P2_Name}): {(P2_Ready ? "Ready" : "...")}";
+                    break;
+
+                case "game_over":
+                    Music_Player?.controls.stop();
+                    MessageBox.Show("Time Is Up! Game Over.", "Notification");
+                    End_Game_Session();
+                    Reset_To_Lobby_State();
+                    break;
+
+                case "player_disconnected":
+                    string Name = Data.ContainsKey("name") ? Data["name"].GetString() : "Opponent";
+                    Music_Player?.controls.stop();
+                    SFX_Countdown?.Stop();
+                    MessageBox.Show($"{Name} Has Disconnected. You Will Return To Lobby.", "Notification");
+                    Is_Returning_To_Lobby = true;
+                    Send_Network_Request(new { action = "leave_room" });
+                    this.Close();
+                    break;
+
+                case "play_sound":
+                    Play_Sound_Effect(Data["sound"].GetString());
+                    break;
+
+                case "force_logout":
+                    Music_Player?.controls.stop();
+                    MessageBox.Show("Account Logged In From Another Location!", "Warning");
+                    Application.Exit();
+                    break;
+            }
+        }
+
+        private void Update_Object_Positions(Dictionary<string, JsonElement> Data)
+        {
+            foreach (var Key in Data.Keys)
+            {
+                if (Key == "action") continue;
                 try
                 {
-                    JsonElement El = Data[key];
-                    if (El.ValueKind == JsonValueKind.Object && El.TryGetProperty("X", out var xVal) && El.TryGetProperty("Y", out var yVal))
+                    JsonElement El = Data[Key];
+                    if (El.ValueKind == JsonValueKind.Object && El.TryGetProperty("X", out var X_Val) && El.TryGetProperty("Y", out var Y_Val))
                     {
-                        int X = xVal.GetInt32();
-                        int Y = yVal.GetInt32();
-                        Target_Positions[key] = new Point(X, Y);
-                        if (!Current_Positons.ContainsKey(key))
-                        {
-                            Current_Positons[key] = new PointF(X, Y);
-                            Object_Positions[key] = new Point(X, Y);
-                        }
+                        int X = X_Val.GetInt32();
+                        int Y = Y_Val.GetInt32();
+
+                        if (Object_Positions.ContainsKey(Key))
+                            Object_Positions[Key] = new Point(X, Y);
+                        else
+                            Object_Positions.Add(Key, new Point(X, Y));
                     }
                 }
                 catch { }
             }
         }
 
-        private void Send_Message(object Msg)
-        {
-            Network_Handle.Send_And_Forget(Msg);
-        }
+        // --- Game State Logic (Logic Trạng thái game) ---
 
-        private void Start_Game()
+        private void Start_Game_Session()
         {
             Crash_Count = 0;
-            Player1_Score = 0;
-            Player2_Score = 0;
+            Score_Player_1 = 0;
+            Score_Player_2 = 0;
+
+            // UI Updates
             btn_Ready.Visible = false;
             lbl_P1_Status.Visible = false;
             lbl_P2_Status.Visible = false;
@@ -339,38 +352,41 @@ namespace Pixel_Drift
             btn_ID.Visible = false;
             lbl_GameTimer.Visible = true;
             lbl_GameTimer.Text = "Time: 60";
+
             if (lbl_Score1 != null) { lbl_Score1.Visible = true; lbl_Score1.Text = "Score: 0"; }
             if (lbl_Score2 != null) { lbl_Score2.Visible = true; lbl_Score2.Text = "Score: 0"; }
-            CountDown?.Stop();
-            Play_Music_Loop("compete.wav");
+
+            SFX_Countdown?.Stop();
+            Play_Background_Music("compete.wav");
             this.Focus();
         }
 
-        private void End_Game()
+        private void End_Game_Session()
         {
             try
             {
                 Crash_Count = 0;
-                Player1_Score = 0;
-                Player2_Score = 0;
-                Music?.controls.stop();
-                Car_Hit?.Stop();
+                Score_Player_1 = 0;
+                Score_Player_2 = 0;
+                Music_Player?.controls.stop();
+                SFX_Crash?.Stop();
             }
-            catch (Exception ex)
+            catch (Exception Ex)
             {
-                MessageBox.Show("Error Resetting Game: " + ex.Message);
+                MessageBox.Show("Error Resetting Game: " + Ex.Message);
             }
         }
 
-        private void Reset_To_Lobby()
+        private void Reset_To_Lobby_State()
         {
-            CountDown?.Stop();
-            Play_Music_Loop("wait.wav");
+            SFX_Countdown?.Stop();
+            Play_Background_Music("wait.wav");
+
             Object_Positions.Clear();
-            Target_Positions.Clear();
-            Current_Positons.Clear();
             if (pn_road_left != null) pn_road_left.Invalidate();
             if (pn_road_right != null) pn_road_right.Invalidate();
+
+            // Restore UI
             btn_Ready.Visible = true;
             btn_Ready.Enabled = true;
             btn_Ready.Text = "Ready";
@@ -383,117 +399,90 @@ namespace Pixel_Drift
             lbl_GameTimer.Visible = false;
             if (lbl_Score1 != null) lbl_Score1.Visible = false;
             if (lbl_Score2 != null) lbl_Score2.Visible = false;
+
             btn_Ready.Focus();
         }
 
-        private void Game_Loop_Timer_Tick(object sender, EventArgs e)
+        // --- Helper Methods (Các hàm phụ trợ) ---
+
+        private void Initialize_Audio()
         {
-            bool Need_Redraw = false;
-
-            Keys_Buffer.Clear();
-            Keys_Buffer.AddRange(Target_Positions.Keys);
-
-            foreach (var Key in Keys_Buffer)
+            Music_Player = new WindowsMediaPlayer();
+            Music_Player.settings.setMode("loop", true);
+            Music_Player.settings.volume = 30;
+            try
             {
-                if (!Current_Positons.ContainsKey(Key)) continue;
+                SFX_Countdown = new SoundPlayer("countdown.wav");
+                SFX_Buff = new SoundPlayer("buff.wav");
+                SFX_Debuff = new SoundPlayer("debuff.wav");
+                SFX_Crash = new SoundPlayer("crash.wav");
 
-                Point Target = Target_Positions[Key];
-                PointF Current = Current_Positons[Key];
-                float Diff_X = Target.X - Current.X;
-                float Diff_Y = Target.Y - Current.Y;
-
-                if (Math.Abs(Diff_Y) > 300 || Math.Abs(Diff_X) > 300)
-                {
-                    Current.X = Target.X;
-                    Current.Y = Target.Y;
-                    Current_Positons[Key] = Current;
-                    Object_Positions[Key] = Target;
-                    Need_Redraw = true;
-                    continue;
-                }
-
-                if (Math.Abs(Diff_X) > 0.5f || Math.Abs(Diff_Y) > 0.5f)
-                {
-                    Current.X += Diff_X * Lerp_Speed;
-                    Current.Y += Diff_Y * Lerp_Speed;
-                    Current_Positons[Key] = Current;
-                    Object_Positions[Key] = new Point((int)Current.X, (int)Current.Y);
-                    Need_Redraw = true;
-                }
-                else
-                {
-                    if (Current.X != Target.X || Current.Y != Target.Y)
-                    {
-                        Current_Positons[Key] = new PointF(Target.X, Target.Y);
-                        Object_Positions[Key] = Target;
-                        Need_Redraw = true;
-                    }
-                }
+                SFX_Countdown.LoadAsync();
+                SFX_Buff.LoadAsync();
+                SFX_Debuff.LoadAsync();
+                SFX_Crash.LoadAsync();
             }
-
-            if (Need_Redraw)
-            {
-                if (pn_road_left != null) pn_road_left.Invalidate();
-                if (pn_road_right != null) pn_road_right.Invalidate();
-            }
+            catch { }
         }
 
-        private void Draw_Object(Graphics g, string key, Image img, Size size)
-        {
-            if (Object_Positions.ContainsKey(key) && img != null)
-            {
-                Point p = Object_Positions[key];
-                g.DrawImage(img, p.X, p.Y, size.Width, size.Height);
-            }
-        }
-
-        private void Play_Music_Loop(string Music_File)
+        private void Play_Background_Music(string File_Name)
         {
             try
             {
-                string Path_File = System.IO.Path.Combine(Application.StartupPath, Music_File);
+                string Path_File = System.IO.Path.Combine(Application.StartupPath, File_Name);
                 if (System.IO.File.Exists(Path_File))
                 {
-                    Music.URL = Path_File;
-                    Music.controls.play();
+                    Music_Player.URL = Path_File;
+                    Music_Player.controls.play();
                 }
             }
             catch { }
         }
 
-        private void Play_Sound_Effect(string Sound_Type)
+        private void Play_Sound_Effect(string Type)
         {
-            if (Sound_Type == "buff") Buff?.Play();
-            else if (Sound_Type == "debuff") Debuff?.Play();
-            else if (Sound_Type == "hit_car") { Car_Hit?.Play(); Crash_Count++; }
+            if (Type == "buff") SFX_Buff?.Play();
+            else if (Type == "debuff") SFX_Debuff?.Play();
+            else if (Type == "hit_car") { SFX_Crash?.Play(); Crash_Count++; }
         }
 
-        private void Road_Left_Paint(object sender, PaintEventArgs e)
+        private void Draw_Game_Entity(Graphics G, string Key, Image Img, Size Size_Obj)
         {
-            Graphics g = e.Graphics;
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
-            Draw_Object(g, "ptb_road_1", Img_Road, pn_road_left.Size);
-            Draw_Object(g, "ptb_road_1_dup", Img_Road, pn_road_left.Size);
-            Draw_Object(g, "ptb_buff_road_1", Img_Buff, Size_Item);
-            Draw_Object(g, "ptb_debuff_road_1", Img_Debuff, Size_Item);
-            Draw_Object(g, "ptb_AICar1", Img_Black_Car, Size_AICar);
-            Draw_Object(g, "ptb_AICar5", Img_Blue_Car, Size_AICar);
-            Draw_Object(g, "ptb_player1", Img_Player_1, Size_Player);
+            if (Object_Positions.ContainsKey(Key) && Img != null)
+            {
+                Point P = Object_Positions[Key];
+                G.DrawImage(Img, P.X, P.Y, Size_Obj.Width, Size_Obj.Height);
+            }
         }
 
-        private void Road_Right_Paint(object sender, PaintEventArgs e)
+        private void Setup_Graphics_Quality(Graphics G)
         {
-            Graphics g = e.Graphics;
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
-            Draw_Object(g, "ptb_road_2", Img_Road, pn_road_right.Size);
-            Draw_Object(g, "ptb_road_2_dup", Img_Road, pn_road_right.Size);
-            Draw_Object(g, "ptb_buff_road_2", Img_Buff, Size_Item);
-            Draw_Object(g, "ptb_debuff_road_2", Img_Debuff, Size_Item);
-            Draw_Object(g, "ptb_AICar3", Img_Orange_Car, Size_AICar);
-            Draw_Object(g, "ptb_AICar6", Img_Red_Car, Size_AICar);
-            Draw_Object(g, "ptb_player2", Img_Player_2, Size_Player);
+            G.CompositingMode = CompositingMode.SourceOver;
+            G.CompositingQuality = CompositingQuality.HighSpeed;
+            G.InterpolationMode = InterpolationMode.NearestNeighbor;
+            G.SmoothingMode = SmoothingMode.None;
+            G.PixelOffsetMode = PixelOffsetMode.HighSpeed;
+        }
+
+        private void Enable_Double_Buffering(Panel P)
+        {
+            if (P == null) return;
+            typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, P, new object[] { true });
+        }
+
+        private void Clear_Old_Controls()
+        {
+            void Scan_And_Remove(Control.ControlCollection Cols)
+            {
+                var Items_To_Remove = new List<Control>();
+                foreach (Control C in Cols)
+                {
+                    if (C is PictureBox && C.Name.StartsWith("ptb_")) Items_To_Remove.Add(C);
+                    if (C.HasChildren) Scan_And_Remove(C.Controls);
+                }
+                foreach (var Item in Items_To_Remove) Cols.Remove(Item);
+            }
+            Scan_And_Remove(this.Controls);
         }
     }
 }

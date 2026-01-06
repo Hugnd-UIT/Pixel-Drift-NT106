@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4589E115156D4B9DB556581CC53A07BE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6C8C9FACD5D247DD97B4388E955A1C5C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -46,12 +52,6 @@
         "Entry"
         {
         "MsmKey" = "8:_BAA9CB3D0E034FE185C24BD1CC6787D5"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D44663D4258C42B6BD3AE91E98DF6726"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -79,6 +79,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -95,6 +111,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -130,6 +154,26 @@
             {
             "SourcePath" = "8:..\\Pixel_Drift_Client\\wait.wav"
             "TargetName" = "8:wait.wav"
+            "Tag" = "8:"
+            "Folder" = "8:_9E69B8574C8140A4BC6EA58CAFDCEB39"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4589E115156D4B9DB556581CC53A07BE"
+            {
+            "SourcePath" = "8:..\\Pixel_Drift_Client\\Resources\\Icon.ico"
+            "TargetName" = "8:Icon.ico"
             "Tag" = "8:"
             "Folder" = "8:_9E69B8574C8140A4BC6EA58CAFDCEB39"
             "Condition" = "8:"
@@ -210,26 +254,6 @@
             {
             "SourcePath" = "8:..\\Pixel_Drift_Client\\buff.wav"
             "TargetName" = "8:buff.wav"
-            "Tag" = "8:"
-            "Folder" = "8:_9E69B8574C8140A4BC6EA58CAFDCEB39"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D44663D4258C42B6BD3AE91E98DF6726"
-            {
-            "SourcePath" = "8:..\\..\\..\\Icon.ico"
-            "TargetName" = "8:Icon.ico"
             "Tag" = "8:"
             "Folder" = "8:_9E69B8574C8140A4BC6EA58CAFDCEB39"
             "Condition" = "8:"
@@ -454,7 +478,7 @@
             "Target" = "8:_3FDD4B24984E430BB551FDA77AEB1DD4"
             "Folder" = "8:_E34E2C31A07B4E8BBC9929EF6BDD6B3E"
             "WorkingFolder" = "8:_9E69B8574C8140A4BC6EA58CAFDCEB39"
-            "Icon" = "8:_D44663D4258C42B6BD3AE91E98DF6726"
+            "Icon" = "8:_4589E115156D4B9DB556581CC53A07BE"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_82362608532347FDB1367332CC53C990"
@@ -468,7 +492,7 @@
             "Target" = "8:_3FDD4B24984E430BB551FDA77AEB1DD4"
             "Folder" = "8:_89266FB8E0B2452DA7BA3575F47F9552"
             "WorkingFolder" = "8:_9E69B8574C8140A4BC6EA58CAFDCEB39"
-            "Icon" = "8:_D44663D4258C42B6BD3AE91E98DF6726"
+            "Icon" = "8:_4589E115156D4B9DB556581CC53A07BE"
             "Feature" = "8:"
             }
         }

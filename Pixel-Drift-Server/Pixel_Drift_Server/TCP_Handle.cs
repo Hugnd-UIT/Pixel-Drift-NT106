@@ -394,7 +394,7 @@ namespace Pixel_Drift_Server
                 {
                     if (Program.Rooms.ContainsKey(Room_ID))
                     {
-                        Program.Rooms[Room_ID].Handle_Game_Action(Client, Action, Data);
+                        Program.Rooms[Room_ID].Process_Player_Action(Client, Action, Data);
                     }
                 }
             }
@@ -721,7 +721,7 @@ namespace Pixel_Drift_Server
             {
                 Room_ID = new Random().Next(100000, 999999).ToString();
                 New_Room = new Game_Room(Room_ID);
-                New_Room.Handle_Player_Join(Client, User);
+                New_Room.Add_Player(Client, User);
             }
             while (!Program.Rooms.TryAdd(Room_ID, New_Room));
 
@@ -744,7 +744,7 @@ namespace Pixel_Drift_Server
 
             if (Program.Rooms.TryGetValue(Room_ID, out Game_Room Room))
             {
-                int P_Num = Room.Handle_Player_Join(Client, User);
+                int P_Num = Room.Add_Player(Client, User);
 
                 if (P_Num != -1)
                 {
@@ -809,7 +809,7 @@ namespace Pixel_Drift_Server
                     {
                         if (Program.Rooms.TryGetValue(Room_ID, out Game_Room Room))
                         {
-                            Room.Handle_Player_Leave(Client);
+                            Room.Remove_Player(Client);
                             if (Room.Is_Empty())
                             {
                                 Program.Rooms.TryRemove(Room_ID, out _);
