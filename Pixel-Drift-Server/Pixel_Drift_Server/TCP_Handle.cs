@@ -21,13 +21,15 @@ namespace Pixel_Drift_Server
 
         private string Session_Key = null;
         private const int Max_Connect_Per_IP = 3;
+        private Dictionary<string, DateTime> Action_Cooldowns_Per_IP = new Dictionary<string, DateTime>();
         private static ConcurrentDictionary<string, int> Attempts_Per_IP = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, int> Connections_Per_IP = new ConcurrentDictionary<string, int>();
-        private static ConcurrentDictionary<string, DateTime> Blocks_Per_IP = new ConcurrentDictionary<string, DateTime>();
+        private static ConcurrentDictionary<string, int> SoftBan_Count_Per_IP = new ConcurrentDictionary<string, int>();
+        private static ConcurrentDictionary<string, DateTime> Ban_Peroid_Per_IP = new ConcurrentDictionary<string, DateTime>();
 
         private int Request_Count = 0;
         private DateTime Request_Time = DateTime.Now;
-        private const int Max_Requests_Per_Second = 20;
+        private const int Max_Requests_Per_Second = 40;
 
         private static ConcurrentDictionary<string, TcpClient> Client_By_Email = new ConcurrentDictionary<string, TcpClient>();
         private static ConcurrentDictionary<TcpClient, string> Client_By_Room = new ConcurrentDictionary<TcpClient, string>();
@@ -36,7 +38,8 @@ namespace Pixel_Drift_Server
         public TCP_Handler(TcpClient TCP_Client)
         {
             this.Client = TCP_Client;
-            this.Client.ReceiveTimeout = 10000;
+            this.Client.ReceiveTimeout = 5000;
+            this.Client.SendTimeout = 5000;
             this.Stream = TCP_Client.GetStream();
         }
 
@@ -69,18 +72,18 @@ namespace Pixel_Drift_Server
                     TcpClient TCP_Client = TCP_Listener.AcceptTcpClient();
                     string IP = ((IPEndPoint)TCP_Client.Client.RemoteEndPoint).Address.ToString();
 
-                    if (Blocks_Per_IP.TryGetValue(IP, out DateTime Ban_Time))
+                    if (Ban_Peroid_Per_IP.TryGetValue(IP, out DateTime Ban_Time))
                     {
-                        if (Blocks_Per_IP.ContainsKey(IP))
+                        if (Ban_Peroid_Per_IP.ContainsKey(IP))
                         {
-                            if (DateTime.Now < Blocks_Per_IP[IP])
+                            if (DateTime.Now < Ban_Peroid_Per_IP[IP])
                             {
                                 TCP_Client.Close();
                                 continue; 
                             }
                             else
                             {
-                                Blocks_Per_IP.TryRemove(IP, out _);
+                                Ban_Peroid_Per_IP.TryRemove(IP, out _);
                             }
                         }
                     }
@@ -90,10 +93,12 @@ namespace Pixel_Drift_Server
                     if (Connections_Per_IP.ContainsKey(IP) && Connections_Per_IP[IP] >= Max_Connect_Per_IP)
                     {
                         DateTime Ban_Until = DateTime.Now.AddMinutes(5);
-                        Blocks_Per_IP.AddOrUpdate(IP, Ban_Until, (Key, Old_Value) => Ban_Until);
+                        Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Until, (Key, Old_Value) => Ban_Until);
 
                         Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "DoS Detected! Too Many Concurrent Connections");
-                            
+                        SQL_Handle.Handle_Add_Blacklist(IP, "DDoS");
+                        OS_Handle.Handle_Block(IP);
+
                         try
                         {
                             TCP_Client.Close();
@@ -106,11 +111,6 @@ namespace Pixel_Drift_Server
                         continue;
                     }
 
-                    if (!Connections_Per_IP.ContainsKey(IP))
-                        Connections_Per_IP[IP] = 1;
-                    else
-                        Connections_Per_IP[IP]++;
-
                     Task.Run(() => new TCP_Handler(TCP_Client).Process());
                 }
             }
@@ -120,11 +120,25 @@ namespace Pixel_Drift_Server
             }
         }
 
+        private bool Handle_Spam_Cooldown(string Action_Name, int Cooldown_Milliseconds)
+        {
+            if (Action_Cooldowns_Per_IP.TryGetValue(Action_Name, out DateTime Allowed_Time))
+            {
+                if (DateTime.Now < Allowed_Time)
+                {
+                    return false; 
+                }
+            }
+            Action_Cooldowns_Per_IP[Action_Name] = DateTime.Now.AddMilliseconds(Cooldown_Milliseconds);
+            return true; 
+        }
+
         public void Process()
         {
             try
             {
                 StreamReader Reader = new StreamReader(Stream, Encoding.UTF8);
+                bool Is_Handshake = true;
                 string Message;
 
                 while ((Message = Reader.ReadLine()) != null)
@@ -136,20 +150,15 @@ namespace Pixel_Drift_Server
 
                     string IP = Handle_Get_IP();
 
-                    if (Blocks_Per_IP.TryGetValue(IP, out DateTime banUntil))
-                    {
-                        if (DateTime.Now < banUntil)
-                        {
-                            break;
-                        }
-                    }
-
                     if (Message.Length > 4096)
                     {
                         DateTime Ban_Time = DateTime.Now.AddMinutes(5);
-                        Blocks_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
+                        Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
                         
                         Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Buffer Overflow Detected! Packet Size {Message.Length} > 4096 Bytes");
+                        SQL_Handle.Handle_Add_Blacklist(IP, "Buffer Overflow");
+                        OS_Handle.Handle_Block(IP);
+                       
                         break;
                     }
 
@@ -165,9 +174,12 @@ namespace Pixel_Drift_Server
                         if (Request_Count > Max_Requests_Per_Second)
                         {
                             DateTime Ban_Time = DateTime.Now.AddMinutes(5);
-                            Blocks_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
+                            Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
 
                             Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Spam Detected!");
+                            SQL_Handle.Handle_Add_Blacklist(IP, "Spam");
+                            OS_Handle.Handle_Block(IP);
+
                             break;
                         }
                     }
@@ -199,9 +211,12 @@ namespace Pixel_Drift_Server
                             if (Diff_Seconds > 5.0)
                             {
                                 DateTime Ban_Time = DateTime.Now.AddMinutes(5);
-                                Blocks_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
+                                Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
 
                                 Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Replay Detected! Delay: {Diff_Seconds:F2}s");
+                                SQL_Handle.Handle_Add_Blacklist(IP, "Replay Attack");
+                                OS_Handle.Handle_Block(IP);
+
                                 break;
                             }
                         }
@@ -214,6 +229,16 @@ namespace Pixel_Drift_Server
                         string Action = Data["action"].GetString();
                         string Response = null;
 
+                        if (Is_Handshake)
+                        {
+                            if (Action != "get_public_key")
+                            {
+                                Security_Logger.Log(Security_Logger.Level.WARNING, IP, "KICKED", $"Protocol Violation Detected! First Packet Was '{Action}'");
+                                break; 
+                            }
+                            Is_Handshake = false;
+                        }
+
                         if (Action != "move" && Action != "ping")
                         {
                             Console.WriteLine($"[TCP] {Client.Client.RemoteEndPoint}: {Action}");
@@ -221,16 +246,12 @@ namespace Pixel_Drift_Server
 
                         switch (Action)
                         {
-                            case "get_aes_key":
+                            case "get_session_key":
                                 Response = Handle_Get_AES(Data);
                                 break;
 
                             case "get_public_key":
-                                string Key = JsonSerializer.Serialize(new
-                                {
-                                    status = "success",
-                                    public_key = Program.SERVER_PUBLIC_KEY
-                                });
+                                string Key = JsonSerializer.Serialize(new { status = "success", public_key = Program.SERVER_PUBLIC_KEY });
                                 Send_Message(Key);
                                 break;
 
@@ -255,14 +276,28 @@ namespace Pixel_Drift_Server
                                 break;
 
                             case "create_room":
+                                if (!Handle_Spam_Cooldown("create_room", 2000))
+                                {
+                                    Send_Message(JsonSerializer.Serialize(new { status = "error", message = "Too Fast! Please Wait 2 Seconds." }));
+                                    break;
+                                }
                                 Response = Handle_Create_Room(Data);
                                 break;
 
                             case "join_room":
+                                if (!Handle_Spam_Cooldown("join_room", 1000))
+                                {
+                                    Send_Message(JsonSerializer.Serialize(new { status = "error", message = "Too Fast! Please Wait 1 Seconds." }));
+                                    break;
+                                }
                                 Response = Handle_Join_Room(Data);
                                 break;
 
                             case "get_scoreboard":
+                                if (!Handle_Spam_Cooldown("db_query", 1000))
+                                {
+                                    break;
+                                }
                                 Response = Handle_Get_Scoreboard(Data);
                                 break;
 
@@ -326,12 +361,13 @@ namespace Pixel_Drift_Server
         {
             try
             {
-                string Encrypted_Key = Data["aes_key"].GetString();
+                string Encrypted_Key = Data["session_key"].GetString();
                 string Decrypted_Key = RSA_Handle.Decrypt(Encrypted_Key, Program.SERVER_PRIVATE_KEY);
 
                 if (Decrypted_Key != null && Decrypted_Key.Length == 32)
                 {
                     this.Session_Key = Decrypted_Key;
+                    this.Client.ReceiveTimeout = 20000;
                     return JsonSerializer.Serialize(new
                     {
                         status = "success",
@@ -358,7 +394,7 @@ namespace Pixel_Drift_Server
                 {
                     if (Program.Rooms.ContainsKey(Room_ID))
                     {
-                        Program.Rooms[Room_ID].Handle_Input(Client, Action, Data);
+                        Program.Rooms[Room_ID].Process_Player_Action(Client, Action, Data);
                     }
                 }
             }
@@ -368,12 +404,13 @@ namespace Pixel_Drift_Server
         {
             string IP = Handle_Get_IP();
 
-            if (Blocks_Per_IP.ContainsKey(IP))
+            if (Ban_Peroid_Per_IP.ContainsKey(IP))
             {
-                if (DateTime.Now < Blocks_Per_IP[IP])
+                if (DateTime.Now < Ban_Peroid_Per_IP[IP])
                 {
-                    TimeSpan Remaining_Time = Blocks_Per_IP[IP] - DateTime.Now;
-                    Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Brute Force Detected! Remaining {Remaining_Time.TotalSeconds:F0}s");
+                    TimeSpan Remaining_Time = Ban_Peroid_Per_IP[IP] - DateTime.Now;
+                    
+                    Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", $"Brute Force Detected! Remaining {Remaining_Time.TotalSeconds:F0}s");
                     return JsonSerializer.Serialize(new
                     {
                         status = "error",
@@ -382,7 +419,7 @@ namespace Pixel_Drift_Server
                 }
                 else
                 {
-                    Blocks_Per_IP.TryRemove(IP, out _);
+                    Ban_Peroid_Per_IP.TryRemove(IP, out _);
                     if (Attempts_Per_IP.ContainsKey(IP))
                     {
                         Attempts_Per_IP.TryRemove(IP, out _);
@@ -444,7 +481,8 @@ namespace Pixel_Drift_Server
                 }
 
                 Attempts_Per_IP.TryRemove(IP, out _);
-                Blocks_Per_IP.TryRemove(IP, out _);
+                Ban_Peroid_Per_IP.TryRemove(IP, out _);
+                SoftBan_Count_Per_IP.TryRemove(IP, out _);
 
                 Security_Logger.Log(Security_Logger.Level.INFO, IP, "SUCCESS", $"User {User} Logged In");
                 return JsonSerializer.Serialize(new
@@ -456,28 +494,60 @@ namespace Pixel_Drift_Server
             }
             else
             {
-                if (!Attempts_Per_IP.ContainsKey(IP))
-                {
-                    Attempts_Per_IP[IP] = 0;
-                }
-                Attempts_Per_IP[IP]++;
+                int Fails = Attempts_Per_IP.AddOrUpdate(IP, 1, (Key, Value) => Value + 1);
+                int Max_Soft_Ban = 5;
 
-                int Max_Attempts = 5;
-
-                if (Attempts_Per_IP[IP] >= Max_Attempts)
+                if (Fails >= Max_Soft_Ban)
                 {
-                    Blocks_Per_IP[IP] = DateTime.Now.AddMinutes(5);
-                    Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Brute Force Detected!");
+                    DateTime Ban_Time = DateTime.Now.AddMinutes(5);
+                    Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Value) => Ban_Time);
+
+                    Attempts_Per_IP.TryRemove(IP, out _);
+
+                    int Ban_Count = SoftBan_Count_Per_IP.AddOrUpdate(IP, 1, (Key, Value) => Value + 1);
+
+                    if (Ban_Count >= 3)
+                    {
+                        string Message = JsonSerializer.Serialize(new
+                        {                       
+                            status = "error",
+                            message = "Your IP Has Been Permanently Blocked Due To Suspicious Activity."
+                        });
+
+                        Task.Run(async () =>
+                        {
+                            await Task.Delay(500);
+                            SQL_Handle.Handle_Add_Blacklist(IP, "Brute Force");
+                            OS_Handle.Handle_Block(IP);
+
+                            Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Brute Force Detected! Persistent Attacker Blocked By Firewall!");
+
+                            try 
+                            { 
+                                Client.Close();
+                            } 
+                            catch 
+                            {
+                                // Continue
+                            }
+                        });
+
+                        return Message;
+                    }
+
+                    Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "Brute Force Detected! Soft Ban 5 mins.");
                     return JsonSerializer.Serialize(new
                     {
                         status = "error",
-                        message = "Too Many Failed Attempts. You Are Blocked For 5 Minutes."
+                        message = "Too Many Failed Attempts. Please Wait 5 Minutes Before Trying Again."
                     });
                 }
                 else
                 {
-                    int Remaining = Max_Attempts - Attempts_Per_IP[IP];
-                    Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", $"User {User} Entered Wrong Password");
+                    int Remaining = Max_Soft_Ban - Fails;
+
+                    Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", $"Wrong Username Or Wrong Password.");
+                    
                     return JsonSerializer.Serialize(new
                     {
                         status = "error",

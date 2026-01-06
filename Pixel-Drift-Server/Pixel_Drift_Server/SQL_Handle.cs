@@ -51,6 +51,19 @@ namespace Pixel_Drift_Server
                     {
                         Cmd.ExecuteNonQuery();
                     }
+
+                    string Create_Blacklist = @"
+                    IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Blacklist' AND xtype='U')
+                    CREATE TABLE Blacklist (
+                        IP_Address VARCHAR(50) PRIMARY KEY,
+                        Reason NVARCHAR(255),
+                        Ban_Date DATETIME DEFAULT GETDATE()
+                    )";
+
+                    using (SqlCommand Cmd = new SqlCommand(Create_Blacklist, Connection))
+                    {
+                        Cmd.ExecuteNonQuery();
+                    }
                 }
                 Console.WriteLine("[Database] Initialized Successfully!");
             }
@@ -386,6 +399,59 @@ namespace Pixel_Drift_Server
                 Console.WriteLine($"[Error] {ex.Message}");
                 return "ERROR";
             }
+        }
+
+        public static void Handle_Add_Blacklist(string IP_Address, string Reason)
+        {
+            try
+            {
+                using (SqlConnection Connection = new SqlConnection(Connection_String))
+                {
+                    Connection.Open();
+                    string Query = @"IF NOT EXISTS (SELECT 1 FROM Blacklist WHERE IP_Address = @ip)
+                             INSERT INTO Blacklist (IP_Address, Reason) VALUES (@ip, @reason)";
+
+                    using (SqlCommand Command = new SqlCommand(Query, Connection))
+                    {
+                        Command.Parameters.AddWithValue("@ip", IP_Address);
+                        Command.Parameters.AddWithValue("@reason", Reason);
+                        Command.ExecuteNonQuery();
+                    }
+                }
+                Console.WriteLine($"[SQL] Saved IP {IP_Address} To Blacklist Permanently.");
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine($"[Error] Could Not Save Blacklist: {Ex.Message}");
+            }
+        }
+
+        public static List<string> Handle_Get_Blacklist()
+        {
+            List<string> IP_List = new List<string>();
+            try
+            {
+                using (SqlConnection Connection = new SqlConnection(Connection_String))
+                {
+                    Connection.Open();
+                    string Query = "SELECT IP_Address FROM Blacklist";
+                    using (SqlCommand Command = new SqlCommand(Query, Connection))
+                    {
+                        using (SqlDataReader Reader = Command.ExecuteReader())
+                        {
+                            while (Reader.Read())
+                            {
+                                IP_List.Add(Reader["IP_Address"].ToString());
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                Console.WriteLine($"[Error] Could Not Load Blacklist: {Ex.Message}");
+            }
+            return IP_List;
         }
     }
 }

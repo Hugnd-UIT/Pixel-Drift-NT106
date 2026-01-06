@@ -71,23 +71,23 @@ namespace Pixel_Drift
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            game_timer = new System.Windows.Forms.Timer(components);
-            panel1 = new Panel();
-            ptb_decreasingroad1 = new PictureBox();
+            Game_Timer = new System.Windows.Forms.Timer(components);
+            pn_road_left = new Panel();
+            ptb_debuff_road_1 = new PictureBox();
             ptb_player1 = new PictureBox();
             ptb_AICar5 = new PictureBox();
             ptb_AICar1 = new PictureBox();
-            ptb_increasingroad1 = new PictureBox();
-            ptb_roadtrack1dup = new PictureBox();
-            ptb_roadtrack1 = new PictureBox();
-            panel2 = new Panel();
-            ptb_decreasingroad2 = new PictureBox();
+            ptb_buff_road_1 = new PictureBox();
+            ptb_road_1_dup = new PictureBox();
+            ptb_road_1 = new PictureBox();
+            pn_road_right = new Panel();
+            ptb_debuff_road_2 = new PictureBox();
             ptb_AICar6 = new PictureBox();
             ptb_AICar3 = new PictureBox();
             ptb_player2 = new PictureBox();
-            ptb_increasingroad2 = new PictureBox();
-            ptb_roadtrack2dup = new PictureBox();
-            ptb_roadtrack2 = new PictureBox();
+            ptb_buff_road_2 = new PictureBox();
+            ptb_road_2_dup = new PictureBox();
+            ptb_road_2 = new PictureBox();
             btn_Scoreboard = new Guna2GradientButton();
             btn_Ready = new Guna2GradientButton();
             btn_ID = new Guna2GradientButton();
@@ -97,58 +97,60 @@ namespace Pixel_Drift
             lbl_Score1 = new Label();
             lbl_Score2 = new Label();
             lbl_P1_Status = new Label();
-            panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)ptb_decreasingroad1).BeginInit();
+            pn_road_left.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ptb_debuff_road_1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ptb_player1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ptb_AICar5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ptb_AICar1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_increasingroad1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_roadtrack1dup).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_roadtrack1).BeginInit();
-            panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)ptb_decreasingroad2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_buff_road_1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_road_1_dup).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_road_1).BeginInit();
+            pn_road_right.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ptb_debuff_road_2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ptb_AICar6).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ptb_AICar3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ptb_player2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_increasingroad2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_roadtrack2dup).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_roadtrack2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_buff_road_2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_road_2_dup).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_road_2).BeginInit();
             SuspendLayout();
             // 
-            // game_timer
+            // Game_Timer
             // 
-            game_timer.Interval = 20;
+            Game_Timer.Interval = 20;
             // 
-            // panel1
+            // pn_road_left
             // 
-            panel1.BackColor = SystemColors.ControlText;
-            panel1.Controls.Add(ptb_decreasingroad1);
-            panel1.Controls.Add(ptb_player1);
-            panel1.Controls.Add(ptb_AICar5);
-            panel1.Controls.Add(ptb_AICar1);
-            panel1.Controls.Add(ptb_increasingroad1);
-            panel1.Controls.Add(ptb_roadtrack1dup);
-            panel1.Controls.Add(ptb_roadtrack1);
-            panel1.Location = new Point(12, 15);
-            panel1.Margin = new Padding(3, 1, 3, 1);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(617, 919);
-            panel1.TabIndex = 0;
+            pn_road_left.BackColor = SystemColors.ControlText;
+            pn_road_left.Controls.Add(ptb_debuff_road_1);
+            pn_road_left.Controls.Add(ptb_player1);
+            pn_road_left.Controls.Add(ptb_AICar5);
+            pn_road_left.Controls.Add(ptb_AICar1);
+            pn_road_left.Controls.Add(ptb_buff_road_1);
+            pn_road_left.Controls.Add(ptb_road_1_dup);
+            pn_road_left.Controls.Add(ptb_road_1);
+            pn_road_left.Location = new Point(12, 15);
+            pn_road_left.Margin = new Padding(3, 1, 3, 1);
+            pn_road_left.Name = "pn_road_left";
+            pn_road_left.Size = new Size(617, 919);
+            pn_road_left.TabIndex = 0;
+            pn_road_left.Paint += Road_Right_Paint;
             // 
-            // ptb_decreasingroad1
+            // ptb_debuff_road_1
             // 
-            ptb_decreasingroad1.Image = Properties.Resources.Debuff;
-            ptb_decreasingroad1.Location = new Point(387, -88);
-            ptb_decreasingroad1.Margin = new Padding(3, 1, 3, 1);
-            ptb_decreasingroad1.Name = "ptb_decreasingroad1";
-            ptb_decreasingroad1.Size = new Size(67, 81);
-            ptb_decreasingroad1.SizeMode = PictureBoxSizeMode.Zoom;
-            ptb_decreasingroad1.TabIndex = 5;
-            ptb_decreasingroad1.TabStop = false;
+            ptb_debuff_road_1.Image = (Image)resources.GetObject("ptb_debuff_road_1.Image");
+            ptb_debuff_road_1.Location = new Point(387, -88);
+            ptb_debuff_road_1.Margin = new Padding(3, 1, 3, 1);
+            ptb_debuff_road_1.Name = "ptb_debuff_road_1";
+            ptb_debuff_road_1.Size = new Size(67, 81);
+            ptb_debuff_road_1.SizeMode = PictureBoxSizeMode.Zoom;
+            ptb_debuff_road_1.TabIndex = 5;
+            ptb_debuff_road_1.TabStop = false;
             // 
             // ptb_player1
             // 
             ptb_player1.BackColor = Color.Transparent;
+            ptb_player1.ErrorImage = null;
             ptb_player1.Image = (Image)resources.GetObject("ptb_player1.Image");
             ptb_player1.Location = new Point(271, 712);
             ptb_player1.Margin = new Padding(4, 5, 4, 5);
@@ -180,66 +182,67 @@ namespace Pixel_Drift
             ptb_AICar1.TabIndex = 7;
             ptb_AICar1.TabStop = false;
             // 
-            // ptb_increasingroad1
+            // ptb_buff_road_1
             // 
-            ptb_increasingroad1.Image = Properties.Resources.Buff;
-            ptb_increasingroad1.Location = new Point(120, -88);
-            ptb_increasingroad1.Margin = new Padding(3, 1, 3, 1);
-            ptb_increasingroad1.Name = "ptb_increasingroad1";
-            ptb_increasingroad1.Size = new Size(67, 81);
-            ptb_increasingroad1.SizeMode = PictureBoxSizeMode.Zoom;
-            ptb_increasingroad1.TabIndex = 6;
-            ptb_increasingroad1.TabStop = false;
+            ptb_buff_road_1.Image = (Image)resources.GetObject("ptb_buff_road_1.Image");
+            ptb_buff_road_1.Location = new Point(120, -88);
+            ptb_buff_road_1.Margin = new Padding(3, 1, 3, 1);
+            ptb_buff_road_1.Name = "ptb_buff_road_1";
+            ptb_buff_road_1.Size = new Size(67, 81);
+            ptb_buff_road_1.SizeMode = PictureBoxSizeMode.Zoom;
+            ptb_buff_road_1.TabIndex = 6;
+            ptb_buff_road_1.TabStop = false;
             // 
-            // ptb_roadtrack1dup
+            // ptb_road_1_dup
             // 
-            ptb_roadtrack1dup.Image = Properties.Resources.Road;
-            ptb_roadtrack1dup.Location = new Point(0, 919);
-            ptb_roadtrack1dup.Margin = new Padding(3, 1, 3, 1);
-            ptb_roadtrack1dup.Name = "ptb_roadtrack1dup";
-            ptb_roadtrack1dup.Size = new Size(617, 919);
-            ptb_roadtrack1dup.SizeMode = PictureBoxSizeMode.StretchImage;
-            ptb_roadtrack1dup.TabIndex = 1;
-            ptb_roadtrack1dup.TabStop = false;
+            ptb_road_1_dup.Image = Properties.Resources.Road;
+            ptb_road_1_dup.Location = new Point(0, 919);
+            ptb_road_1_dup.Margin = new Padding(3, 1, 3, 1);
+            ptb_road_1_dup.Name = "ptb_road_1_dup";
+            ptb_road_1_dup.Size = new Size(617, 919);
+            ptb_road_1_dup.SizeMode = PictureBoxSizeMode.StretchImage;
+            ptb_road_1_dup.TabIndex = 1;
+            ptb_road_1_dup.TabStop = false;
             // 
-            // ptb_roadtrack1
+            // ptb_road_1
             // 
-            ptb_roadtrack1.Image = Properties.Resources.Road;
-            ptb_roadtrack1.Location = new Point(0, -1);
-            ptb_roadtrack1.Margin = new Padding(3, 1, 3, 1);
-            ptb_roadtrack1.Name = "ptb_roadtrack1";
-            ptb_roadtrack1.Size = new Size(617, 919);
-            ptb_roadtrack1.SizeMode = PictureBoxSizeMode.StretchImage;
-            ptb_roadtrack1.TabIndex = 10;
-            ptb_roadtrack1.TabStop = false;
+            ptb_road_1.Image = Properties.Resources.Road;
+            ptb_road_1.Location = new Point(0, -1);
+            ptb_road_1.Margin = new Padding(3, 1, 3, 1);
+            ptb_road_1.Name = "ptb_road_1";
+            ptb_road_1.Size = new Size(617, 919);
+            ptb_road_1.SizeMode = PictureBoxSizeMode.StretchImage;
+            ptb_road_1.TabIndex = 10;
+            ptb_road_1.TabStop = false;
             // 
-            // panel2
+            // pn_road_right
             // 
-            panel2.BackColor = SystemColors.ControlText;
-            panel2.Controls.Add(ptb_decreasingroad2);
-            panel2.Controls.Add(ptb_AICar6);
-            panel2.Controls.Add(ptb_AICar3);
-            panel2.Controls.Add(ptb_player2);
-            panel2.Controls.Add(ptb_increasingroad2);
-            panel2.Controls.Add(ptb_roadtrack2dup);
-            panel2.Controls.Add(ptb_roadtrack2);
-            panel2.Location = new Point(660, 15);
-            panel2.Margin = new Padding(3, 1, 3, 1);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(611, 919);
-            panel2.TabIndex = 1;
+            pn_road_right.BackColor = SystemColors.ControlText;
+            pn_road_right.Controls.Add(ptb_debuff_road_2);
+            pn_road_right.Controls.Add(ptb_AICar6);
+            pn_road_right.Controls.Add(ptb_AICar3);
+            pn_road_right.Controls.Add(ptb_player2);
+            pn_road_right.Controls.Add(ptb_buff_road_2);
+            pn_road_right.Controls.Add(ptb_road_2_dup);
+            pn_road_right.Controls.Add(ptb_road_2);
+            pn_road_right.Location = new Point(660, 15);
+            pn_road_right.Margin = new Padding(3, 1, 3, 1);
+            pn_road_right.Name = "pn_road_right";
+            pn_road_right.Size = new Size(611, 919);
+            pn_road_right.TabIndex = 1;
+            pn_road_right.Paint += Road_Left_Paint;
             // 
-            // ptb_decreasingroad2
+            // ptb_debuff_road_2
             // 
-            ptb_decreasingroad2.BackColor = SystemColors.ControlText;
-            ptb_decreasingroad2.Image = Properties.Resources.Debuff;
-            ptb_decreasingroad2.Location = new Point(400, -88);
-            ptb_decreasingroad2.Margin = new Padding(3, 1, 3, 1);
-            ptb_decreasingroad2.Name = "ptb_decreasingroad2";
-            ptb_decreasingroad2.Size = new Size(67, 81);
-            ptb_decreasingroad2.SizeMode = PictureBoxSizeMode.Zoom;
-            ptb_decreasingroad2.TabIndex = 7;
-            ptb_decreasingroad2.TabStop = false;
+            ptb_debuff_road_2.BackColor = SystemColors.ControlText;
+            ptb_debuff_road_2.Image = (Image)resources.GetObject("ptb_debuff_road_2.Image");
+            ptb_debuff_road_2.Location = new Point(400, -88);
+            ptb_debuff_road_2.Margin = new Padding(3, 1, 3, 1);
+            ptb_debuff_road_2.Name = "ptb_debuff_road_2";
+            ptb_debuff_road_2.Size = new Size(67, 81);
+            ptb_debuff_road_2.SizeMode = PictureBoxSizeMode.Zoom;
+            ptb_debuff_road_2.TabIndex = 7;
+            ptb_debuff_road_2.TabStop = false;
             // 
             // ptb_AICar6
             // 
@@ -275,40 +278,40 @@ namespace Pixel_Drift
             ptb_player2.TabIndex = 10;
             ptb_player2.TabStop = false;
             // 
-            // ptb_increasingroad2
+            // ptb_buff_road_2
             // 
-            ptb_increasingroad2.BackColor = SystemColors.ControlText;
-            ptb_increasingroad2.Image = Properties.Resources.Buff;
-            ptb_increasingroad2.Location = new Point(131, -88);
-            ptb_increasingroad2.Margin = new Padding(3, 1, 3, 1);
-            ptb_increasingroad2.Name = "ptb_increasingroad2";
-            ptb_increasingroad2.Size = new Size(67, 81);
-            ptb_increasingroad2.SizeMode = PictureBoxSizeMode.Zoom;
-            ptb_increasingroad2.TabIndex = 8;
-            ptb_increasingroad2.TabStop = false;
+            ptb_buff_road_2.BackColor = SystemColors.ControlText;
+            ptb_buff_road_2.Image = (Image)resources.GetObject("ptb_buff_road_2.Image");
+            ptb_buff_road_2.Location = new Point(131, -88);
+            ptb_buff_road_2.Margin = new Padding(3, 1, 3, 1);
+            ptb_buff_road_2.Name = "ptb_buff_road_2";
+            ptb_buff_road_2.Size = new Size(67, 81);
+            ptb_buff_road_2.SizeMode = PictureBoxSizeMode.Zoom;
+            ptb_buff_road_2.TabIndex = 8;
+            ptb_buff_road_2.TabStop = false;
             // 
-            // ptb_roadtrack2dup
+            // ptb_road_2_dup
             // 
-            ptb_roadtrack2dup.Image = Properties.Resources.Road;
-            ptb_roadtrack2dup.Location = new Point(0, 919);
-            ptb_roadtrack2dup.Margin = new Padding(3, 1, 3, 1);
-            ptb_roadtrack2dup.Name = "ptb_roadtrack2dup";
-            ptb_roadtrack2dup.Size = new Size(611, 919);
-            ptb_roadtrack2dup.SizeMode = PictureBoxSizeMode.StretchImage;
-            ptb_roadtrack2dup.TabIndex = 1;
-            ptb_roadtrack2dup.TabStop = false;
+            ptb_road_2_dup.Image = Properties.Resources.Road;
+            ptb_road_2_dup.Location = new Point(0, 919);
+            ptb_road_2_dup.Margin = new Padding(3, 1, 3, 1);
+            ptb_road_2_dup.Name = "ptb_road_2_dup";
+            ptb_road_2_dup.Size = new Size(611, 919);
+            ptb_road_2_dup.SizeMode = PictureBoxSizeMode.StretchImage;
+            ptb_road_2_dup.TabIndex = 1;
+            ptb_road_2_dup.TabStop = false;
             // 
-            // ptb_roadtrack2
+            // ptb_road_2
             // 
-            ptb_roadtrack2.BackColor = SystemColors.ControlText;
-            ptb_roadtrack2.Image = Properties.Resources.Road;
-            ptb_roadtrack2.Location = new Point(0, 1);
-            ptb_roadtrack2.Margin = new Padding(3, 1, 3, 1);
-            ptb_roadtrack2.Name = "ptb_roadtrack2";
-            ptb_roadtrack2.Size = new Size(611, 919);
-            ptb_roadtrack2.SizeMode = PictureBoxSizeMode.StretchImage;
-            ptb_roadtrack2.TabIndex = 1;
-            ptb_roadtrack2.TabStop = false;
+            ptb_road_2.BackColor = SystemColors.ControlText;
+            ptb_road_2.Image = Properties.Resources.Road;
+            ptb_road_2.Location = new Point(0, 1);
+            ptb_road_2.Margin = new Padding(3, 1, 3, 1);
+            ptb_road_2.Name = "ptb_road_2";
+            ptb_road_2.Size = new Size(611, 919);
+            ptb_road_2.SizeMode = PictureBoxSizeMode.StretchImage;
+            ptb_road_2.TabIndex = 1;
+            ptb_road_2.TabStop = false;
             // 
             // btn_Scoreboard
             // 
@@ -464,8 +467,8 @@ namespace Pixel_Drift
             Controls.Add(lbl_P1_Status);
             Controls.Add(btn_Ready);
             Controls.Add(btn_Scoreboard);
-            Controls.Add(panel2);
-            Controls.Add(panel1);
+            Controls.Add(pn_road_right);
+            Controls.Add(pn_road_left);
             Controls.Add(lbl_GameTimer);
             KeyPreview = true;
             Margin = new Padding(3, 1, 3, 1);
@@ -476,22 +479,22 @@ namespace Pixel_Drift
             Load += Game_Window_Load;
             KeyDown += Game_Window_KeyDown;
             KeyUp += Game_Window_KeyUp;
-            panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)ptb_decreasingroad1).EndInit();
+            pn_road_left.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)ptb_debuff_road_1).EndInit();
             ((System.ComponentModel.ISupportInitialize)ptb_player1).EndInit();
             ((System.ComponentModel.ISupportInitialize)ptb_AICar5).EndInit();
             ((System.ComponentModel.ISupportInitialize)ptb_AICar1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_increasingroad1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_roadtrack1dup).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_roadtrack1).EndInit();
-            panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)ptb_decreasingroad2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_buff_road_1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_road_1_dup).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_road_1).EndInit();
+            pn_road_right.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)ptb_debuff_road_2).EndInit();
             ((System.ComponentModel.ISupportInitialize)ptb_AICar6).EndInit();
             ((System.ComponentModel.ISupportInitialize)ptb_AICar3).EndInit();
             ((System.ComponentModel.ISupportInitialize)ptb_player2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_increasingroad2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_roadtrack2dup).EndInit();
-            ((System.ComponentModel.ISupportInitialize)ptb_roadtrack2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_buff_road_2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_road_2_dup).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ptb_road_2).EndInit();
             ResumeLayout(false);
             PerformLayout();
 
@@ -511,23 +514,23 @@ namespace Pixel_Drift
 
         #endregion
 
-        private System.Windows.Forms.Timer game_timer;
+        private System.Windows.Forms.Timer Game_Timer;
 
-        private System.Windows.Forms.PictureBox ptb_roadtrack1dup;
+        private System.Windows.Forms.PictureBox ptb_road_1_dup;
 
-        private System.Windows.Forms.PictureBox ptb_increasingroad1;
+        private System.Windows.Forms.PictureBox ptb_buff_road_1;
 
-        private System.Windows.Forms.PictureBox ptb_decreasingroad1;
+        private System.Windows.Forms.PictureBox ptb_debuff_road_1;
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pn_road_left;
 
-        private System.Windows.Forms.PictureBox ptb_roadtrack2dup;
+        private System.Windows.Forms.PictureBox ptb_road_2_dup;
 
-        private System.Windows.Forms.PictureBox ptb_increasingroad2;
+        private System.Windows.Forms.PictureBox ptb_buff_road_2;
 
-        private System.Windows.Forms.PictureBox ptb_decreasingroad2;
+        private System.Windows.Forms.PictureBox ptb_debuff_road_2;
 
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel pn_road_right;
 
         private System.Windows.Forms.PictureBox ptb_player1;
 
@@ -541,11 +544,11 @@ namespace Pixel_Drift
 
         private System.Windows.Forms.PictureBox ptb_AICar1;
 
-        private System.Windows.Forms.PictureBox ptb_roadtrack2;
+        private System.Windows.Forms.PictureBox ptb_road_2;
 
         private Guna.UI2.WinForms.Guna2GradientButton btn_Scoreboard;
 
-        private System.Windows.Forms.PictureBox ptb_roadtrack1;
+        private System.Windows.Forms.PictureBox ptb_road_1;
 
         private Guna.UI2.WinForms.Guna2GradientButton btn_Ready;
 
