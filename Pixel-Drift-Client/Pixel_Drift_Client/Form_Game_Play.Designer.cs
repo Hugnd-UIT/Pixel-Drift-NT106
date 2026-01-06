@@ -65,12 +65,12 @@ namespace Pixel_Drift
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game_Window));
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Game_Timer = new System.Windows.Forms.Timer(components);
             pn_road_left = new Panel();
             ptb_debuff_road_1 = new PictureBox();
@@ -246,7 +246,7 @@ namespace Pixel_Drift
             // 
             // ptb_AICar6
             // 
-            ptb_AICar6.Image = Properties.Resources.Red_Car;
+            ptb_AICar6.Image = Properties.Resources.Green_Car;
             ptb_AICar6.Location = new Point(403, 369);
             ptb_AICar6.Margin = new Padding(4, 5, 4, 5);
             ptb_AICar6.Name = "ptb_AICar6";
@@ -317,7 +317,7 @@ namespace Pixel_Drift
             // 
             btn_Scoreboard.BackColor = Color.Transparent;
             btn_Scoreboard.BorderRadius = 20;
-            btn_Scoreboard.CustomizableEdges = customizableEdges7;
+            btn_Scoreboard.CustomizableEdges = customizableEdges1;
             btn_Scoreboard.DisabledState.BorderColor = Color.DarkGray;
             btn_Scoreboard.DisabledState.CustomBorderColor = Color.DarkGray;
             btn_Scoreboard.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -330,7 +330,7 @@ namespace Pixel_Drift
             btn_Scoreboard.Location = new Point(119, 988);
             btn_Scoreboard.Margin = new Padding(3, 1, 3, 1);
             btn_Scoreboard.Name = "btn_Scoreboard";
-            btn_Scoreboard.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btn_Scoreboard.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btn_Scoreboard.Size = new Size(380, 120);
             btn_Scoreboard.TabIndex = 4;
             btn_Scoreboard.Text = "🏆 SCORE BOARD 🏆";
@@ -340,7 +340,7 @@ namespace Pixel_Drift
             // 
             btn_Ready.BackColor = Color.Transparent;
             btn_Ready.BorderRadius = 20;
-            btn_Ready.CustomizableEdges = customizableEdges9;
+            btn_Ready.CustomizableEdges = customizableEdges3;
             btn_Ready.DisabledState.BorderColor = Color.DarkGray;
             btn_Ready.DisabledState.CustomBorderColor = Color.DarkGray;
             btn_Ready.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -353,7 +353,7 @@ namespace Pixel_Drift
             btn_Ready.Location = new Point(530, 988);
             btn_Ready.Margin = new Padding(3, 1, 3, 1);
             btn_Ready.Name = "btn_Ready";
-            btn_Ready.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            btn_Ready.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btn_Ready.Size = new Size(224, 120);
             btn_Ready.TabIndex = 5;
             btn_Ready.Text = "READY";
@@ -363,7 +363,7 @@ namespace Pixel_Drift
             // 
             btn_ID.BackColor = Color.Transparent;
             btn_ID.BorderRadius = 20;
-            btn_ID.CustomizableEdges = customizableEdges11;
+            btn_ID.CustomizableEdges = customizableEdges5;
             btn_ID.FillColor = Color.DarkBlue;
             btn_ID.FillColor2 = Color.Purple;
             btn_ID.Font = new Font("Segoe UI Black", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -371,7 +371,7 @@ namespace Pixel_Drift
             btn_ID.Location = new Point(779, 988);
             btn_ID.Margin = new Padding(3, 1, 3, 1);
             btn_ID.Name = "btn_ID";
-            btn_ID.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            btn_ID.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btn_ID.Size = new Size(380, 120);
             btn_ID.TabIndex = 12;
             btn_ID.Text = "ID:";

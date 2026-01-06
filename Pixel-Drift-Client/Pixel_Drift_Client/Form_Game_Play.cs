@@ -22,7 +22,7 @@ namespace Pixel_Drift
         private Dictionary<string, Point> Object_Positions = new Dictionary<string, Point>();
         private Dictionary<string, Point> Target_Positions = new Dictionary<string, Point>();
         private Dictionary<string, PointF> Current_Positons = new Dictionary<string, PointF>();
-        private float Lerp_Speed = 0.6f;
+        private float Lerp_Speed = 0.5f;
 
         private Image Img_Player_1 = Properties.Resources.Player_Car_1;
         private Image Img_Player_2 = Properties.Resources.Player_Car_2;
@@ -32,7 +32,7 @@ namespace Pixel_Drift
         private Image Img_Black_Car = Properties.Resources.Black_Car;
         private Image Img_Blue_Car = Properties.Resources.Blue_Car;
         private Image Img_Orange_Car = Properties.Resources.Orange_Car;
-        private Image Img_Red_Car = Properties.Resources.Red_Car;
+        private Image Img_Red_Car = Properties.Resources.Green_Car;
 
         private Size Size_Player = new Size(80, 175);
         private Size Size_Road = new Size(610, 910);

@@ -422,7 +422,7 @@ namespace Pixel_Drift_Server
             }
             catch (Exception Ex)
             {
-                Console.WriteLine($"[SQL Error] Could Not Save Blacklist: {Ex.Message}");
+                Console.WriteLine($"[Error] Could Not Save Blacklist: {Ex.Message}");
             }
         }
 
@@ -449,7 +449,7 @@ namespace Pixel_Drift_Server
             }
             catch (Exception Ex)
             {
-                Console.WriteLine($"[SQL Error] Could Not Load Blacklist: {Ex.Message}");
+                Console.WriteLine($"[Error] Could Not Load Blacklist: {Ex.Message}");
             }
             return IP_List;
         }

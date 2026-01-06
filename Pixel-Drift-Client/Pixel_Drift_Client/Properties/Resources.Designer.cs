@@ -191,6 +191,16 @@ namespace Pixel_Drift.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Green_Car {
+            get {
+                object obj = ResourceManager.GetObject("Green_Car", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] Icon {
@@ -226,16 +236,6 @@ namespace Pixel_Drift.Properties {
         internal static System.Drawing.Bitmap Player_Car_2 {
             get {
                 object obj = ResourceManager.GetObject("Player_Car_2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Red_Car {
-            get {
-                object obj = ResourceManager.GetObject("Red_Car", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

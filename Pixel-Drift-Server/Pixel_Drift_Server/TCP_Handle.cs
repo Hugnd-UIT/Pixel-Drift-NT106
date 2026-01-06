@@ -95,7 +95,7 @@ namespace Pixel_Drift_Server
                         DateTime Ban_Until = DateTime.Now.AddMinutes(5);
                         Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Until, (Key, Old_Value) => Ban_Until);
 
-                        Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "DoS Detected! Too Many Concurrent Connections");
+                        Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "DoS Detected! Too Many Concurrent Connections");
                         SQL_Handle.Handle_Add_Blacklist(IP, "DDoS");
                         OS_Handle.Handle_Block(IP);
 
@@ -155,7 +155,7 @@ namespace Pixel_Drift_Server
                         DateTime Ban_Time = DateTime.Now.AddMinutes(5);
                         Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
                         
-                        Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", $"Buffer Overflow Detected! Packet Size {Message.Length} > 4096 Bytes");
+                        Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Buffer Overflow Detected! Packet Size {Message.Length} > 4096 Bytes");
                         SQL_Handle.Handle_Add_Blacklist(IP, "Buffer Overflow");
                         OS_Handle.Handle_Block(IP);
                        
@@ -176,7 +176,7 @@ namespace Pixel_Drift_Server
                             DateTime Ban_Time = DateTime.Now.AddMinutes(5);
                             Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
 
-                            Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "Spam Detected!");
+                            Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", "Spam Detected!");
                             SQL_Handle.Handle_Add_Blacklist(IP, "Spam");
                             OS_Handle.Handle_Block(IP);
 
@@ -213,7 +213,7 @@ namespace Pixel_Drift_Server
                                 DateTime Ban_Time = DateTime.Now.AddMinutes(5);
                                 Ban_Peroid_Per_IP.AddOrUpdate(IP, Ban_Time, (Key, Old_Value) => Ban_Time);
 
-                                Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", $"Replay Detected! Delay: {Diff_Seconds:F2}s");
+                                Security_Logger.Log(Security_Logger.Level.ALERT, IP, "BLOCKED", $"Replay Detected! Delay: {Diff_Seconds:F2}s");
                                 SQL_Handle.Handle_Add_Blacklist(IP, "Replay Attack");
                                 OS_Handle.Handle_Block(IP);
 
@@ -394,7 +394,7 @@ namespace Pixel_Drift_Server
                 {
                     if (Program.Rooms.ContainsKey(Room_ID))
                     {
-                        Program.Rooms[Room_ID].Handle_Request(Client, Action, Data);
+                        Program.Rooms[Room_ID].Handle_Game_Action(Client, Action, Data);
                     }
                 }
             }
@@ -409,6 +409,7 @@ namespace Pixel_Drift_Server
                 if (DateTime.Now < Ban_Peroid_Per_IP[IP])
                 {
                     TimeSpan Remaining_Time = Ban_Peroid_Per_IP[IP] - DateTime.Now;
+                    
                     Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", $"Brute Force Detected! Remaining {Remaining_Time.TotalSeconds:F0}s");
                     return JsonSerializer.Serialize(new
                     {
@@ -535,7 +536,6 @@ namespace Pixel_Drift_Server
                     }
 
                     Security_Logger.Log(Security_Logger.Level.CRITICAL, IP, "BLOCKED", "Brute Force Detected! Soft Ban 5 mins.");
-                    
                     return JsonSerializer.Serialize(new
                     {
                         status = "error",
@@ -545,6 +545,9 @@ namespace Pixel_Drift_Server
                 else
                 {
                     int Remaining = Max_Soft_Ban - Fails;
+
+                    Security_Logger.Log(Security_Logger.Level.WARNING, IP, "FAILED", $"Wrong Username Or Wrong Password.");
+                    
                     return JsonSerializer.Serialize(new
                     {
                         status = "error",

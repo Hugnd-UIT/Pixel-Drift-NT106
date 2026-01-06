@@ -114,7 +114,7 @@ namespace Pixel_Drift_Server
             }
         }
 
-        public void Handle_Request(TcpClient Client, string Action, Dictionary<string, JsonElement> Data)
+        public void Handle_Game_Action(TcpClient Client, string Action, Dictionary<string, JsonElement> Data)
         {
             int Player_ID = 0;
             if (Player_1 != null && Player_1.Client == Client) Player_ID = 1;
@@ -375,7 +375,7 @@ namespace Pixel_Drift_Server
         private Point Calculate_New_Position(string Name, int Min_X, int Max_X)
         {
             Size Current_Size = Dict_Object_Sizes.ContainsKey(Name) ? Dict_Object_Sizes[Name] : new Size(30, 30);
-            int Safe_Max_X = Max_X - Current_Size.Width - 70;
+            int Safe_Max_X = Max_X - Current_Size.Width - 100;
             if (Safe_Max_X <= Min_X) Safe_Max_X = Min_X + 1;
 
             int Max_Retries = 20;
@@ -404,7 +404,7 @@ namespace Pixel_Drift_Server
                 Attempt++;
             } while (Overlap && Attempt < Max_Retries);
 
-            if (Overlap) New_Pos.Y -= 300;
+            if (Overlap) New_Pos.Y -= 500;
             if (Dict_Object_Pos.ContainsKey(Name)) Dict_Object_Pos[Name] = New_Pos;
             return New_Pos;
         }

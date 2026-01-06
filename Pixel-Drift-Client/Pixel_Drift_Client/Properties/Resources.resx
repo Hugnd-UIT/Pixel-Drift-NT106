@@ -161,7 +161,7 @@
     <value>..\Resources\Black_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Orange_Car" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Orange_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\Orange_Car.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Debuff" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Debuff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -172,10 +172,10 @@
   <data name="Player_Car_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Player_Right.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Red_Car" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Red_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Player_Car_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Player_Left.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Green_Car" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Green_Car.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
