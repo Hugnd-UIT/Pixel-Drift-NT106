@@ -19,10 +19,11 @@ namespace Pixel_Drift
         private bool Is_Left_Pressed = false;
         private bool Is_Right_Pressed = false;
 
+        private List<string> Keys_Buffer = new List<string>();
         private Dictionary<string, Point> Object_Positions = new Dictionary<string, Point>();
         private Dictionary<string, Point> Target_Positions = new Dictionary<string, Point>();
         private Dictionary<string, PointF> Current_Positons = new Dictionary<string, PointF>();
-        private float Lerp_Speed = 0.5f;
+        private float Lerp_Speed = 0.8f;
 
         private Image Img_Player_1 = Properties.Resources.Player_Car_1;
         private Image Img_Player_2 = Properties.Resources.Player_Car_2;
@@ -212,84 +213,87 @@ namespace Pixel_Drift
         {
             if (this.Disposing || this.IsDisposed || !this.IsHandleCreated) return;
 
-            this.Invoke(new Action(() =>
+            try
             {
-                try
+                var Data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Message);
+                if (!Data.ContainsKey("action")) return;
+                string Action = Data["action"].GetString();
+
+                this.BeginInvoke(new Action(() =>
                 {
-                    var Data = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(Message);
-                    if (!Data.ContainsKey("action")) return;
-                    string Action = Data["action"].GetString();
-
-                    switch (Action)
+                    try
                     {
-                        case "update_game_state":
-                            Handle_Game_Positions(Data);
-                            break;
+                        switch (Action)
+                        {
+                            case "update_game_state":
+                                Handle_Game_Positions(Data);
+                                break;
 
-                        case "update_score":
-                            Player1_Score = Data["p1_score"].GetInt64();
-                            Player2_Score = Data["p2_score"].GetInt64();
-                            if (lbl_Score1 != null) lbl_Score1.Text = "Score: " + Player1_Score;
-                            if (lbl_Score2 != null) lbl_Score2.Text = "Score: " + Player2_Score;
-                            break;
+                            case "update_score":
+                                Player1_Score = Data["p1_score"].GetInt64();
+                                Player2_Score = Data["p2_score"].GetInt64();
+                                if (lbl_Score1 != null) lbl_Score1.Text = "Score: " + Player1_Score;
+                                if (lbl_Score2 != null) lbl_Score2.Text = "Score: " + Player2_Score;
+                                break;
 
-                        case "update_time":
-                            if (lbl_GameTimer != null) lbl_GameTimer.Text = "Time: " + Data["time"].GetInt32();
-                            break;
+                            case "update_time":
+                                if (lbl_GameTimer != null) lbl_GameTimer.Text = "Time: " + Data["time"].GetInt32();
+                                break;
 
-                        case "start_game":
-                            Start_Game();
-                            break;
+                            case "start_game":
+                                Start_Game();
+                                break;
 
-                        case "countdown":
-                            if (lbl_Countdown != null)
-                            {
-                                lbl_Countdown.Visible = true;
-                                int Time = Data["time"].GetInt32();
-                                lbl_Countdown.Text = Time.ToString();
-                                if (Time == 5) { Music.controls.stop(); CountDown?.Play(); }
-                            }
-                            break;
+                            case "countdown":
+                                if (lbl_Countdown != null)
+                                {
+                                    lbl_Countdown.Visible = true;
+                                    int Time = Data["time"].GetInt32();
+                                    lbl_Countdown.Text = Time.ToString();
+                                    if (Time == 5) { Music.controls.stop(); CountDown?.Play(); }
+                                }
+                                break;
 
-                        case "update_ready_status":
-                            string P1_Name = Data["player1_name"].GetString();
-                            string P2_Name = Data["player2_name"].GetString();
-                            bool P1_Ready = Data["player1_ready"].GetBoolean();
-                            bool P2_Ready = Data["player2_ready"].GetBoolean();
-                            if (lbl_P1_Status != null) lbl_P1_Status.Text = $"P1 ({P1_Name}): {(P1_Ready ? "Ready" : "...")}";
-                            if (lbl_P2_Status != null) lbl_P2_Status.Text = $"P2 ({P2_Name}): {(P2_Ready ? "Ready" : "...")}";
-                            break;
+                            case "update_ready_status":
+                                string P1_Name = Data["player1_name"].GetString();
+                                string P2_Name = Data["player2_name"].GetString();
+                                bool P1_Ready = Data["player1_ready"].GetBoolean();
+                                bool P2_Ready = Data["player2_ready"].GetBoolean();
+                                if (lbl_P1_Status != null) lbl_P1_Status.Text = $"P1 ({P1_Name}): {(P1_Ready ? "Ready" : "...")}";
+                                if (lbl_P2_Status != null) lbl_P2_Status.Text = $"P2 ({P2_Name}): {(P2_Ready ? "Ready" : "...")}";
+                                break;
 
-                        case "game_over":
-                            Music?.controls.stop();
-                            MessageBox.Show("Time Is Up! Game Over.", "Notification");
-                            End_Game();
-                            Reset_To_Lobby();
-                            break;
+                            case "game_over":
+                                Music?.controls.stop();
+                                MessageBox.Show("Time Is Up! Game Over.", "Notification");
+                                End_Game();
+                                Reset_To_Lobby();
+                                break;
 
-                        case "player_disconnected":
-                            string Name = Data.ContainsKey("name") ? Data["name"].GetString() : "Opponent";
-                            Music?.controls.stop();
-                            CountDown?.Stop();
-                            MessageBox.Show($"{Name} Has Disconnected. You Will Return To Lobby.", "Notification");
-                            Is_Returning_To_Lobby = true;
-                            Send_Message(new { action = "leave_room" });
-                            this.Close();
-                            break;
+                            case "player_disconnected":
+                                string Name = Data.ContainsKey("name") ? Data["name"].GetString() : "Opponent";
+                                Music?.controls.stop();
+                                CountDown?.Stop();
+                                MessageBox.Show($"{Name} Has Disconnected. You Will Return To Lobby.", "Notification");
+                                Is_Returning_To_Lobby = true;
+                                Send_Message(new { action = "leave_room" });
+                                this.Close();
+                                break;
 
-                        case "play_sound":
-                            Play_Sound_Effect(Data["sound"].GetString());
-                            break;
+                            case "play_sound":
+                                Play_Sound_Effect(Data["sound"].GetString());
+                                break;
 
-                        case "force_logout":
-                            Music?.controls.stop();
-                            MessageBox.Show("Account Logged In From Another Location!", "Warning");
-                            Application.Exit();
-                            break;
-                    }
-                }
-                catch { }
-            }));
+                            case "force_logout":
+                                Music?.controls.stop();
+                                MessageBox.Show("Account Logged In From Another Location!", "Warning");
+                                Application.Exit();
+                                break;
+                        }
+                    } catch { }
+                }));
+            }
+            catch { }
         }
 
         private void Handle_Game_Positions(Dictionary<string, JsonElement> Data)
@@ -385,7 +389,11 @@ namespace Pixel_Drift
         private void Game_Loop_Timer_Tick(object sender, EventArgs e)
         {
             bool Need_Redraw = false;
-            foreach (var Key in Target_Positions.Keys.ToList())
+
+            Keys_Buffer.Clear();
+            Keys_Buffer.AddRange(Target_Positions.Keys);
+
+            foreach (var Key in Keys_Buffer)
             {
                 if (!Current_Positons.ContainsKey(Key)) continue;
 
