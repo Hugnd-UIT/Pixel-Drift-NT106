@@ -1,0 +1,24 @@
+=================================================================
+HƯỚNG DẪN KHỞI ĐỘNG ELK STACK (Elasticsearch - Logstash - Kibana)
+=================================================================
+
+1. KHỞI ĐỘNG (START)
+--------------------
+Bước 1: Mở CMD hoặc Terminal tại thư mục chứa file "docker-compose.yml".
+Bước 2: Chạy lệnh sau để bật toàn bộ server: docker-compose up -d
+
+2. TẮT SERVER (STOP)
+--------------------
+Khi không dùng nữa, chạy lệnh này để tắt và dọn dẹp container: docker-compose down
+
+3. KIỂM TRA TRẠNG THÁI (VERIFY)
+-------------------------------
+- Xem danh sách container đang chạy: docker ps
+
+- Kiểm tra Elasticsearch (Database): Link: http://localhost:9200 
+  (Nếu thấy hiện JSON có dòng "You Know, for Search" là OK)
+
+- Kiểm tra Kibana (Giao diện Dashboard): Link: http://localhost:5601 
+  (Nếu vào được giao diện Elastic là thành công)
+
+============================================================

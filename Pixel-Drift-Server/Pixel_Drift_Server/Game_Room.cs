@@ -338,8 +338,8 @@ namespace Pixel_Drift_Server
                 if (Is_Road)
                 {
                     string Dup_Name = (Name == "ptb_road_1") ? "ptb_road_1_dup" :
-                                     (Name == "ptb_road_1_dup") ? "ptb_road_1" :
-                                     (Name == "ptb_road_2") ? "ptb_road_2_dup" : "ptb_road_2";
+                                      (Name == "ptb_road_1_dup") ? "ptb_road_1" :
+                                      (Name == "ptb_road_2") ? "ptb_road_2_dup" : "ptb_road_2";
                     Pos.Y = Object_Positions[Dup_Name].Y - Map_Height;
                 }
                 else
@@ -355,29 +355,28 @@ namespace Pixel_Drift_Server
             // Player 1
             if (Player_1 != null)
             {
-                if (Is_Colliding("ptb_player1", "ptb_buff_road_1")) { Speed_P1 += 3; Respawn_Object("ptb_buff_road_1"); Send_Sound_To_Player(Player_1, "buff"); }
-                if (Is_Colliding("ptb_player1", "ptb_debuff_road_1")) { Speed_P1 -= 3; Respawn_Object("ptb_debuff_road_1"); Send_Sound_To_Player(Player_1, "debuff"); }
-                if (Is_Colliding("ptb_player1", "ptb_AICar1")) { Speed_P1 -= 4; Crash_Count_P1++; Respawn_Object("ptb_AICar1"); Send_Sound_To_Player(Player_1, "hit_car"); }
-                if (Is_Colliding("ptb_player1", "ptb_AICar5")) { Speed_P1 -= 4; Crash_Count_P1++; Respawn_Object("ptb_AICar5"); Send_Sound_To_Player(Player_1, "hit_car"); }
-                Speed_P1 = Math.Max(4, Speed_P1);
+                if (Is_Colliding("ptb_player1", "ptb_buff_road_1")) { Speed_P1 += 4; Score_P1 += 400; Respawn_Object("ptb_buff_road_1"); Send_Sound_To_Player(Player_1, "buff"); }
+                if (Is_Colliding("ptb_player1", "ptb_debuff_road_1")) { Speed_P1 -= 4; Score_P1 -= 200; Respawn_Object("ptb_debuff_road_1"); Send_Sound_To_Player(Player_1, "debuff"); }
+                if (Is_Colliding("ptb_player1", "ptb_AICar1")) { Speed_P1 -= 4; Score_P1 -= 100; Crash_Count_P1++; Respawn_Object("ptb_AICar1"); Send_Sound_To_Player(Player_1, "hit_car"); }
+                if (Is_Colliding("ptb_player1", "ptb_AICar5")) { Speed_P1 -= 4; Score_P1 -= 100; Crash_Count_P1++; Respawn_Object("ptb_AICar5"); Send_Sound_To_Player(Player_1, "hit_car"); }
+                Speed_P1 = Math.Max(10, Speed_P1);
             }
 
             // Player 2
             if (Player_2 != null)
             {
-                if (Is_Colliding("ptb_player2", "ptb_buff_road_2")) { Speed_P2 += 3; Respawn_Object("ptb_buff_road_2"); Send_Sound_To_Player(Player_2, "buff"); }
-                if (Is_Colliding("ptb_player2", "ptb_debuff_road_2")) { Speed_P2 -= 3; Respawn_Object("ptb_debuff_road_2"); Send_Sound_To_Player(Player_2, "debuff"); }
-                if (Is_Colliding("ptb_player2", "ptb_AICar3")) { Speed_P2 -= 4; Crash_Count_P2++; Respawn_Object("ptb_AICar3"); Send_Sound_To_Player(Player_2, "hit_car"); }
-                if (Is_Colliding("ptb_player2", "ptb_AICar6")) { Speed_P2 -= 4; Crash_Count_P2++; Respawn_Object("ptb_AICar6"); Send_Sound_To_Player(Player_2, "hit_car"); }
-                Speed_P2 = Math.Max(4, Speed_P2);
+                if (Is_Colliding("ptb_player2", "ptb_buff_road_2")) { Speed_P2 += 4; Score_P2 += 400; Respawn_Object("ptb_buff_road_2"); Send_Sound_To_Player(Player_2, "buff"); }
+                if (Is_Colliding("ptb_player2", "ptb_debuff_road_2")) { Speed_P2 -= 4; Score_P2 -= 200; Respawn_Object("ptb_debuff_road_2"); Send_Sound_To_Player(Player_2, "debuff"); }
+                if (Is_Colliding("ptb_player2", "ptb_AICar3")) { Speed_P2 -= 4; Score_P2 -= 100; Crash_Count_P2++; Respawn_Object("ptb_AICar3"); Send_Sound_To_Player(Player_2, "hit_car"); }
+                if (Is_Colliding("ptb_player2", "ptb_AICar6")) { Speed_P2 -= 4; Score_P2 -= 100; Crash_Count_P2++; Respawn_Object("ptb_AICar6"); Send_Sound_To_Player(Player_2, "hit_car"); }
+                Speed_P2 = Math.Max(10, Speed_P2);
             }
         }
 
         private bool Is_Colliding(string Player_Key, string Obj_Key)
         {
             if (!Object_Positions.ContainsKey(Player_Key) || !Object_Positions.ContainsKey(Obj_Key)) return false;
-            return new Rectangle(Object_Positions[Player_Key], Object_Sizes[Player_Key])
-                .IntersectsWith(new Rectangle(Object_Positions[Obj_Key], Object_Sizes[Obj_Key]));
+            return new Rectangle(Object_Positions[Player_Key], Object_Sizes[Player_Key]).IntersectsWith(new Rectangle(Object_Positions[Obj_Key], Object_Sizes[Obj_Key]));
         }
 
         private void Respawn_Object(string Name)
@@ -391,7 +390,7 @@ namespace Pixel_Drift_Server
             int Safe_Max_X = Max_X - Current_Size.Width - 150;
             if (Safe_Max_X <= Min_X) Safe_Max_X = Min_X + 1;
 
-            int Max_Retries = 20;
+            int Max_Retries = 40;
             int Attempts = 0;
             Point New_Pos;
             bool Overlap;
@@ -401,11 +400,11 @@ namespace Pixel_Drift_Server
                 Overlap = false;
                 New_Pos = new Point(Random_Gen.Next(Min_X, Safe_Max_X), Random_Gen.Next(-1000, -150));
                 Rectangle New_Rect = new Rectangle(New_Pos, Current_Size);
-                New_Rect.Inflate(30, 150); // Margin
+                New_Rect.Inflate(40, 140); // Margin
 
                 foreach (var Key in Object_Positions.Keys)
                 {
-                    if (Key == Name || Key.Contains("roadtrack") || Key.Contains("player")) continue;
+                    if (Key == Name || Key.Contains("road") || Key.Contains("player")) continue;
                     if (Object_Sizes.ContainsKey(Key))
                     {
                         if (New_Rect.IntersectsWith(new Rectangle(Object_Positions[Key], Object_Sizes[Key])))
@@ -506,33 +505,38 @@ namespace Pixel_Drift_Server
             int Max_X = 500 - Safe_Margin;
 
             // Players
-            Object_Sizes["ptb_player1"] = new Size(72, 117);
-            Object_Positions["ptb_player1"] = new Point(202, 470);
-            Object_Sizes["ptb_player2"] = new Size(72, 117);
-            Object_Positions["ptb_player2"] = new Point(202, 470);
+            Object_Sizes["ptb_player1"] = new Size(80, 175);
+            Object_Positions["ptb_player1"] = new Point(270, 710);
+            Object_Sizes["ptb_player2"] = new Size(80, 175);
+            Object_Positions["ptb_player2"] = new Point(270, 710);
 
             // Roads
-            Object_Sizes["ptb_road_1"] = new Size(617, 734); Object_Positions["ptb_road_1"] = new Point(0, -2);
-            Object_Sizes["ptb_road_1_dup"] = new Size(617, 734); Object_Positions["ptb_road_1_dup"] = new Point(0, 734);
-            Object_Sizes["ptb_road_2"] = new Size(458, 596); Object_Positions["ptb_road_2"] = new Point(0, 2);
-            Object_Sizes["ptb_road_2_dup"] = new Size(458, 596); Object_Positions["ptb_road_2_dup"] = new Point(0, 596);
+            Object_Sizes["ptb_road_1"] = new Size(617, 919); Object_Positions["ptb_road_1"] = new Point(0, -1);
+            Object_Sizes["ptb_road_1_dup"] = new Size(617, 919); Object_Positions["ptb_road_1_dup"] = new Point(0, 919);
+            Object_Sizes["ptb_road_2"] = new Size(617, 919); Object_Positions["ptb_road_2"] = new Point(0, 1);
+            Object_Sizes["ptb_road_2_dup"] = new Size(617, 919); Object_Positions["ptb_road_2_dup"] = new Point(0, 919);
 
-            // AI Cars
-            string[] AI_Cars = { "ptb_AICar1", "ptb_AICar3", "ptb_AICar5", "ptb_AICar6" };
-            Size AI_Size = new Size(74, 128);
-            foreach (var Car in AI_Cars)
+            string[] AI_Objects =
             {
-                Object_Sizes[Car] = AI_Size;
-                Object_Positions[Car] = Calculate_Respawn_Position(Car, Min_X, Max_X);
-            }
+                "ptb_AICar1",
+                "ptb_buff_road_1",
+                "ptb_AICar3",
+                "ptb_debuff_road_1",
+                "ptb_AICar5",
+                "ptb_buff_road_2",
+                "ptb_AICar6",
+                "ptb_debuff_road_2"
+            };
 
-            // Items
-            string[] Items = { "ptb_buff_road_1", "ptb_debuff_road_1", "ptb_buff_road_2", "ptb_debuff_road_2" };
-            Size Item_Size = new Size(30, 30);
-            foreach (var Item in Items)
+            Size Car_Size = new Size(80, 175);
+            Size Item_Size = new Size(50, 50);
+
+            foreach (var obj in AI_Objects)
             {
-                Object_Sizes[Item] = Item_Size;
-                Object_Positions[Item] = Calculate_Respawn_Position(Item, Min_X, Max_X);
+                bool isItem = obj.Contains("buff") || obj.Contains("debuff");
+
+                Object_Sizes[obj] = isItem ? Item_Size : Car_Size;
+                Object_Positions[obj] = Calculate_Respawn_Position(obj, Min_X, Max_X);
             }
         }
 

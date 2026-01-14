@@ -134,7 +134,7 @@ namespace Pixel_Drift
             pn_road_left.Name = "pn_road_left";
             pn_road_left.Size = new Size(617, 919);
             pn_road_left.TabIndex = 0;
-            pn_road_left.Paint += Road_Right_Paint;
+            pn_road_left.Paint += Road_Left_Paint;
             // 
             // ptb_debuff_road_1
             // 
@@ -142,7 +142,7 @@ namespace Pixel_Drift
             ptb_debuff_road_1.Location = new Point(387, -88);
             ptb_debuff_road_1.Margin = new Padding(3, 1, 3, 1);
             ptb_debuff_road_1.Name = "ptb_debuff_road_1";
-            ptb_debuff_road_1.Size = new Size(67, 81);
+            ptb_debuff_road_1.Size = new Size(50, 50);
             ptb_debuff_road_1.SizeMode = PictureBoxSizeMode.Zoom;
             ptb_debuff_road_1.TabIndex = 5;
             ptb_debuff_road_1.TabStop = false;
@@ -152,7 +152,7 @@ namespace Pixel_Drift
             ptb_player1.BackColor = Color.Transparent;
             ptb_player1.ErrorImage = null;
             ptb_player1.Image = (Image)resources.GetObject("ptb_player1.Image");
-            ptb_player1.Location = new Point(271, 712);
+            ptb_player1.Location = new Point(270, 710);
             ptb_player1.Margin = new Padding(4, 5, 4, 5);
             ptb_player1.Name = "ptb_player1";
             ptb_player1.Size = new Size(80, 175);
@@ -188,7 +188,7 @@ namespace Pixel_Drift
             ptb_buff_road_1.Location = new Point(120, -88);
             ptb_buff_road_1.Margin = new Padding(3, 1, 3, 1);
             ptb_buff_road_1.Name = "ptb_buff_road_1";
-            ptb_buff_road_1.Size = new Size(67, 81);
+            ptb_buff_road_1.Size = new Size(50, 50);
             ptb_buff_road_1.SizeMode = PictureBoxSizeMode.Zoom;
             ptb_buff_road_1.TabIndex = 6;
             ptb_buff_road_1.TabStop = false;
@@ -230,7 +230,7 @@ namespace Pixel_Drift
             pn_road_right.Name = "pn_road_right";
             pn_road_right.Size = new Size(611, 919);
             pn_road_right.TabIndex = 1;
-            pn_road_right.Paint += Road_Left_Paint;
+            pn_road_right.Paint += Road_Right_Paint;
             // 
             // ptb_debuff_road_2
             // 
@@ -239,7 +239,7 @@ namespace Pixel_Drift
             ptb_debuff_road_2.Location = new Point(400, -88);
             ptb_debuff_road_2.Margin = new Padding(3, 1, 3, 1);
             ptb_debuff_road_2.Name = "ptb_debuff_road_2";
-            ptb_debuff_road_2.Size = new Size(67, 81);
+            ptb_debuff_road_2.Size = new Size(50, 50);
             ptb_debuff_road_2.SizeMode = PictureBoxSizeMode.Zoom;
             ptb_debuff_road_2.TabIndex = 7;
             ptb_debuff_road_2.TabStop = false;
@@ -270,7 +270,7 @@ namespace Pixel_Drift
             // 
             ptb_player2.BackColor = Color.Transparent;
             ptb_player2.Image = (Image)resources.GetObject("ptb_player2.Image");
-            ptb_player2.Location = new Point(265, 721);
+            ptb_player2.Location = new Point(270, 710);
             ptb_player2.Margin = new Padding(4, 5, 4, 5);
             ptb_player2.Name = "ptb_player2";
             ptb_player2.Size = new Size(80, 175);
@@ -285,7 +285,7 @@ namespace Pixel_Drift
             ptb_buff_road_2.Location = new Point(131, -88);
             ptb_buff_road_2.Margin = new Padding(3, 1, 3, 1);
             ptb_buff_road_2.Name = "ptb_buff_road_2";
-            ptb_buff_road_2.Size = new Size(67, 81);
+            ptb_buff_road_2.Size = new Size(50, 50);
             ptb_buff_road_2.SizeMode = PictureBoxSizeMode.Zoom;
             ptb_buff_road_2.TabIndex = 8;
             ptb_buff_road_2.TabStop = false;
@@ -308,7 +308,7 @@ namespace Pixel_Drift
             ptb_road_2.Location = new Point(0, 1);
             ptb_road_2.Margin = new Padding(3, 1, 3, 1);
             ptb_road_2.Name = "ptb_road_2";
-            ptb_road_2.Size = new Size(611, 919);
+            ptb_road_2.Size = new Size(617, 919);
             ptb_road_2.SizeMode = PictureBoxSizeMode.StretchImage;
             ptb_road_2.TabIndex = 1;
             ptb_road_2.TabStop = false;
