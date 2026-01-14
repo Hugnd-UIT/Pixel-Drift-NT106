@@ -61,7 +61,7 @@ namespace Pixel_Drift
             lb_pass.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lb_pass.AutoSize = false;
             lb_pass.BackColor = Color.Transparent;
-            lb_pass.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lb_pass.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lb_pass.ForeColor = Color.FromArgb(128, 255, 255);
             lb_pass.Location = new Point(35, 226);
             lb_pass.Margin = new Padding(4, 5, 4, 5);
@@ -75,7 +75,7 @@ namespace Pixel_Drift
             lb_user.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lb_user.AutoSize = false;
             lb_user.BackColor = Color.Transparent;
-            lb_user.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lb_user.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lb_user.ForeColor = Color.FromArgb(128, 255, 255);
             lb_user.Location = new Point(35, 118);
             lb_user.Margin = new Padding(4, 5, 4, 5);
@@ -89,12 +89,12 @@ namespace Pixel_Drift
             lb_dangnhap.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lb_dangnhap.AutoSize = false;
             lb_dangnhap.BackColor = Color.Transparent;
-            lb_dangnhap.Font = new Font("Arial Black", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lb_dangnhap.Font = new Font("Consolas", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lb_dangnhap.ForeColor = Color.FromArgb(0, 255, 255);
             lb_dangnhap.Location = new Point(198, 29);
             lb_dangnhap.Margin = new Padding(4, 5, 4, 5);
             lb_dangnhap.Name = "lb_dangnhap";
-            lb_dangnhap.Size = new Size(120, 54);
+            lb_dangnhap.Size = new Size(121, 54);
             lb_dangnhap.TabIndex = 9;
             lb_dangnhap.Text = "LOGIN";
             // 
@@ -153,7 +153,7 @@ namespace Pixel_Drift
             btn_quenmatkhau.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btn_quenmatkhau.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
             btn_quenmatkhau.FillColor = Color.Transparent;
-            btn_quenmatkhau.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            btn_quenmatkhau.Font = new Font("Consolas", 9F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
             btn_quenmatkhau.ForeColor = Color.FromArgb(128, 255, 0);
             btn_quenmatkhau.HoverState.ForeColor = Color.Lime;
             btn_quenmatkhau.Location = new Point(3, 448);
@@ -175,7 +175,7 @@ namespace Pixel_Drift
             btn_quaylaidk.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btn_quaylaidk.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
             btn_quaylaidk.FillColor = Color.Transparent;
-            btn_quaylaidk.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            btn_quaylaidk.Font = new Font("Consolas", 9F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
             btn_quaylaidk.ForeColor = Color.FromArgb(0, 192, 255);
             btn_quaylaidk.HoverState.ForeColor = Color.DeepSkyBlue;
             btn_quaylaidk.Location = new Point(242, 448);
@@ -222,7 +222,7 @@ namespace Pixel_Drift
             btn_dang_nhap.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
             btn_dang_nhap.FillColor = Color.DodgerBlue;
             btn_dang_nhap.FillColor2 = Color.LightCoral;
-            btn_dang_nhap.Font = new Font("Segoe UI Black", 18F, FontStyle.Bold);
+            btn_dang_nhap.Font = new Font("Consolas", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btn_dang_nhap.ForeColor = Color.White;
             btn_dang_nhap.HoverState.BorderColor = Color.White;
             btn_dang_nhap.HoverState.FillColor = Color.FromArgb(128, 128, 255);
@@ -239,6 +239,7 @@ namespace Pixel_Drift
             // 
             // Form_Dang_Nhap
             // 
+            AcceptButton = btn_dang_nhap;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(15, 20, 30);

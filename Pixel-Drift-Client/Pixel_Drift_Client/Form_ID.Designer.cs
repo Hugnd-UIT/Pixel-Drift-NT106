@@ -28,49 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tb_ID = new System.Windows.Forms.TextBox();
-            this.btn_TimPhong = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            tb_ID = new TextBox();
+            btn_TimPhong = new Button();
+            SuspendLayout();
             // 
             // tb_ID
             // 
-            this.tb_ID.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tb_ID.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_ID.ForeColor = System.Drawing.Color.DarkCyan;
-            this.tb_ID.Location = new System.Drawing.Point(144, 53);
-            this.tb_ID.Margin = new System.Windows.Forms.Padding(4);
-            this.tb_ID.MaxLength = 50;
-            this.tb_ID.Name = "tb_ID";
-            this.tb_ID.Size = new System.Drawing.Size(227, 27);
-            this.tb_ID.TabIndex = 1;
+            tb_ID.BorderStyle = BorderStyle.None;
+            tb_ID.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tb_ID.ForeColor = Color.DarkCyan;
+            tb_ID.Location = new Point(144, 66);
+            tb_ID.Margin = new Padding(4, 5, 4, 5);
+            tb_ID.MaxLength = 50;
+            tb_ID.Name = "tb_ID";
+            tb_ID.Size = new Size(227, 27);
+            tb_ID.TabIndex = 1;
             // 
             // btn_TimPhong
             // 
-            this.btn_TimPhong.Font = new System.Drawing.Font("Consolas", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_TimPhong.Location = new System.Drawing.Point(205, 87);
-            this.btn_TimPhong.Margin = new System.Windows.Forms.Padding(4);
-            this.btn_TimPhong.Name = "btn_TimPhong";
-            this.btn_TimPhong.Size = new System.Drawing.Size(100, 28);
-            this.btn_TimPhong.TabIndex = 2;
-            this.btn_TimPhong.Text = "Find room";
-            this.btn_TimPhong.UseVisualStyleBackColor = true;
-            this.btn_TimPhong.Click += new System.EventHandler(this.btn_TimPhong_Click);
+            btn_TimPhong.Font = new Font("Consolas", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_TimPhong.Location = new Point(205, 109);
+            btn_TimPhong.Margin = new Padding(4, 5, 4, 5);
+            btn_TimPhong.Name = "btn_TimPhong";
+            btn_TimPhong.Size = new Size(100, 35);
+            btn_TimPhong.TabIndex = 2;
+            btn_TimPhong.Text = "Find room";
+            btn_TimPhong.UseVisualStyleBackColor = true;
+            btn_TimPhong.Click += btn_TimPhong_Click;
             // 
             // Form_ID
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Pixel_Drift.Properties.Resources.Background_ID;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(514, 149);
-            this.Controls.Add(this.btn_TimPhong);
-            this.Controls.Add(this.tb_ID);
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.MaximizeBox = false;
-            this.Name = "Form_ID";
-            this.Text = "ID";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AcceptButton = btn_TimPhong;
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = Properties.Resources.Background_ID;
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(514, 186);
+            Controls.Add(btn_TimPhong);
+            Controls.Add(tb_ID);
+            Margin = new Padding(4, 5, 4, 5);
+            MaximizeBox = false;
+            Name = "Form_ID";
+            Text = "ID";
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

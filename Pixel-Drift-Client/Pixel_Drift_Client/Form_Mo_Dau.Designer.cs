@@ -56,7 +56,7 @@ namespace Pixel_Drift
             btn_dang_ki.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
             btn_dang_ki.FillColor = Color.FromArgb(0, 255, 128);
             btn_dang_ki.FillColor2 = Color.Cyan;
-            btn_dang_ki.Font = new Font("Segoe UI Black", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_dang_ki.Font = new Font("Consolas", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btn_dang_ki.ForeColor = Color.White;
             btn_dang_ki.HoverState.BorderColor = Color.White;
             btn_dang_ki.HoverState.FillColor = Color.FromArgb(128, 255, 128);
@@ -82,7 +82,7 @@ namespace Pixel_Drift
             btn_dang_nhap.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
             btn_dang_nhap.FillColor = Color.DodgerBlue;
             btn_dang_nhap.FillColor2 = Color.Magenta;
-            btn_dang_nhap.Font = new Font("Segoe UI Black", 18F, FontStyle.Bold);
+            btn_dang_nhap.Font = new Font("Consolas", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btn_dang_nhap.ForeColor = Color.White;
             btn_dang_nhap.HoverState.BorderColor = Color.White;
             btn_dang_nhap.HoverState.FillColor = Color.FromArgb(128, 128, 255);
@@ -108,7 +108,7 @@ namespace Pixel_Drift
             btn_thoat.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
             btn_thoat.FillColor = Color.LightCoral;
             btn_thoat.FillColor2 = Color.OrangeRed;
-            btn_thoat.Font = new Font("Segoe UI Black", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_thoat.Font = new Font("Consolas", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btn_thoat.ForeColor = Color.White;
             btn_thoat.HoverState.BorderColor = Color.White;
             btn_thoat.HoverState.FillColor = Color.FromArgb(255, 128, 128);

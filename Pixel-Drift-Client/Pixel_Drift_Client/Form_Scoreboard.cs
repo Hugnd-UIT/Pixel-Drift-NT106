@@ -49,6 +49,7 @@ namespace Pixel_Drift
                 }
                 catch
                 {
+                    // Bỏ qua lỗi
                 }
             }));
         }
@@ -67,6 +68,8 @@ namespace Pixel_Drift
         {
             try
             {
+                dgv_ScoreBoard.DataSource = null;
+
                 if (string.IsNullOrEmpty(Json_Data) || Json_Data == "EMPTY" || Json_Data == "ERROR")
                 {
                     dgv_ScoreBoard.DataSource = null;
@@ -95,6 +98,11 @@ namespace Pixel_Drift
                         double Total_Score = double.Parse(Parts[4]);
                         string Date_Played = Parts[5];
 
+                        if (DateTime.TryParse(Parts[5], out DateTime parsedDate))
+                        {
+                            Date_Played = parsedDate.ToString("dd/MM/yyyy");
+                        }
+
                         Dt.Rows.Add(Rank++, Player_Name, Win_Count, Crash_Count, Total_Score, Date_Played);
                     }
                 }
@@ -103,11 +111,17 @@ namespace Pixel_Drift
 
                 if (dgv_ScoreBoard.Columns.Count > 0)
                 {
-                    dgv_ScoreBoard.Columns[0].Width = 60;
-                    dgv_ScoreBoard.Columns[1].Width = 90;
-                    dgv_ScoreBoard.Columns[3].Width = 80;
-                    dgv_ScoreBoard.Columns[4].Width = 60;
-                    dgv_ScoreBoard.Columns[5].Width = 60;
+                    dgv_ScoreBoard.Columns[0].FillWeight = 10;
+                    dgv_ScoreBoard.Columns[1].FillWeight = 20;
+                    dgv_ScoreBoard.Columns[2].FillWeight = 15; // Win
+                    dgv_ScoreBoard.Columns[3].FillWeight = 15; // Crash
+                    dgv_ScoreBoard.Columns[4].FillWeight = 15; // Total
+                    dgv_ScoreBoard.Columns[5].FillWeight = 15; // Date
+                    foreach (DataGridViewColumn col in dgv_ScoreBoard.Columns)
+                    {
+                        col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                        col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    }
                 }
 
                 Highlight_Top_Players();

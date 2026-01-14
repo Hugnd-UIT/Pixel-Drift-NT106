@@ -400,7 +400,7 @@ namespace Pixel_Drift_Server
                 Overlap = false;
                 New_Pos = new Point(Random_Gen.Next(Min_X, Safe_Max_X), Random_Gen.Next(-1000, -150));
                 Rectangle New_Rect = new Rectangle(New_Pos, Current_Size);
-                New_Rect.Inflate(40, 140); // Margin
+                New_Rect.Inflate(50, 250); // Margin
 
                 foreach (var Key in Object_Positions.Keys)
                 {

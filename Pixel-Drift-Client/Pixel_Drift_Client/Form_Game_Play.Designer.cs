@@ -247,7 +247,7 @@ namespace Pixel_Drift
             // ptb_AICar6
             // 
             ptb_AICar6.Image = Properties.Resources.Green_Car;
-            ptb_AICar6.Location = new Point(403, 369);
+            ptb_AICar6.Location = new Point(407, 369);
             ptb_AICar6.Margin = new Padding(4, 5, 4, 5);
             ptb_AICar6.Name = "ptb_AICar6";
             ptb_AICar6.Size = new Size(80, 175);
@@ -258,7 +258,7 @@ namespace Pixel_Drift
             // ptb_AICar3
             // 
             ptb_AICar3.Image = Properties.Resources.Orange_Car;
-            ptb_AICar3.Location = new Point(144, 369);
+            ptb_AICar3.Location = new Point(151, 369);
             ptb_AICar3.Margin = new Padding(4, 5, 4, 5);
             ptb_AICar3.Name = "ptb_AICar3";
             ptb_AICar3.Size = new Size(80, 175);
@@ -325,15 +325,15 @@ namespace Pixel_Drift
             btn_Scoreboard.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
             btn_Scoreboard.FillColor = Color.DarkBlue;
             btn_Scoreboard.FillColor2 = Color.Purple;
-            btn_Scoreboard.Font = new Font("Segoe UI Black", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_Scoreboard.Font = new Font("Consolas", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btn_Scoreboard.ForeColor = Color.White;
-            btn_Scoreboard.Location = new Point(119, 988);
+            btn_Scoreboard.Location = new Point(88, 988);
             btn_Scoreboard.Margin = new Padding(3, 1, 3, 1);
             btn_Scoreboard.Name = "btn_Scoreboard";
             btn_Scoreboard.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btn_Scoreboard.Size = new Size(380, 120);
             btn_Scoreboard.TabIndex = 4;
-            btn_Scoreboard.Text = "🏆 SCORE BOARD 🏆";
+            btn_Scoreboard.Text = "🏆 SCOREBOARD 🏆";
             btn_Scoreboard.Click += btn_Scoreboard_Click;
             // 
             // btn_Ready
@@ -348,13 +348,13 @@ namespace Pixel_Drift
             btn_Ready.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
             btn_Ready.FillColor = Color.FromArgb(0, 192, 0);
             btn_Ready.FillColor2 = Color.Teal;
-            btn_Ready.Font = new Font("Segoe UI Black", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_Ready.Font = new Font("Consolas", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_Ready.ForeColor = Color.White;
-            btn_Ready.Location = new Point(530, 988);
+            btn_Ready.Location = new Point(505, 988);
             btn_Ready.Margin = new Padding(3, 1, 3, 1);
             btn_Ready.Name = "btn_Ready";
             btn_Ready.ShadowDecoration.CustomizableEdges = customizableEdges4;
-            btn_Ready.Size = new Size(224, 120);
+            btn_Ready.Size = new Size(270, 120);
             btn_Ready.TabIndex = 5;
             btn_Ready.Text = "READY";
             btn_Ready.Click += btn_Ready_Click;
@@ -366,9 +366,9 @@ namespace Pixel_Drift
             btn_ID.CustomizableEdges = customizableEdges5;
             btn_ID.FillColor = Color.DarkBlue;
             btn_ID.FillColor2 = Color.Purple;
-            btn_ID.Font = new Font("Segoe UI Black", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_ID.Font = new Font("Consolas", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btn_ID.ForeColor = Color.White;
-            btn_ID.Location = new Point(779, 988);
+            btn_ID.Location = new Point(811, 988);
             btn_ID.Margin = new Padding(3, 1, 3, 1);
             btn_ID.Name = "btn_ID";
             btn_ID.ShadowDecoration.CustomizableEdges = customizableEdges6;
@@ -380,12 +380,12 @@ namespace Pixel_Drift
             // 
             lbl_P2_Status.AutoSize = true;
             lbl_P2_Status.BackColor = Color.Transparent;
-            lbl_P2_Status.Font = new Font("Microsoft Sans Serif", 15F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl_P2_Status.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl_P2_Status.ForeColor = Color.WhiteSmoke;
-            lbl_P2_Status.Location = new Point(854, 934);
+            lbl_P2_Status.Location = new Point(842, 935);
             lbl_P2_Status.Margin = new Padding(4, 0, 4, 0);
             lbl_P2_Status.Name = "lbl_P2_Status";
-            lbl_P2_Status.Size = new Size(251, 29);
+            lbl_P2_Status.Size = new Size(278, 32);
             lbl_P2_Status.TabIndex = 7;
             lbl_P2_Status.Text = "Waiting for player 2";
             // 
@@ -393,12 +393,12 @@ namespace Pixel_Drift
             // 
             lbl_Countdown.AutoSize = true;
             lbl_Countdown.BackColor = Color.Transparent;
-            lbl_Countdown.Font = new Font("Microsoft Sans Serif", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl_Countdown.Font = new Font("Consolas", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl_Countdown.ForeColor = Color.WhiteSmoke;
             lbl_Countdown.Location = new Point(625, 934);
             lbl_Countdown.Margin = new Padding(4, 0, 4, 0);
             lbl_Countdown.Name = "lbl_Countdown";
-            lbl_Countdown.Size = new Size(40, 42);
+            lbl_Countdown.Size = new Size(42, 47);
             lbl_Countdown.TabIndex = 8;
             lbl_Countdown.Text = "5";
             lbl_Countdown.Visible = false;
@@ -407,12 +407,12 @@ namespace Pixel_Drift
             // 
             lbl_GameTimer.AutoSize = true;
             lbl_GameTimer.BackColor = Color.Transparent;
-            lbl_GameTimer.Font = new Font("Microsoft Sans Serif", 15F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl_GameTimer.Font = new Font("Consolas", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl_GameTimer.ForeColor = Color.WhiteSmoke;
-            lbl_GameTimer.Location = new Point(585, 934);
+            lbl_GameTimer.Location = new Point(573, 934);
             lbl_GameTimer.Margin = new Padding(4, 0, 4, 0);
             lbl_GameTimer.Name = "lbl_GameTimer";
-            lbl_GameTimer.Size = new Size(120, 29);
+            lbl_GameTimer.Size = new Size(143, 36);
             lbl_GameTimer.TabIndex = 9;
             lbl_GameTimer.Text = "Time: 60";
             lbl_GameTimer.Visible = false;
@@ -420,9 +420,9 @@ namespace Pixel_Drift
             // lbl_Score1
             // 
             lbl_Score1.BackColor = Color.Transparent;
-            lbl_Score1.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl_Score1.Font = new Font("Consolas", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl_Score1.ForeColor = Color.WhiteSmoke;
-            lbl_Score1.Location = new Point(217, 934);
+            lbl_Score1.Location = new Point(193, 932);
             lbl_Score1.Name = "lbl_Score1";
             lbl_Score1.Size = new Size(251, 39);
             lbl_Score1.TabIndex = 10;
@@ -431,9 +431,9 @@ namespace Pixel_Drift
             // lbl_Score2
             // 
             lbl_Score2.BackColor = Color.Transparent;
-            lbl_Score2.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl_Score2.Font = new Font("Consolas", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl_Score2.ForeColor = Color.WhiteSmoke;
-            lbl_Score2.Location = new Point(854, 936);
+            lbl_Score2.Location = new Point(842, 935);
             lbl_Score2.Name = "lbl_Score2";
             lbl_Score2.Size = new Size(251, 34);
             lbl_Score2.TabIndex = 11;
@@ -443,33 +443,34 @@ namespace Pixel_Drift
             // 
             lbl_P1_Status.AutoSize = true;
             lbl_P1_Status.BackColor = Color.Transparent;
-            lbl_P1_Status.Font = new Font("Microsoft Sans Serif", 15F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl_P1_Status.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl_P1_Status.ForeColor = Color.WhiteSmoke;
-            lbl_P1_Status.Location = new Point(217, 934);
+            lbl_P1_Status.Location = new Point(193, 935);
             lbl_P1_Status.Margin = new Padding(4, 0, 4, 0);
             lbl_P1_Status.Name = "lbl_P1_Status";
-            lbl_P1_Status.Size = new Size(251, 29);
+            lbl_P1_Status.Size = new Size(278, 32);
             lbl_P1_Status.TabIndex = 6;
             lbl_P1_Status.Text = "Waiting for player 1";
             // 
             // Game_Window
             // 
+            AcceptButton = btn_Ready;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.Background_Game_Play;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1285, 1124);
             Controls.Add(btn_ID);
-            Controls.Add(lbl_Score2);
             Controls.Add(lbl_Score1);
             Controls.Add(lbl_Countdown);
-            Controls.Add(lbl_P2_Status);
-            Controls.Add(lbl_P1_Status);
             Controls.Add(btn_Ready);
             Controls.Add(btn_Scoreboard);
             Controls.Add(pn_road_right);
             Controls.Add(pn_road_left);
             Controls.Add(lbl_GameTimer);
+            Controls.Add(lbl_P1_Status);
+            Controls.Add(lbl_Score2);
+            Controls.Add(lbl_P2_Status);
             KeyPreview = true;
             Margin = new Padding(3, 1, 3, 1);
             MaximizeBox = false;

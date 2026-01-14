@@ -28,78 +28,80 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txt_email = new System.Windows.Forms.TextBox();
-            this.btn_guimahoa = new System.Windows.Forms.Button();
-            this.btn_quaylai = new System.Windows.Forms.Button();
-            this.guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.SuspendLayout();
+            txt_email = new TextBox();
+            btn_guimahoa = new Button();
+            btn_quaylai = new Button();
+            guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            SuspendLayout();
             // 
             // txt_email
             // 
-            this.txt_email.BackColor = System.Drawing.Color.GhostWhite;
-            this.txt_email.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_email.Location = new System.Drawing.Point(268, 158);
-            this.txt_email.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt_email.MaxLength = 100;
-            this.txt_email.Name = "txt_email";
-            this.txt_email.Size = new System.Drawing.Size(512, 41);
-            this.txt_email.TabIndex = 2;
+            txt_email.BackColor = Color.GhostWhite;
+            txt_email.Font = new Font("Microsoft Sans Serif", 24F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txt_email.Location = new Point(269, 198);
+            txt_email.Margin = new Padding(3, 2, 3, 2);
+            txt_email.MaxLength = 100;
+            txt_email.Name = "txt_email";
+            txt_email.Size = new Size(508, 53);
+            txt_email.TabIndex = 2;
             // 
             // btn_guimahoa
             // 
-            this.btn_guimahoa.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btn_guimahoa.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_guimahoa.Location = new System.Drawing.Point(377, 228);
-            this.btn_guimahoa.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_guimahoa.Name = "btn_guimahoa";
-            this.btn_guimahoa.Size = new System.Drawing.Size(151, 44);
-            this.btn_guimahoa.TabIndex = 3;
-            this.btn_guimahoa.Text = "Send token";
-            this.btn_guimahoa.UseVisualStyleBackColor = false;
-            this.btn_guimahoa.Click += new System.EventHandler(this.btn_quenmatkhau_Click);
+            btn_guimahoa.BackColor = Color.WhiteSmoke;
+            btn_guimahoa.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_guimahoa.Location = new Point(377, 285);
+            btn_guimahoa.Margin = new Padding(3, 2, 3, 2);
+            btn_guimahoa.Name = "btn_guimahoa";
+            btn_guimahoa.Size = new Size(151, 55);
+            btn_guimahoa.TabIndex = 3;
+            btn_guimahoa.Text = "Send token";
+            btn_guimahoa.UseVisualStyleBackColor = false;
+            btn_guimahoa.Click += btn_quenmatkhau_Click;
             // 
             // btn_quaylai
             // 
-            this.btn_quaylai.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.btn_quaylai.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_quaylai.Location = new System.Drawing.Point(534, 228);
-            this.btn_quaylai.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_quaylai.Name = "btn_quaylai";
-            this.btn_quaylai.Size = new System.Drawing.Size(136, 44);
-            this.btn_quaylai.TabIndex = 4;
-            this.btn_quaylai.Text = "Back";
-            this.btn_quaylai.UseVisualStyleBackColor = false;
-            this.btn_quaylai.Click += new System.EventHandler(this.btn_quaylai_Click);
+            btn_quaylai.BackColor = Color.WhiteSmoke;
+            btn_quaylai.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_quaylai.Location = new Point(534, 285);
+            btn_quaylai.Margin = new Padding(3, 2, 3, 2);
+            btn_quaylai.Name = "btn_quaylai";
+            btn_quaylai.Size = new Size(136, 55);
+            btn_quaylai.TabIndex = 4;
+            btn_quaylai.Text = "Back";
+            btn_quaylai.UseVisualStyleBackColor = false;
+            btn_quaylai.Click += btn_quaylai_Click;
             // 
             // guna2HtmlLabel1
             // 
-            this.guna2HtmlLabel1.AutoSize = false;
-            this.guna2HtmlLabel1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2HtmlLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.guna2HtmlLabel1.ForeColor = System.Drawing.Color.Orange;
-            this.guna2HtmlLabel1.Location = new System.Drawing.Point(287, 84);
-            this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            this.guna2HtmlLabel1.Size = new System.Drawing.Size(475, 44);
-            this.guna2HtmlLabel1.TabIndex = 6;
-            this.guna2HtmlLabel1.Text = "Please enter your email address:";
+            guna2HtmlLabel1.AutoSize = false;
+            guna2HtmlLabel1.BackColor = Color.Transparent;
+            guna2HtmlLabel1.Font = new Font("Consolas", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            guna2HtmlLabel1.ForeColor = Color.Orange;
+            guna2HtmlLabel1.Location = new Point(269, 111);
+            guna2HtmlLabel1.Margin = new Padding(3, 4, 3, 4);
+            guna2HtmlLabel1.Name = "guna2HtmlLabel1";
+            guna2HtmlLabel1.Size = new Size(528, 55);
+            guna2HtmlLabel1.TabIndex = 6;
+            guna2HtmlLabel1.Text = "Please enter your email address:";
             // 
             // Form_Quen_Mat_Khau
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Pixel_Drift.Properties.Resources.Background_Quen_Mat_Khau;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1045, 559);
-            this.Controls.Add(this.guna2HtmlLabel1);
-            this.Controls.Add(this.btn_quaylai);
-            this.Controls.Add(this.btn_guimahoa);
-            this.Controls.Add(this.txt_email);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.MaximizeBox = false;
-            this.Name = "Form_Quen_Mat_Khau";
-            this.Text = "Quên Mật Khẩu";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AcceptButton = btn_guimahoa;
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = Properties.Resources.Background_Quen_Mat_Khau;
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(1045, 699);
+            Controls.Add(guna2HtmlLabel1);
+            Controls.Add(btn_quaylai);
+            Controls.Add(btn_guimahoa);
+            Controls.Add(txt_email);
+            Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
+            Name = "Form_Quen_Mat_Khau";
+            Text = "Quên Mật Khẩu";
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

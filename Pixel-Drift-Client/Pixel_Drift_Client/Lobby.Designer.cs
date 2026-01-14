@@ -28,91 +28,92 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ptb_Lobby = new System.Windows.Forms.PictureBox();
-            this.btn_CreateRoom = new System.Windows.Forms.Button();
-            this.btn_JoinRoom = new System.Windows.Forms.Button();
-            this.btn_Scoreboard = new Guna.UI2.WinForms.Guna2Button();
-            ((System.ComponentModel.ISupportInitialize)(this.ptb_Lobby)).BeginInit();
-            this.SuspendLayout();
+            ptb_Lobby = new PictureBox();
+            btn_CreateRoom = new Button();
+            btn_JoinRoom = new Button();
+            btn_Scoreboard = new Button();
+            ((System.ComponentModel.ISupportInitialize)ptb_Lobby).BeginInit();
+            SuspendLayout();
             // 
             // ptb_Lobby
             // 
-            this.ptb_Lobby.Image = global::Pixel_Drift.Properties.Resources.Background_Lobby;
-            this.ptb_Lobby.Location = new System.Drawing.Point(0, 0);
-            this.ptb_Lobby.Margin = new System.Windows.Forms.Padding(4);
-            this.ptb_Lobby.Name = "ptb_Lobby";
-            this.ptb_Lobby.Size = new System.Drawing.Size(1069, 558);
-            this.ptb_Lobby.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.ptb_Lobby.TabIndex = 0;
-            this.ptb_Lobby.TabStop = false;
+            ptb_Lobby.Image = Properties.Resources.Background_Lobby;
+            ptb_Lobby.Location = new Point(0, 0);
+            ptb_Lobby.Margin = new Padding(4, 5, 4, 5);
+            ptb_Lobby.Name = "ptb_Lobby";
+            ptb_Lobby.Size = new Size(1191, 731);
+            ptb_Lobby.SizeMode = PictureBoxSizeMode.StretchImage;
+            ptb_Lobby.TabIndex = 0;
+            ptb_Lobby.TabStop = false;
             // 
             // btn_CreateRoom
             // 
-            this.btn_CreateRoom.BackColor = System.Drawing.Color.Transparent;
-            this.btn_CreateRoom.FlatAppearance.BorderSize = 0;
-            this.btn_CreateRoom.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.btn_CreateRoom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_CreateRoom.Font = new System.Drawing.Font("Consolas", 17F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_CreateRoom.ForeColor = System.Drawing.Color.DarkCyan;
-            this.btn_CreateRoom.Location = new System.Drawing.Point(296, 177);
-            this.btn_CreateRoom.Margin = new System.Windows.Forms.Padding(4);
-            this.btn_CreateRoom.Name = "btn_CreateRoom";
-            this.btn_CreateRoom.Size = new System.Drawing.Size(219, 102);
-            this.btn_CreateRoom.TabIndex = 1;
-            this.btn_CreateRoom.Text = "CREATE ROOM";
-            this.btn_CreateRoom.UseVisualStyleBackColor = false;
-            this.btn_CreateRoom.Click += new System.EventHandler(this.btn_CreateRoom_Click);
+            btn_CreateRoom.BackColor = Color.Transparent;
+            btn_CreateRoom.FlatAppearance.BorderSize = 0;
+            btn_CreateRoom.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            btn_CreateRoom.FlatStyle = FlatStyle.Flat;
+            btn_CreateRoom.Font = new Font("Consolas", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_CreateRoom.ForeColor = Color.DarkCyan;
+            btn_CreateRoom.Location = new Point(321, 229);
+            btn_CreateRoom.Margin = new Padding(4, 5, 4, 5);
+            btn_CreateRoom.Name = "btn_CreateRoom";
+            btn_CreateRoom.Size = new Size(260, 134);
+            btn_CreateRoom.TabIndex = 1;
+            btn_CreateRoom.Text = "CREATE ROOM";
+            btn_CreateRoom.UseVisualStyleBackColor = false;
+            btn_CreateRoom.Click += btn_CreateRoom_Click;
             // 
             // btn_JoinRoom
             // 
-            this.btn_JoinRoom.BackColor = System.Drawing.Color.Transparent;
-            this.btn_JoinRoom.FlatAppearance.BorderSize = 0;
-            this.btn_JoinRoom.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.btn_JoinRoom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_JoinRoom.Font = new System.Drawing.Font("Consolas", 17F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_JoinRoom.ForeColor = System.Drawing.Color.DarkCyan;
-            this.btn_JoinRoom.Location = new System.Drawing.Point(555, 177);
-            this.btn_JoinRoom.Margin = new System.Windows.Forms.Padding(4);
-            this.btn_JoinRoom.Name = "btn_JoinRoom";
-            this.btn_JoinRoom.Size = new System.Drawing.Size(219, 102);
-            this.btn_JoinRoom.TabIndex = 2;
-            this.btn_JoinRoom.Text = "JOIN ROOM";
-            this.btn_JoinRoom.UseVisualStyleBackColor = false;
-            this.btn_JoinRoom.Click += new System.EventHandler(this.btn_JoinRoom_Click);
+            btn_JoinRoom.BackColor = Color.Transparent;
+            btn_JoinRoom.FlatAppearance.BorderSize = 0;
+            btn_JoinRoom.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            btn_JoinRoom.FlatStyle = FlatStyle.Flat;
+            btn_JoinRoom.Font = new Font("Consolas", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_JoinRoom.ForeColor = Color.DarkCyan;
+            btn_JoinRoom.Location = new Point(613, 229);
+            btn_JoinRoom.Margin = new Padding(4, 5, 4, 5);
+            btn_JoinRoom.Name = "btn_JoinRoom";
+            btn_JoinRoom.Size = new Size(255, 134);
+            btn_JoinRoom.TabIndex = 2;
+            btn_JoinRoom.Text = "JOIN ROOM";
+            btn_JoinRoom.UseVisualStyleBackColor = false;
+            btn_JoinRoom.Click += btn_JoinRoom_Click;
             // 
             // btn_Scoreboard
             // 
-            this.btn_Scoreboard.BorderThickness = 2;
-            this.btn_Scoreboard.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btn_Scoreboard.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btn_Scoreboard.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btn_Scoreboard.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btn_Scoreboard.FillColor = System.Drawing.Color.White;
-            this.btn_Scoreboard.Font = new System.Drawing.Font("Consolas", 16.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Scoreboard.ForeColor = System.Drawing.Color.DarkCyan;
-            this.btn_Scoreboard.Location = new System.Drawing.Point(420, 308);
-            this.btn_Scoreboard.Name = "btn_Scoreboard";
-            this.btn_Scoreboard.Size = new System.Drawing.Size(219, 102);
-            this.btn_Scoreboard.TabIndex = 3;
-            this.btn_Scoreboard.Text = "SCOREBOARD";
-            this.btn_Scoreboard.Click += new System.EventHandler(this.btn_Scoreboard_Click);
+            btn_Scoreboard.BackColor = Color.Transparent;
+            btn_Scoreboard.FlatAppearance.BorderSize = 0;
+            btn_Scoreboard.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            btn_Scoreboard.FlatStyle = FlatStyle.Flat;
+            btn_Scoreboard.Font = new Font("Consolas", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btn_Scoreboard.ForeColor = Color.DarkCyan;
+            btn_Scoreboard.Location = new Point(468, 399);
+            btn_Scoreboard.Margin = new Padding(4, 5, 4, 5);
+            btn_Scoreboard.Name = "btn_Scoreboard";
+            btn_Scoreboard.Size = new Size(260, 134);
+            btn_Scoreboard.TabIndex = 3;
+            btn_Scoreboard.Text = "SCOREBOARD";
+            btn_Scoreboard.UseVisualStyleBackColor = false;
+            btn_Scoreboard.Click += btn_Scoreboard_Click;
             // 
             // Lobby
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 554);
-            this.Controls.Add(this.btn_Scoreboard);
-            this.Controls.Add(this.btn_JoinRoom);
-            this.Controls.Add(this.btn_CreateRoom);
-            this.Controls.Add(this.ptb_Lobby);
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.MaximizeBox = false;
-            this.Name = "Lobby";
-            this.Text = "Lobby";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Lobby_FormClosed);
-            ((System.ComponentModel.ISupportInitialize)(this.ptb_Lobby)).EndInit();
-            this.ResumeLayout(false);
+            AcceptButton = btn_CreateRoom;
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1190, 731);
+            Controls.Add(btn_Scoreboard);
+            Controls.Add(btn_JoinRoom);
+            Controls.Add(btn_CreateRoom);
+            Controls.Add(ptb_Lobby);
+            Margin = new Padding(4, 5, 4, 5);
+            MaximizeBox = false;
+            Name = "Lobby";
+            Text = "Lobby";
+            FormClosed += Lobby_FormClosed;
+            ((System.ComponentModel.ISupportInitialize)ptb_Lobby).EndInit();
+            ResumeLayout(false);
 
         }
 
@@ -121,6 +122,6 @@
         private System.Windows.Forms.PictureBox ptb_Lobby;
         private System.Windows.Forms.Button btn_CreateRoom;
         private System.Windows.Forms.Button btn_JoinRoom;
-        private Guna.UI2.WinForms.Guna2Button btn_Scoreboard;
+        private Button btn_Scoreboard;
     }
 }
